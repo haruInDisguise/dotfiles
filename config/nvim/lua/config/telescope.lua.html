@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~/.config/nvim/lua/config/telescope.lua.html</title>
+<meta name="Generator" content="Vim/8.0">
+<meta name="plugin-version" content="vim8.1_v2">
+<meta name="syntax" content="none">
+<meta name="settings" content="number_lines,use_css,pre_wrap,no_foldcolumn,expand_tabs,line_ids,prevent_copy=,use_input_for_pc=fallback">
+<meta name="colorscheme" content="gruvbox-material">
+<style>
+<!--
+pre { white-space: pre-wrap; font-family: monospace; color: #d4be98; background-color: #282828; }
+body { font-family: monospace; color: #d4be98; background-color: #282828; }
+* { font-size: 1em; }
+.LineNr { color: #5a524c; }
+-->
+</style>
+
+<script>
+<!--
+
+/* function to open any folds containing a jumped-to line before jumping to it */
+function JumpToLine()
+{
+  var lineNum;
+  lineNum = window.location.hash;
+  lineNum = lineNum.substr(1); /* strip off '#' */
+
+  if (lineNum.indexOf('L') == -1) {
+    lineNum = 'L'+lineNum;
+  }
+  var lineElem = document.getElementById(lineNum);
+  /* Always jump to new location even if the line was hidden inside a fold, or
+   * we corrected the raw number to a line ID.
+   */
+  if (lineElem) {
+    lineElem.scrollIntoView(true);
+  }
+  return true;
+}
+if ('onhashchange' in window) {
+  window.onhashchange = JumpToLine;
+}
+
+-->
+</script>
+</head>
+<body onload='JumpToLine();'>
+<pre id='vimCodeElement'>
+<span id="L1" class="LineNr"> 1 </span>local tele = require 'telescope'
+<span id="L2" class="LineNr"> 2 </span>local config = {}
+<span id="L3" class="LineNr"> 3 </span>
+<span id="L4" class="LineNr"> 4 </span>local init = function()
+<span id="L5" class="LineNr"> 5 </span>    tele.setup {
+<span id="L6" class="LineNr"> 6 </span>
+<span id="L7" class="LineNr"> 7 </span>    }
+<span id="L8" class="LineNr"> 8 </span>end
+<span id="L9" class="LineNr"> 9 </span>
+<span id="L10" class="LineNr">10 </span>local map = function()
+<span id="L11" class="LineNr">11 </span>    local keymap = vim.api.nvim_set_keymap
+<span id="L12" class="LineNr">12 </span>    local keymap_options = {
+<span id="L13" class="LineNr">13 </span>        silent = true,
+<span id="L14" class="LineNr">14 </span>        noremap = true,
+<span id="L15" class="LineNr">15 </span>    }
+<span id="L16" class="LineNr">16 </span>
+<span id="L17" class="LineNr">17 </span>    keymap('n', '&lt;leader&gt;tt', '&lt;cmd&gt;Telescope&lt;CR&gt;', keymap_options)
+<span id="L18" class="LineNr">18 </span>    keymap('n', '&lt;leader&gt;tf', '&lt;cmd&gt;Telescope find_files&lt;CR&gt;', keymap_options)
+<span id="L19" class="LineNr">19 </span>    keymap('n', '&lt;leader&gt;tf', '&lt;cmd&gt;Telescope find_files&lt;CR&gt;', keymap_options)
+<span id="L20" class="LineNr">20 </span>    keymap('n', '&lt;leader&gt;tf', '&lt;cmd&gt;Telescope find_files&lt;CR&gt;', keymap_options)
+<span id="L21" class="LineNr">21 </span>
+<span id="L22" class="LineNr">22 </span>end
+<span id="L23" class="LineNr">23 </span>
+<span id="L24" class="LineNr">24 </span>init()
+<span id="L25" class="LineNr">25 </span>map()
+<span id="L26" class="LineNr">26 </span>
+</pre>
+</body>
+</html>
+<!-- vim: set foldmethod=manual : -->

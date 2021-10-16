@@ -1,0 +1,23 @@
+#!/usr/bin/sh
+
+# A small script to set a wallpaper... yay
+# GLOBAL ARGS:
+# $1: Alternative wallpaper path
+
+# Source fancy logging functions
+. "$USER_BIN_LIB_PATH/log.sh"
+
+readonly BG_PATH="${1:-"$HOME/.local/share/bg"}"
+readonly CMD="feh --no-fehbg --bg-center"
+
+set_background() {
+    $CMD "$BG_PATH"
+}
+
+main() {
+    if [ ! $(set_background) ]; then
+        log_err("Unable to set background! Did you provide a valid path?")
+    fi
+}
+
+main $#
