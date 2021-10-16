@@ -1,0 +1,112 @@
+#!/usr/bin/bash
+
+# HELPER
+_println() {
+    local date="$(date +[%H:%M:%S])"
+    printf "$date $@\n"
+}
+
+error() {
+    _println "ERROR: $@" 2>$1
+}
+
+error_and_die() {
+    error "$@"
+    exit 1
+}
+
+info() {
+    _println "INFO: $@"
+}
+
+readonly SPT_CMD_PB='spt playback'
+readonly SPT_CMD_LIST=''
+readonly SPOTIFYD_CMD='spotifyd'
+readonly SPOTIFYD_DEVICE='box'
+readonly SPOTIFYD_PID='pidof spotifyd'
+
+function is_spt_context_valid() {
+    if [[ $SPOTIFYD_PID ]] then;
+        local cmd_output="$($SPT_CMD_PB)"
+        info "result code is: $result"
+    fi
+
+    return 1
+}
+
+function get_format_layout() {
+    # Format args:
+    #   %a: artist
+    #   %b: album
+    #   %p: playlist
+    #   %t: track
+    #   %h: show?
+    #   %f: flags (shuggle, repeat, like)
+    #   %s: playback status
+    #   %v: volume
+    #   %d: current device
+    echo -ne "%a;%b;%p;%t;%h;%f;%s;%v;%d"
+}
+
+function get_format_results() {
+    local format_string="$1"
+    local result=$($SPT_CMD_PB --format $format_string)
+    echo "Error code: $?"
+}
+
+function toggle_playback() {
+    $SPT_CMD_PB --toggle
+}
+
+function toggle_shuffle() {
+    $SPT_CMD_PB --shuffle
+}
+
+function parse_format_string() {
+    local format_results="$1"
+
+    # TODO: Use dictionary instead?
+    IFS=';' read -r \
+        _SPT_CURRENT_ARTIST \
+        _SPT_CURRENT_ALBUM \
+        _SPT_CURRENT_PLAYLIST \
+        _SPT_CURRENT_TRACK \
+        _SPT_CURRENT_SHOW \
+        _SPT_CURRENT_FLAGS \
+        _SPT_CURRENT_PLAYBACK_STATUS \
+        _SPT_CURRENT_VOLUME \
+        _SPT_CURRENT_DEVICE \
+        <<<"$format_results"
+}
+
+function pretty_print_formated() {
+    echo "Artist:    $_SPT_CURRENT_ARTIST"
+    echo "Album:     $_SPT_CURRENT_ALBUM"
+    echo "Playlist:  $_SPT_CURRENT_PLAYLIST"
+    echo "Track:     $_SPT_CURRENT_TRACK"
+    echo "Show:      $_SPT_CURRENT_SHOW"
+    echo "Flags:     $_SPT_CURRENT_FLAGS"
+    echo "P. Status: $_SPT_CURRENT_PLAYBACK_STATUS"
+    echo "Volume:    $_SPT_CURRENT_VOLUME"
+    echo "Device:    $_SPT_CURRENT_DEVICE"
+}
+
+
+function main() {
+    if [[ $(is_spt_context_valid) -eq 1 ]]; then
+        error_and_die "Unable to parse spt data. Does spt know about your spotify session?"
+    fi
+
+    local format_layout="$(get_format_layout)"
+    local format_string="$(get_format_results $format_layout)"
+
+    if [ format_string == '' ]; then
+        error_and_die 
+    fi
+
+    parse_format_string $format_string
+    pretty_print_formated
+}
+
+main $@
+

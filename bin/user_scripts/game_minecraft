@@ -1,0 +1,28 @@
+#!/usr/bin/sh
+# Script for running minecraft using MulitMC. Awesome stuff...
+
+# NOT strictly POSIX compliant, due to the usage of the 'local' keyword. However, 
+# most MODERN shells that strive to be POSIX compliant, do support this feature. 
+# Might break on solaris or something though...
+# More info: https://www.shellcheck.net/wiki/SC3043
+
+readonly MULTIMC_WORK_DIR="$EXT_DISK_PATH_DATA/games/minecraft/MultiMC"
+readonly MULTIMC_EXEC="$MULTIMC_WORK_DIR/MultiMC"
+
+readonly DEFAULT_INSTANCE_NAME=''
+readonly DEFAULT_INSTANCE_PATH=''
+
+main() {
+    local instances_full_path instances_basename 
+
+    instances_full_path=$(\
+        find "$MULTIMC_WORK_DIR/instances" -mindepth 1 -maxdepth 1 -type d -not -name '_*' -print\
+    )
+
+    instances_basename=$(\
+        echo "$instances_full_path" | xargs -I{} basename "{}"
+    )
+
+}
+
+$MULTIMC_EXEC

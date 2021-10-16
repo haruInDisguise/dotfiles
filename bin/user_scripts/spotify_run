@@ -1,0 +1,12 @@
+#!/usr/bin/sh
+
+# A utility script to manage spotifyd
+
+readonly SPD_EXEC="$CARGO_HOME/bin/spotifyd"
+
+main() {
+  
+}
+
+$SPD_EXEC_FINAL
+

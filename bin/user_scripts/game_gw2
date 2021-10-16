@@ -1,0 +1,8 @@
+#!/usr/bin/bash
+
+ENABLE_VKBASALT=1 \
+VKBASALT_CONFIG_FILE=/mnt/data/games/vkbasalt/gw2.conf \
+VKBASALT_LOG_LEVEL=debug \
+STEAM_PROTON_PATH='/mnt/data/games/steam/steamapps/common/Proton 5.0/'
+STEAM_COMPAT_DATA_PATH=/mnt/data/games/proton/prefixes/tmp \
+"$STEAM_PROTON_PATH"/proton run /mnt/data/games/guild_wars_2/Gw2-64.exe

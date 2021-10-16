@@ -1,0 +1,7 @@
+#!/bin/bash
+
+readonly IMG_PATH="${1:-$HOME/.local/share/bg}"
+readonly CMD="feh --bg-fill --no-fehbg"
+
+$CMD "$IMG_PATH"
+

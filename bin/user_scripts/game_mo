@@ -1,0 +1,27 @@
+#!/usr/bin/bash
+
+# A small script to help me setup ModOrganizer2 on linux
+
+# Define required, path might be optional. 
+# Point this to your steam directory
+# to allow proton to start the steam client for you. 
+# Have to confirm this... 
+readonly STEAM_COMPAT_CLIENT_PATH=""
+
+# Similar to $WINEPREFIX. Points
+# to the wine instance to be used.
+readonly STEAM_COMPAT_DATA_PATH=""
+
+# Some additional options
+# See: https://github.com/ValveSoftware/Proton#runtime-config-options
+readonly PROTON_LOG=""
+readonly PROTON_LOG_DIR=""
+readonly PROTON_DUMP_DEBUG_COMMANDS=""
+readonly PROTON_DEBUG_DIR=""
+
+readonly PROTON_ARGS=""
+
+readonly APP_NAME="ModOrganizer2.exe"
+readonly APP_PATH=""
+readonly APP_ARGS=""
+
