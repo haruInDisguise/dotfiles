@@ -1,0 +1,59 @@
+#!/usr/bin/sh
+# A script to launch and configure redshift.
+
+# Source logging script
+#USER_LOG_LEVEL=3
+set -e
+
+USER_LOG_PATH_TYPE="base"
+USER_LOG_LEVEL="4"
+. "$USER_LIB_DIR/log.sh"
+
+REDSHIFT_CMD="redshift"
+
+GEOCLUE_URL="https://location.services.mozilla.com/v1/geolocate?key=geoclue"
+GEOCLUE_CACHE_PATH="$XDG_CACHE_HOME/redshift_geoclue_cache.json"
+GEOCLUE_CACHE_TIME_SEC="$((3600*24*3))"
+
+parse_json_from_cached() {
+    jq '.location.lat, .location.lng' "$GEOCLUE_CACHE_PATH" | tr '\n' ':' | sed 's/:$//'
+}
+
+send_request() {
+    if curl -s "$GEOCLUE_URL" --output "$GEOCLUE_CACHE_PATH"; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+main() {
+    local is_cached_useable="false"
+
+    if [ -e "$GEOCLUE_CACHE_PATH" ]; then
+        local geoclue_cache_time_passed_sec="$(($(date +%s)-$(date +%s -r $GEOCLUE_CACHE_PATH)))"
+        debug "Cache Lifetime passed: $geoclue_cache_time_passed_sec Max: $GEOCLUE_CACHE_TIME_SEC - $(echo "scale=2; $geoclue_cache_time_passed_sec/$GEOCLUE_CACHE_TIME_SEC*100" | bc)%"
+
+        if [ $geoclue_cache_time_passed_sec -lt $GEOCLUE_CACHE_TIME_SEC ]; then
+            is_cached_useable="true"
+        fi
+    fi
+
+    if [ "$is_cached_useable" = "false" ]; then
+        info "Requesting new GOECLUE data"
+        debug "Sending request to: $GEOCLUE_URL"
+        if ! send_request; then
+            error_and_die "Unable to send request"
+        fi
+    fi
+
+    debug "Reading cached file: $GEOCLUE_CACHE_PATH"
+    local parsed_location="$(parse_json_from_cached)"
+    debug "Location: $parsed_location"
+    info "Launching redshift..."
+
+    $REDSHIFT_CMD -l "$parsed_location"
+}
+
+main
+
