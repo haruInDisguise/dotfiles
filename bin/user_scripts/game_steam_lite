@@ -1,9 +1,0 @@
-#!/usr/bin/sh
-
-# A script to launch steam using my custom installation.
-# Optional lightmode to avoid cuttering memory
-
-# All of this is TODO... for now just launch steam without browser
-readonly steam_lite='steam -no-browser +open steam://open/minigameslist'
-
-$steam_lite

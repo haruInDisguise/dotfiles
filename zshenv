@@ -1,5 +1,4 @@
 # GENERAL
-export TERM="alacritty"
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 export BROWSER="firefox"
@@ -8,9 +7,9 @@ export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
 
-export XDG_BIN_HOME="$XDG_DATA_HOME/../bin"
-export XDG_DESKTOP_DIR="/dev/null"
+export XDG_BIN_HOME="$XDG_DATA_HOME/../bin/extern"
 export XDG_DOWNLOADS_DIR="$HOME/downloads"
+export XDG_DESKTOP_DIR="/dev/null"
 
 # shell
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
@@ -37,17 +36,10 @@ export npm_config_prefix="$XDG_DATA_HOME/npm"
 export GOPATH="$XDG_DATA_HOME/go"
 
 # PATH
-#typeset _BIN_LOCAL="$(find "$HOME/.local/bin" -maxdepth 1 -type d -not -name '_*' -printf '%p:' | uniq)"
-typeset _BIN_USER="$HOME/.local/bin/user_scripts/bin:$HOME/.local/bin"
-typeset _BIN_CARGO="$CARGO_HOME/bin"
-typeset _BIN_NPM="$npm_config_prefix/bin"
+_BIN_USER="$HOME/.local/bin/user_scripts/bin:$HOME/.local/bin/extern"
+_BIN_CARGO="$CARGO_HOME/bin"
+_BIN_NPM="$npm_config_prefix/bin"
 
-# This is not ideal. _BIN_LOCAL's find call concats an additional
-# colon at the end of the path list, therefore, we have to omit
-# it in the following export statement to avoid adding invalid/empty 
-# dirs in the PATH
-# TODO: Add local binary dirs manually. At this scale, globing is barley 
-# sensible and doesn't improve readability
 export PATH="$_BIN_USER:$_BIN_NPM:$_BIN_CARGO:$PATH"
 unset _BIN_CARGO _BIN_LOCAL _BIN_NPM _BIN_USER
 
@@ -61,10 +53,12 @@ export LESSHISTSIZE=100
 
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 
-# Fixing "bugs" in dwm...
+# Fixing "bugs" in dwm... see dwm(1)
 export _JAVA_AWT_WM_NONREPARENTING=1
 
 # Personal exports for script mangement... AHHHAH
-export USER_DOTFILES="$HOME/dotfiles"
-export USER_LIB_DIR="$HOME/.local/bin/user_scripts/lib"
+export USER_CONF_DOTFILES_DIR="$HOME/dotfiles"
+export USER_CONF_SCRIPTS_BIN_DIR="$HOME/.local/bin/user_scripts/bin"
+export USER_CONF_SCRIPTS_LIB_DIR="$HOME/.local/bin/user_scripts/lib"
+export USER_CONF_SCRIPTS_SCRIPT_DIR="$HOME/.local/bin/user_scripts/scripts"
 

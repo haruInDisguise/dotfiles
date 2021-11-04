@@ -46,12 +46,14 @@ else
     _USER_LOG_PATH_FMT=""
 fi
 
+# TODO: POSIX SH (tested with dash) fails to properly interpret echo.
+# Figure out why... For now, use GNU echo, instead of builtin...
 _write_to_stdout() {
-    echo "$@"
+    printf "%b" "$@\n"
 }
 
 _write_to_stderr() {
-    echo "$@" >&2
+    printf "%b" "$@\n" >&2 
 }
 
 _write_fmt_stdout() {
@@ -80,16 +82,16 @@ else
     error() {
         return
     }
-    
-    error_and_die() {
-        exit "${2:-1}"
-    }
+
+error_and_die() {
+    exit "${2:-1}"
+}
 fi
 
 # Define WARN
 if [ "$_USER_LOG_LEVEL" -ge "$_USER_LOG_WARN" ]; then
     warn() {
-        _write_fmt_stdout "$_USER_LOG_CLR_YLW WARN  $_USER_LOG_RESET" "$@"
+        _write_fmt_stdout "$_USER_LOG_CLR_YLW WARN  $_USER_LOG_RESET" "$*"
     }
 else
     warn() {
@@ -100,7 +102,7 @@ fi
 # Define INFO
 if [ "$_USER_LOG_LEVEL" -ge "$_USER_LOG_INFO" ]; then
     info() {
-        _write_fmt_stdout "$_USER_LOG_CLR_GRN INFO  $_USER_LOG_RESET" "$@"
+        _write_fmt_stdout "$_USER_LOG_CLR_GRN INFO  $_USER_LOG_RESET" "$*"
     }
 else
     info() {
@@ -111,7 +113,7 @@ fi
 # Define DEBUG
 if [ "$_USER_LOG_LEVEL" -ge "$_USER_LOG_DEBUG" ]; then
     debug() {
-        _write_fmt_stdout "$_USER_LOG_CLR_CYN DEBUG $_USER_LOG_RESET" "$@"
+        _write_fmt_stdout "$_USER_LOG_CLR_CYN DEBUG $_USER_LOG_RESET" "$*"
     }
 else
     debug() {

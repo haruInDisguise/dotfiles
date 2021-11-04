@@ -11,6 +11,7 @@ global_set_keymap('n', '<Leader><esc>', '<cmd>nohlsearch<CR>', mapping_options)
 
 -- Save file
 global_set_keymap('n', '<Leader>w', '<cmd>w<CR>', mapping_options)
+global_set_keymap('n', '<Leader>W', '<cmd>w !sudo tee % >/dev/null<CR>', mapping_options)
 
 -- Quit buffer or exit
 global_set_keymap('n', '<Leader>q', '<cmd>bd<CR>', mapping_options)

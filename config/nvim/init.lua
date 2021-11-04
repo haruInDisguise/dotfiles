@@ -72,7 +72,5 @@ opt.list = true
 -- colorscheme
 opt.termguicolors = true
 opt.background = 'dark'
-vim.g['gruvbox_material_diagnostic_text_highlight'] = true
-vim.g['gruvbox_material_diagnostic_line_highlight'] = true
 vim.cmd 'colorscheme gruvbox-material'
 

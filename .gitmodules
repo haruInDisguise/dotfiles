@@ -1,3 +1,9 @@
 [submodule "config/zsh/extern/zsh-syntax-highlighting"]
 	path = config/zsh/extern/zsh-syntax-highlighting
 	url = git@github.com:zsh-users/zsh-syntax-highlighting
+[submodule "config/zsh/extern/zsh-async"]
+	path = config/zsh/extern/zsh-async
+	url = https://github.com/mafredri/zsh-async
+[submodule "config/zsh/extern/zsh-autosuggestions"]
+	path = config/zsh/extern/zsh-autosuggestions
+	url = https://github.com/zsh-users/zsh-autosuggestions

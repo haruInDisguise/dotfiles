@@ -43,7 +43,7 @@ end
 -- Configuring lsp using passed through config
 -- TODO: Move server specific config out of init.lua?
 local init = function(utils, options)
-    local servers = {'rust_analyzer', 'clangd', 'tsserver'}
+    local servers = {'rls', 'clangd', 'tsserver'}
     
     for _, server in ipairs(servers) do
 
