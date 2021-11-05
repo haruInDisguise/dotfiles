@@ -23,77 +23,6 @@
 # \e8   => restore cursor position
 # \e[K  => clears everything after the cursor on the current line
 # \e[2K => clear everything on the current line
-
-prompt_git_status() {
-  local INDEX STATUS
-
-  INDEX=$(command git status --porcelain -b 2> /dev/null)
-
-  STATUS=""
-
-  if $(echo "$INDEX" | command grep -E '^\?\? ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNTRACKED$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^A  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^M  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_ADDED$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^ M ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^AM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^MM ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  elif $(echo "$INDEX" | grep '^ T ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_MODIFIED$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^R  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_RENAMED$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^ D ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^D  ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  elif $(echo "$INDEX" | grep '^AD ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DELETED$STATUS"
-  fi
-
-  if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_STASHED$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^UU ' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_UNMERGED$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*ahead' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_AHEAD$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*behind' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_BEHIND$STATUS"
-  fi
-
-  if $(echo "$INDEX" | grep '^## [^ ]\+ .*diverged' &> /dev/null); then
-    STATUS="$ZSH_THEME_GIT_PROMPT_DIVERGED$STATUS"
-  fi
-
-  if [[ ! -z "$STATUS" ]]; then
-    echo "%f[ $STATUS%f]"
-  fi
-}
-
-prompt_git_info() {
-    [ -z "$vcs_info_msg_0_" ] && echo "$ZSH_THEME_GIT_PROMPT_PREFIX$vcs_info_msg_0_$ZSH_THEME_GIT_PROMPT_SUFFIX"
-}
-
 prompt_sprompt_get_fmtstr() {
     # %r - proposed correction
     # %R - incorrect string
@@ -128,7 +57,7 @@ prompt_timefmt_get_fmtstr() {
 
 # Takes a timestamp in seconds
 prompt_time_get_human() {
-    local human msg
+    local msg
     integer timestamp="$1" days hours minutes seconds
 
     [ -z "$timestamp" ] && return
@@ -169,7 +98,6 @@ prompt_time_get_suffix() {
 }
 
 prompt_time_get_elapsed_sec() {
-    integer limit=${3:-0}
     integer elapsed="$(( $2 - $1 ))"
 
     (( elapsed > 0 )) && print -n - "$elapsed"
@@ -178,10 +106,36 @@ prompt_time_get_elapsed_sec() {
 prompt_time_pretty_print() {
     local msg
 
-    msg="'%B%F{green}$PROMPT_STATUS[cmd_expanded]%f%b' took %B%F{yellow}$PROMPT_STATUS[time_real_human] $PROMPT_STATUS[time_real_suffix]%b%f"
+    msg=$'\n'"'%B%F{green}$PROMPT_STATUS[input_raw]%f%b' took %B%F{yellow}$PROMPT_STATUS[time_real_human] $PROMPT_STATUS[time_real_suffix]%b%f"
 
-    builtin print -
+    if [[ PROMPT_OPTION[exec_time_show_real] = true ]]; then
+        msg+="$(prompt_time_get_date $PROMPT_STATUS[_time_before_sec])"
+    fi
+
     builtin print - "${(%)msg}"
+}
+
+prompt_time_exec() {
+    # Make sure that a command has been executed and it wasn't the 'time' builtin
+    if [[ ! $PROMPT_STATUS[context_prev] = 'preexec' || $PROMPT_STATUS[input_expanded] =~ '^time ' ]]; then
+        return
+    fi
+
+    # Calculate real time. Result might be 0
+    PROMPT_STATUS[time_real_sec]="$(( PROMPT_STATUS[time_after_exec_sec] - PROMPT_STATUS[time_before_exec_sec]))"
+
+    # Check if the threshold has been reached
+    if [[ $PROMPT_STATUS[time_real_sec] -ge $PROMPT_OPTIONS[exec_threshold_sec] ]]; then
+        PROMPT_STATUS[time_real_human]="$(prompt_time_get_human $PROMPT_STATUS[time_real_sec])"
+        PROMPT_STATUS[time_real_suffix]="$(prompt_time_get_suffix $PROMPT_STATUS[time_real_human])"
+        prompt_time_pretty_print
+    fi
+}
+
+# Set context to $1. Run without args to (re)set context (idle)
+prompt_set_context() {
+    PROMPT_STATUS[context_prev]="$PROMPT_STATUS[context]"
+    PROMPT_STATUS[context]="${1:-idle}"
 }
 
 # preexec - After command has been read, but before execution
@@ -190,56 +144,20 @@ prompt_time_pretty_print() {
 #               function bodys
 #           $3: expanded command with function body
 prompt_hook_preexec() {
-    # Save cmd/input
-    PROMPT_STATUS[cmd_expanded]="$3"
-    PROMPT_STATUS[cmd_input]="$1"
+    prompt_set_context 'preexec'
 
-    # Save time before command execution
-    # epochtime: $1: seconds since epoch $2: remainder
-    #local time=($epochtime)
-    PROMPT_STATUS[_time_before_sec]="$EPOCHSECONDS"
-
-    # Signal to 'precmd' that a command has been executed
-    PROMPT_STATUS[_preexec_check_is_cmd]="true"
-
-    # Check if the time builtin has been used
-    if [[ "$2" =~ '^time ' ]]; then
-        PROMPT_STATUS[_preexec_check_cmd_is_time]="true"
-    fi
-
+    PROMPT_STATUS[time_before_exec_sec]="$EPOCHSECONDS"
+    PROMPT_STATUS[input_expanded]="$3"
+    PROMPT_STATUS[input_raw]="$1"
 }
 
 # precmd  - Before each prompt
 prompt_hook_precmd() {
-    # Save time after command execution
-    PROMPT_STATUS[_time_after_sec]="$EPOCHSECONDS"
+    prompt_set_context 'precmd'
 
-    # GUARD: Make sure that a command has been executed
-    # and all required varianles are set.
-    if [[  $PROMPT_STATUS[_preexec_check_is_cmd] == 'true' && -z $PROMPT_STATUS[_preexec_check_cmd_is_time] ]]; then
+    PROMPT_STATUS[time_after_exec_sec]="$EPOCHSECONDS"
 
-        PROMPT_STATUS[time_real_sec]="$(prompt_time_get_elapsed_sec $PROMPT_STATUS[_time_before_sec] $PROMPT_STATUS[_time_after_sec])"
-
-        # Check if the threshold has been reached
-        if [[ $PROMPT_STATUS[time_real_sec] -gt $PROMPT_OPTIONS[exec_threshold_sec] ]]; then
-            PROMPT_STATUS[time_real_human]="$(prompt_time_get_human $PROMPT_STATUS[time_real_sec])"
-            PROMPT_STATUS[time_real_suffix]="$(prompt_time_get_suffix $PROMPT_STATUS[time_real_human])"
-
-            prompt_time_pretty_print
-        fi
-
-    fi
-
-    # Reset state
-    PROMPT_STATUS[_preexec_check_is_cmd]=""
-    PROMPT_STATUS[_preexec_check_cmd_is_time]=""
-
-    # A newline, for padding
-    builtin print -
-}
-
-prompt_util_reset() {
-    zle && zle .prompt-reset
+    prompt_time_exec
 }
 
 prompt_setup() {
@@ -265,7 +183,9 @@ prompt_setup() {
     PROMPT_OPTIONS=(
         break_after_path_col   110
         break_after_path_force true
-        exec_threshold_sec     5
+        #
+        exec_threshold_sec     1
+        exec_show_real         true
         #
         setup_exec_threshold   true
         setup_timefmt          true
@@ -274,17 +194,18 @@ prompt_setup() {
     )
 
     PROMPT_STATUS=(
+        # 'context' stores the name of the hook that is being run
+        context               'setup'
+        context_prev          'setup'
+        #
         time_real_sec         0
         time_real_human       ""
         time_real_suffix      ""
+        time_before_exec_sec  0
+        time_after_exec_sec   0
         #
         cmd_expanded          ""
         cmd_input             ""
-        #
-        _preexec_check_is_cmd  ""
-        _preexec_check_is_time ""
-        _time_after_sec       0
-        _time_before_sec      0
     )
 
     PROMPT_COLORS=(
@@ -314,20 +235,19 @@ prompt_setup() {
         git_untracked      ""
     )
 
-    # Hide trailing % in partial lines
+    # trailing % in partial lines
     PROMPT_EOL_MARK="%K{black} %k"
 
-    # TODO: Use zstyle for this!
-    # the moment when you forget to enable substitution for the prompt.... AHHHHH
     local prompt_section_status='%(?..%? )'
     local prompt_section_symbol='%(!.$PROMPT_CHARS[prompt_is_root].$PROMPT_CHARS[prompt_is_user])'
 
     local prompt_section_path='%~'$'\n'
-    local prompt_section_indicator_color='%F{%(?.$PROMPT_COLORS[cmd_success].$PROMPT_COLORS[cmd_error])}'
+    local prompt_section_indicator_color='%B%F{%(?.$PROMPT_COLORS[cmd_success].$PROMPT_COLORS[cmd_error])}'
 
     # PS1 - primary prompt
-    PS1="$prompt_section_path"
-    PS1+="$prompt_section_indicator_color$prompt_section_status$prompt_section_symbol%f "
+    PS1=$'\n'
+    PS1+="$prompt_section_path"
+    PS1+="$prompt_section_indicator_color$prompt_section_status$prompt_section_symbol%f%b "
 
     # PS2 - prompt for incomplete commands and zsh structs, like function, if, for etc.
     PS2='%F{$PROMPT_COLORS[cmd_continue]}%_%f > '
