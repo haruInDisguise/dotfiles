@@ -8,6 +8,9 @@
 local lsp = require 'lspconfig'
 local config = {}
 
+-- CMP
+local cmp_capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
 local on_attach = function(client, bufnr)
@@ -43,20 +46,18 @@ end
 -- Configuring lsp using passed through config
 -- TODO: Move server specific config out of init.lua?
 local init = function(utils, options)
-    local servers = {'rls', 'clangd', 'tsserver'}
-    
-    for _, server in ipairs(servers) do
+    local servers = {'rust_analyzer', 'clangd'}
 
-        lsp[server].setup {
+    for _, name in ipairs(servers) do
+        lsp[name].setup {
+            capabilities = cmp_capabilities,
             on_attach = on_attach,
             flags = {
                 debounce_text_changes = 150,
-            }
+            },
         }
     end
 end
-
-require('parser.mcfunction')
 
 init()
 

@@ -7,6 +7,7 @@ local init = function()
         ensure_installed = { 
         "bash", "bibtex", "cpp", "c", "cmake", "devicetree", "dockerfile", "html", "javascript",
         "json", "latex", "lua", "python", "regex", "rust", "toml", "typescript", "vim", "yaml",
+        "glsl"
         },
         -- ensure_installed = "maintained",
         ignore_install = {""}, 
@@ -15,6 +16,18 @@ local init = function()
             disable = {""},
             -- set to true for indentation. Can be a list of languages
             additional_vim_regex_hightlighting = false,
+        },
+        incremental_selection = {
+            enable = true,
+            keymaps = {
+                init_selection = "gnn",
+                node_incremental = "grn",
+                scope_incremental = "grc",
+                node_decremental = "grm",
+            }
+        },
+        ident = {
+            enable = true
         }
     }
 end

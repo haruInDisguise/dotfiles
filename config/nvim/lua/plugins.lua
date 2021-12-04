@@ -1,7 +1,8 @@
 -- Loading my plugins and their respective configuration
+
 -- I'm using 'packer.nvim' as my plugin manager: https://github.com/wbthomason/packer.nvim
 local packer = require 'packer'
-local packer_config = {} 
+local packer_config = {}
 
 local init = function(options)
   local use = packer.use
@@ -31,8 +32,22 @@ local init = function(options)
   }
 
   use {
-    'hrsh7th/nvim-compe',
-    config = [[ require 'config.compe' ]],
+    'hrsh7th/nvim-cmp',
+    config = [[ require 'config.cmp' ]],
+    requires = {
+        'hrsh7th/cmp-nvim-lsp',
+        'hrsh7th/cmp-buffer',
+        'hrsh7th/cmp-path',
+        'hrsh7th/cmp-cmdline',
+    }
+  }
+
+  use {
+      'L3MON4D3/LuaSnip',
+      config = [[ require '' ]],
+      requires = {
+          'honza/vim-snippets'
+      }
   }
 
   use { 
@@ -45,7 +60,10 @@ local init = function(options)
     config = [[ require 'config.trouble' ]],
     requires = 'kyazdani42/nvim-web-devicons'
   }
-
+  use {
+    'lervag/vimtex',
+    config = [[ require 'config.vimtex' ]]
+  }
   -- Plugins by @tpope
   use 'tpope/vim-surround'
   use 'tpope/vim-commentary'

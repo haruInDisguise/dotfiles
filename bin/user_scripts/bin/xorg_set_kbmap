@@ -1,0 +1,16 @@
+#!/usr/bin/zsh
+
+# A small (dirty) script to quickly
+# switch between german and us layout
+
+local keymap_current=${(M)$(setxkbmap -query):#(de|us)}
+local -A targets=(
+    de  us
+    us  de
+)
+
+local keymap=$targets[$keymap_current]
+
+setxkbmap $keymap -option caps:escape
+dunstify -r 543234 "Changed keymap to: ${(C)keymap}"
+

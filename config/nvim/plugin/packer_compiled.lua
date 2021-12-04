@@ -69,84 +69,130 @@ end
 time([[try_loadstring definition]], false)
 time([[Defining packer_plugins]], true)
 _G.packer_plugins = {
+  ["cmp-buffer"] = {
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/cmp-buffer",
+    url = "https://github.com/hrsh7th/cmp-buffer"
+  },
+  ["cmp-cmdline"] = {
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/cmp-cmdline",
+    url = "https://github.com/hrsh7th/cmp-cmdline"
+  },
+  ["cmp-nvim-lsp"] = {
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/cmp-nvim-lsp",
+    url = "https://github.com/hrsh7th/cmp-nvim-lsp"
+  },
+  ["cmp-path"] = {
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/cmp-path",
+    url = "https://github.com/hrsh7th/cmp-path"
+  },
   ["gruvbox-material"] = {
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/gruvbox-material"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/gruvbox-material",
+    url = "https://github.com/sainnhe/gruvbox-material"
   },
   ["lualine.nvim"] = {
     config = { " require 'config.lualine' " },
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/lualine.nvim"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/lualine.nvim",
+    url = "https://github.com/hoob3rt/lualine.nvim"
+  },
+  ["nvim-cmp"] = {
+    config = { " require 'config.cmp' " },
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-cmp",
+    url = "https://github.com/hrsh7th/nvim-cmp"
   },
   ["nvim-colorizer.lua"] = {
     config = { " require 'config.colorizer' " },
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua"
-  },
-  ["nvim-compe"] = {
-    config = { " require 'config.compe' " },
-    loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-compe"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-colorizer.lua",
+    url = "https://github.com/norcalli/nvim-colorizer.lua"
   },
   ["nvim-lspconfig"] = {
     config = { " require 'config.lsp' " },
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-lspconfig"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-lspconfig",
+    url = "https://github.com/neovim/nvim-lspconfig"
   },
   ["nvim-treesitter"] = {
     config = { " require 'config.treesitter' " },
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-treesitter"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-treesitter",
+    url = "https://github.com/nvim-treesitter/nvim-treesitter"
   },
   ["nvim-web-devicons"] = {
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-web-devicons"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/nvim-web-devicons",
+    url = "https://github.com/kyazdani42/nvim-web-devicons"
   },
   ["packer.nvim"] = {
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/packer.nvim"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/packer.nvim",
+    url = "https://github.com/wbthomason/packer.nvim"
   },
   ["plenary.nvim"] = {
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/plenary.nvim"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/plenary.nvim",
+    url = "https://github.com/nvim-lua/plenary.nvim"
   },
   ["telescope.nvim"] = {
     config = { " require 'config.telescope' " },
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/telescope.nvim"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/telescope.nvim",
+    url = "https://github.com/nvim-telescope/telescope.nvim"
   },
   ["trouble.nvim"] = {
     config = { " require 'config.trouble' " },
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/trouble.nvim"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/trouble.nvim",
+    url = "https://github.com/folke/trouble.nvim"
+  },
+  ultisnips = {
+    config = { " require 'config.ultisnips' " },
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/ultisnips",
+    url = "https://github.com/SirVer/ultisnips"
   },
   ["vim-commentary"] = {
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/vim-commentary"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/vim-commentary",
+    url = "https://github.com/tpope/vim-commentary"
+  },
+  ["vim-snippets"] = {
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/vim-snippets",
+    url = "https://github.com/honza/vim-snippets"
   },
   ["vim-surround"] = {
     loaded = true,
-    path = "/home/haru/.local/share/nvim/site/pack/packer/start/vim-surround"
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/vim-surround",
+    url = "https://github.com/tpope/vim-surround"
+  },
+  vimtex = {
+    config = { " require 'config.vimtex' " },
+    loaded = true,
+    path = "/home/haru/.local/share/nvim/site/pack/packer/start/vimtex",
+    url = "https://github.com/lervag/vimtex"
   }
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: nvim-compe
-time([[Config for nvim-compe]], true)
- require 'config.compe' 
-time([[Config for nvim-compe]], false)
+-- Config for: nvim-colorizer.lua
+time([[Config for nvim-colorizer.lua]], true)
+ require 'config.colorizer' 
+time([[Config for nvim-colorizer.lua]], false)
+-- Config for: nvim-cmp
+time([[Config for nvim-cmp]], true)
+ require 'config.cmp' 
+time([[Config for nvim-cmp]], false)
 -- Config for: lualine.nvim
 time([[Config for lualine.nvim]], true)
  require 'config.lualine' 
 time([[Config for lualine.nvim]], false)
--- Config for: nvim-lspconfig
-time([[Config for nvim-lspconfig]], true)
- require 'config.lsp' 
-time([[Config for nvim-lspconfig]], false)
--- Config for: telescope.nvim
-time([[Config for telescope.nvim]], true)
- require 'config.telescope' 
-time([[Config for telescope.nvim]], false)
 -- Config for: nvim-treesitter
 time([[Config for nvim-treesitter]], true)
  require 'config.treesitter' 
@@ -155,10 +201,22 @@ time([[Config for nvim-treesitter]], false)
 time([[Config for trouble.nvim]], true)
  require 'config.trouble' 
 time([[Config for trouble.nvim]], false)
--- Config for: nvim-colorizer.lua
-time([[Config for nvim-colorizer.lua]], true)
- require 'config.colorizer' 
-time([[Config for nvim-colorizer.lua]], false)
+-- Config for: ultisnips
+time([[Config for ultisnips]], true)
+ require 'config.ultisnips' 
+time([[Config for ultisnips]], false)
+-- Config for: telescope.nvim
+time([[Config for telescope.nvim]], true)
+ require 'config.telescope' 
+time([[Config for telescope.nvim]], false)
+-- Config for: vimtex
+time([[Config for vimtex]], true)
+ require 'config.vimtex' 
+time([[Config for vimtex]], false)
+-- Config for: nvim-lspconfig
+time([[Config for nvim-lspconfig]], true)
+ require 'config.lsp' 
+time([[Config for nvim-lspconfig]], false)
 if should_profile then save_profiles() end
 
 end)

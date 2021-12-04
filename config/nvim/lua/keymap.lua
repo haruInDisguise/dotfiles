@@ -26,10 +26,13 @@ global_set_keymap('n', 'H', '<Nop>', {})
 global_set_keymap('n', 'L', '<Nop>', {})
 
 -- more "powerful" version of hjkl or something
-global_set_keymap('n', 'H', '0', mapping_options)
+global_set_keymap('n', 'H', '^', mapping_options)
 global_set_keymap('n', 'L', '$', mapping_options)
 global_set_keymap('n', 'J', '}', mapping_options)
 global_set_keymap('n', 'K', '{', mapping_options)
+
+global_set_keymap('n', 'j', 'gj', mapping_options)
+global_set_keymap('n', 'k', 'gk', mapping_options)
 
 -- centering search results
 global_set_keymap('n', 'n', 'nzz', mapping_options)

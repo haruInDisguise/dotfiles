@@ -1,7 +1,7 @@
 # GENERAL
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
-export BROWSER="firefox"
+export BROWSER="firefox-developer-edition"
 
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
@@ -36,12 +36,13 @@ export npm_config_prefix="$XDG_DATA_HOME/npm"
 export GOPATH="$XDG_DATA_HOME/go"
 
 # PATH
-_BIN_USER="$HOME/.local/bin/user_scripts/bin:$HOME/.local/bin/extern"
+_BIN_USER="$HOME/.local/bin"
+_BIN_USER_DOT="$HOME/dotfiles/bin/user_scripts/bin"
 _BIN_CARGO="$CARGO_HOME/bin"
 _BIN_NPM="$npm_config_prefix/bin"
 
-export PATH="$_BIN_USER:$_BIN_NPM:$_BIN_CARGO:$PATH"
-unset _BIN_CARGO _BIN_LOCAL _BIN_NPM _BIN_USER
+export PATH="$_BIN_USER_DOT:$_BIN_USER:$_BIN_NPM:$_BIN_CARGO:$PATH"
+unset _BIN_CARGO _BIN_LOCAL _BIN_NPM _BIN_USER _BIN_USER_DOT
 
 # OTHER
 export PROXYCHAINS_CONF_FILE="$XDG_CONFIG_HOME/proxychains/proxychains.conf"
@@ -51,7 +52,14 @@ export WINEPREFIX="$XDG_DATA_HOME/wine/pfx/default"
 export LESSHISTFILE="$XDG_DATA_HOME/lesshst"
 export LESSHISTSIZE=100
 
+# Pager for man with some color changes
+export MANPAGER='less -R --use-color -Dum$Dd+g$Dsy$DPw'
+export MANROFFOPT='-c'
+
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
+export GPG_TTY="$(tty)"
+
+export REDSHIFT_LOCATION='52.3127:13.3427'
 
 # Fixing "bugs" in dwm... see dwm(1)
 export _JAVA_AWT_WM_NONREPARENTING=1
