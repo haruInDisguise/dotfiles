@@ -21,16 +21,8 @@ alias cp='cp -iv'
 alias rm='rm -v'
 alias mv='mv -iv'
 
-# grep
 alias grep='grep --color=auto'
-alias rgrep='grep -r'
-alias fgrep='fgrep --color=auto'
-alias egrep='egrep --color=auto'
-
-# bc
 alias bc='bc -q'
-
-# ping
 alias pg='ping 8.8.8.8 -c3'
 
 ## ZSH
@@ -63,10 +55,10 @@ alias xpropc='xprop | grep "WM_CLASS"'
 # youtube_dl
 alias yta='youtube-dl --audio-format opus -x'
 
-# neovim
-alias n="$EDITOR"
-alias vim="$EDITOR"
-alias ntmp='n $(mktemp /tmp/XXXXXXXXXX.md)'
+# neovik
+alias n='$EDITOR'
+alias vim='$EDITOR'
+alias ntmp='$EDITOR $(mktemp /tmp/XXXXXXXXXX.md)'
 
 # git
 alias gs='git status'
