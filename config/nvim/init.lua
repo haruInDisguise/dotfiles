@@ -46,12 +46,12 @@ opt.wb = false
 
 -- tab config, indent and scrolloff...
 opt.smarttab = true
-opt.tabstop = 4
-opt.shiftwidth = 4
+opt.tabstop = 2
+opt.shiftwidth = 2
 opt.expandtab = true
 opt.autoindent = true
 opt.smartindent = true
-opt.scrolloff = 2
+opt.scrolloff = 3
 
 opt.backspace = 'indent,start,eol'
 
