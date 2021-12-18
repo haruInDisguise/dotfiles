@@ -7,3 +7,6 @@
 [submodule "config/zsh/extern/zsh-autosuggestions"]
 	path = config/zsh/extern/zsh-autosuggestions
 	url = https://github.com/zsh-users/zsh-autosuggestions
+[submodule "config/zsh/extern/zsh-theme-niice"]
+	path = config/zsh/extern/zsh-theme-niice
+	url = git@github.com:haruInDisguise/zsh-theme-niice
