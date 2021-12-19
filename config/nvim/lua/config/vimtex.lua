@@ -10,3 +10,4 @@ vim.g.tex_flavour = 'latex'
 -- see ":help vimtex-compiler".
 vim.g.vimtex_compiler_method = 'latexmk'
 
+vim.g.vimtex_compiler_latexmk = '-pdf -pvc'

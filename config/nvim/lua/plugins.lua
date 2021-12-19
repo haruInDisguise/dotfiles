@@ -1,5 +1,3 @@
--- Loading my plugins and their respective configuration
-
 -- I'm using 'packer.nvim' as my plugin manager: https://github.com/wbthomason/packer.nvim
 local packer = require 'packer'
 local packer_config = {}
@@ -43,22 +41,17 @@ local init = function(options)
   }
 
   use {
-      'L3MON4D3/LuaSnip',
-      config = [[ require '' ]],
+      'sirver/UltiSnips',
+      config = [[ require 'config.ultisnips' ]],
       requires = {
           'honza/vim-snippets'
       }
   }
 
-  use { 
-    'nvim-treesitter/nvim-treesitter', 
+  use {
+    'nvim-treesitter/nvim-treesitter',
     config = [[ require 'config.treesitter' ]],
     run = ':TSUpdate' 
-  }
-  use { 
-    'folke/trouble.nvim',
-    config = [[ require 'config.trouble' ]],
-    requires = 'kyazdani42/nvim-web-devicons'
   }
   use {
     'lervag/vimtex',
