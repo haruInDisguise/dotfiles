@@ -68,7 +68,7 @@ source "$ZDOTDIR/extern/zsh-theme-niice/src/prompt.zsh"
 # zoxide:   Jump to directories. Probably my favorite and most used
 #           tool for the shell
 # Source:   https://github.com/ajeetdsouza/zoxide
-command -vp 'zoxide' &>/dev/null && eval "$(zoxide init zsh)"
+command -v 'zoxide' &>/dev/null && eval "$(zoxide init zsh)"
 
 # fzf:      A very useful and universal cli fuzzy finder
 #           TODO: ReWRite It iN rUsT!1!
