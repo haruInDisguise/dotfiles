@@ -1,13 +1,8 @@
--- Viewer options: One may configure the viewer either by specifying a built-in
--- viewer method:
 vim.g.vimtex_view_method = 'zathura'
 vim.g.tex_flavour = 'latex'
 
--- VimTeX uses latexmk as the default compiler backend. If you use it, which is
--- strongly recommended, you probably don't need to configure anything. If you
--- want another compiler backend, you can change it as follows. The list of
--- supported backends and further explanation is provided in the documentation,
--- see ":help vimtex-compiler".
 vim.g.vimtex_compiler_method = 'latexmk'
+vim.g.vimtex_compiler_latexmk = { build_dir = 'build' }
 
-vim.g.vimtex_compiler_latexmk = '-pdf -pvc'
+vim.g.vimtex_complete_bib = { simple = true }
+

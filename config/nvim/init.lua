@@ -15,7 +15,6 @@ local pre_init = require 'pre_init'
 -- Load utils and several helper functions into the global scope
 local utils = require 'utils'
 
--- Useful shortcuts
 local opt = vim.opt -- AllInOne Solution to set options
 
 -- Load my plugins and there respective config
@@ -46,8 +45,8 @@ opt.wb = false
 
 -- tab config, indent and scrolloff...
 opt.smarttab = true
-opt.tabstop = 2
-opt.shiftwidth = 2
+opt.tabstop = 4
+opt.shiftwidth = 4
 opt.expandtab = true
 opt.autoindent = true
 opt.smartindent = true
@@ -58,7 +57,7 @@ opt.backspace = 'indent,start,eol'
 -- linebreak and length
 opt.wrap = true
 opt.lbr = true
-opt.tw = 500
+-- opt.tw = 500
 
 -- search related
 opt.incsearch = true
@@ -72,5 +71,6 @@ opt.list = true
 -- colorscheme
 opt.termguicolors = true
 opt.background = 'dark'
+
 vim.cmd 'colorscheme gruvbox-material'
 
