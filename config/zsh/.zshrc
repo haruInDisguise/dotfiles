@@ -61,9 +61,9 @@ source "$ZDOTDIR/config/keymap.zsh"
 
 source "$ZDOTDIR/extern/zsh-theme-niice/src/prompt.zsh"
 
-# ==========================
-# External tools and plugins
-# ==========================
+# ==============
+# External tools
+# ==============
 
 # zoxide:   Jump to directories. Probably my favorite and most used
 #           tool for the shell
@@ -73,24 +73,29 @@ command -v 'zoxide' &>/dev/null && eval "$(zoxide init zsh)"
 # fzf:      A very useful and universal cli fuzzy finder
 #           TODO: ReWRite It iN rUsT!1!
 # Source:   https://github.com/junegunn/fzf
-if command -vp "fzf" &>/dev/null; then
+command -v 'fzf' &>/dev/null && {
     source /usr/share/fzf/completion.zsh
     source /usr/share/fzf/key-bindings.zsh
-fi
+}
 
-# External zsh plugins
+# broot:    A fancy way to view files
+# source:   https://github.com/Canop/broot
+command -v 'broot' &>/dev/null && eval "$(broot --print-shell-function zsh)"
 
-#           Something that I'm working on. Probably already exists in a much more useful
+# ===========
+# ZSH plugins
+# ===========
+
+# desc:     Something that I'm working on. Probably already exists in a much more useful
 #           manner, but it was fun to create non the less and a great little learning exercise.
-# Source:   TODO
+# source:   TODO
 
 #           Neat auto completions!
-# Source:   https://github.com/zsh-users/zsh-autosuggestions
+# source:   https://github.com/zsh-users/zsh-autosuggestions
 source "$ZDOTDIR/extern/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
 
-#           Very pretty syntax highlighting.
-# Source:   https://github.com/zsh-users/zsh-syntax-highlighting
-# Note:     To be sourced at the end of the config or after every call to zle that
-#           registers a new hook or widget.
+# desc:     Very pretty syntax highlighting.
+# source:   https://github.com/zsh-users/zsh-syntax-highlighting
+# note:     To be sourced at the end of the config or after every call to zle that
+#           binds/invokes a (default) widget.
 source "$ZDOTDIR/extern/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
-

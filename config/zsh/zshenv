@@ -1,54 +1,54 @@
-# GENERAL
+# General
 export EDITOR="nvim"
 export VISUAL="$EDITOR"
 export BROWSER="firefox-developer-edition"
 
+# Being explicit about the defaults...
+# See: https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html
+# A bit more comprehensible: https://wiki.archlinux.org/title/XDG_Base_Directory
 export XDG_CACHE_HOME="$HOME/.cache"
 export XDG_CONFIG_HOME="$HOME/.config"
 export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_STATE_HOME="$HOME/.local/state"
 
-export XDG_BIN_HOME="$XDG_DATA_HOME/../bin/extern"
+# The following directories are not defined
+# by the standart (above url), but not everybody listens,
+# and/or this is an undocumented feature/expansion.
+# It is even more likely, that I'm just stupid.
+export XDG_BIN_HOME="$HOME/.local/bin"
 export XDG_DOWNLOADS_DIR="$HOME/downloads"
 export XDG_DESKTOP_DIR="/dev/null"
 
-# shell
+# Shell
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export HISTFILE="$XDG_DATA_HOME/.zhistory"
 export HISTSIZE=10000
 export SAVEHIST=10000
 
-# cargo
+# Cargo/Rust
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
 export CARGO_HOME="$XDG_DATA_HOME/cargo"
 
 # X11
 export XAUTHORITY="$XDG_CACHE_HOME/.Xauthority"
+# Overwritten by the startx helper script
 export XINITRC="$XDG_CONFIG_HOME/xorg/xinitrc"
 
-# git
+# Git
 export GIT_REVIEW_BASE="main"
 export GIT_PAGER="bat"
 
-# nodejs - npm global modules/config
+# NodeJS - npm global modules/config
 export npm_config_prefix="$XDG_DATA_HOME/npm"
 
-# denojs
+# DenoJS
 export DENO_DIR="$XDG_CACHE_HOME/deno"
 export DENO_INSTALL_ROOT="$XDG_DATA_HOME/deno/bin"
 
-# go
+# Go
 export GOPATH="$XDG_DATA_HOME/go"
 
-# PATH
-_BIN_USER="$HOME/.local/bin"
-_BIN_USER_DOT="$HOME/dotfiles/bin/user_scripts/bin"
-_BIN_CARGO="$CARGO_HOME/bin"
-_BIN_NPM="$npm_config_prefix/bin"
-
-export PATH="$DENO_INSTALL_ROOT:$_BIN_USER_DOT:$_BIN_USER:$_BIN_NPM:$_BIN_CARGO:$PATH"
-unset _BIN_CARGO _BIN_LOCAL _BIN_NPM _BIN_USER _BIN_USER_DOT
-
-# OTHER
+# Other
 export PROXYCHAINS_CONF_FILE="$XDG_CONFIG_HOME/proxychains/proxychains.conf"
 export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass"
 export WINEPREFIX="$XDG_DATA_HOME/wine/pfx/default"
@@ -64,11 +64,20 @@ export MANROFFOPT='-c'
 export GNUPGHOME="$XDG_DATA_HOME/gnupg"
 export GPG_TTY="$(tty)"
 
-# Used in .xinit
+# Used in .xinit. TODO: Move?
 export REDSHIFT_LOCATION='52.3127:13.3427'
 
 # Fixing "bugs" in dwm... see dwm(1)
 export _JAVA_AWT_WM_NONREPARENTING=1
+
+# PATH
+_BIN_USER="$HOME/.local/bin"
+_BIN_USER_DOT="$HOME/dotfiles/bin/user_scripts/bin"
+_BIN_CARGO="$CARGO_HOME/bin"
+_BIN_NPM="$npm_config_prefix/bin"
+
+export PATH="$DENO_INSTALL_ROOT:$_BIN_USER_DOT:$_BIN_USER:$_BIN_NPM:$_BIN_CARGO:$PATH"
+unset _BIN_CARGO _BIN_LOCAL _BIN_NPM _BIN_USER _BIN_USER_DOT
 
 # Personal exports for script mangement... AHHHAH
 export USER_CONF_DOTFILES_ROOT="$HOME/dotfiles"

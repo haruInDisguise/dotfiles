@@ -1,11 +1,5 @@
 # My aliases
 
-# Some quick acess stuff. Unset at the end
-typeset -A zsh_options_aliases=(
-    dirstack_acess_range "$(print {0..9})"
-    linux_kernel_distro "$(uname -r)"
-)
-
 # Shutdown and reboot
 alias shd='sudo shutdown -h now'
 
@@ -28,11 +22,10 @@ alias pg='ping 8.8.8.8 -c3'
 ## ZSH
 
 # dirstack and jump up
-for i ({0..9}) alias "$i"="pushd -$i"
+# for i ({0..9}) alias "$i"="pushd -$i"
 for i ({2..5}) alias "..$i"="builtin cd $(printf '../%.0s' {1..${i}})"
 
-## OTHER PROGRAMS
-case "$zsh_options_aliases[linux_kernel_distro]" in
+case "$(uname -r)" in
     *(artix|arch)*)
         alias pac='sudo pacman --color=auto'
         alias pacin='pac -S'
@@ -66,6 +59,4 @@ alias ga='git add'
 alias gp='git push'
 alias gpo='git push origin'
 alias gc='git commit'
-
-unset zsh_options_aliases
 
