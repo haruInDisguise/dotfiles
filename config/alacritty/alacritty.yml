@@ -383,7 +383,7 @@ schemes:
       white:   '0xd4be98'
 
 # Apply the color scheme.
-colors: *gruvbox_material_medium_dark
+colors: *gruvbox_material_hard_dark
 
 # Bell
 #
