@@ -16,10 +16,8 @@ alias rm='rm -v'
 alias mv='mv -iv'
 
 alias grep='grep --color=auto'
-alias bc='bc -q'
+alias bc='bc -lq'
 alias pg='ping 8.8.8.8 -c3'
-
-## ZSH
 
 # dirstack and jump up
 # for i ({0..9}) alias "$i"="pushd -$i"
@@ -27,16 +25,19 @@ for i ({2..5}) alias "..$i"="builtin cd $(printf '../%.0s' {1..${i}})"
 
 case "$(uname -r)" in
     *(artix|arch)*)
-        alias pac='sudo pacman --color=auto'
-        alias pacin='pac -S'
-        alias pacupg='pac -Syu'
-        alias pacupd='pac -Sy'
-        alias pacrm='pac -Rs'
-        alias pacsearch='pac -Ss'
-        alias pacinfo='pac -Si'
-        alias pacdown='pac -Suu' 
-        alias pacls='pac -Qe'
-        alias pacown='pac -Qo'
+        local pac='pacman --color=auto'
+
+        alias pacin="sudo $pac -S"
+        alias pacupg="sudo $pac -Syu"
+        alias pacupd="sudo $pac -Sy"
+        alias pacrm="sudo $pac -Rs"
+
+        alias pacsearch="$pac -Ss"
+        alias pacinfo="$pac -Si"
+        alias pacls="$pac -Qe"
+        alias pacown="$pac -Qo"
+
+        unset pac
         ;;
 esac
 
@@ -48,10 +49,11 @@ alias xpropc='xprop | grep "WM_CLASS"'
 # youtube_dl
 alias yta='youtube-dl --audio-format opus -x'
 
-# neovik
+# neovim
 alias n='$EDITOR'
 alias vim='$EDITOR'
 alias ntmp='$EDITOR $(mktemp /tmp/XXXXXXXXXX.md)'
+alias ntmpconst='$EDITOR '"$(mktemp /tmp/XXXXXXXXXX.md)"
 
 # git
 alias gs='git status'
