@@ -3,14 +3,19 @@
 # A small (dirty) script to quickly
 # switch between german and us layout
 
-local keymap_current=${(M)$(setxkbmap -query):#(de|us)}
-local -A targets=(
+typeset -r KEYMAP_CURRENT=${(M)$(setxkbmap -query):#(de|us)}
+
+typeset -A targets=(
     de  us
     us  de
 )
 
-local keymap=$targets[$keymap_current]
+typeset -r KEYMAP="$targets[$KEYMAP_CURRENT]"
+typeset ARGS
 
-setxkbmap $keymap -option caps:escape
-dunstify -r 543234 "Changed keymap to: ${(C)keymap}"
+[[ -z "$KEYMAP" ]] && { print -- "Unknown keymap: $KEYMAP_CURRENT"; exit 1 }
+[[ "$HOST" != "artbox" ]] && ARGS+="-option caps:escape"
+
+eval "setxkbmap $KEYMAP $ARGS"
+dunstify -r 543234 "changed keymap to: ${(c)KEYMAP}"
 
