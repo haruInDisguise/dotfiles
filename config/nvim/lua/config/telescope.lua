@@ -1,10 +1,16 @@
-local tele = require 'telescope'
+local telescope = require 'telescope'
 local config = {}
 
 local init = function()
-    tele.setup {
-        
+    telescope.setup {
+        extensions = {
+            file_browser = {
+                theme = 'ivy',
+            };
+        }
     }
+
+    telescope.load_extension('file_browser')
 end
 
 local map = function()
@@ -15,9 +21,8 @@ local map = function()
     }
 
     keymap('n', '<leader>tt', '<cmd>Telescope<CR>', keymap_options)
-    keymap('n', '<leader>tf', '<cmd>Telescope find_files<CR>', keymap_options)
-    keymap('n', '<leader>tf', '<cmd>Telescope find_files<CR>', keymap_options)
-    keymap('n', '<leader>tf', '<cmd>Telescope find_files<CR>', keymap_options)
+
+    keymap('n', '<leader>fb', "<cmd>lua require 'telescope'.extensions.file_browser.file_browser()<CR>", keymap_options)
 
 end
 

@@ -62,7 +62,11 @@ local init = function(options)
     use {
         'nvim-telescope/telescope.nvim',
         config = [[ require 'config.telescope' ]],
-        requires = 'nvim-lua/plenary.nvim',
+        requires = {
+            'nvim-lua/plenary.nvim',
+            'kyazdani42/nvim-web-devicons',
+            'nvim-telescope/telescope-file-browser.nvim',
+        }
     }
 
     use {

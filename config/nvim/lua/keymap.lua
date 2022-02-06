@@ -38,11 +38,9 @@ global_set_keymap('n', 'k', 'gk', mapping_options)
 global_set_keymap('n', 'n', 'nzz', mapping_options)
 global_set_keymap('n', 'N', 'Nzz', mapping_options)
 
--- switch to last buffer and respecitve cursor position
-global_set_keymap('n', '<bs>', '<c-^>`”zz', mapping_options)
+-- switch to previous buffer
+global_set_keymap('n', '<bs>', '<cmd>bp<CR>zz', mapping_options)
 
--- Remove the need to press shift when using US keymap. owever,
--- this ignores your keymap and also effects, for example, the DE layout.
--- I mostly use the US Keymap, and therefore this is rather convinient.
+-- is this a good idea?
 global_set_keymap('n', ';', ':', mapping_options)
 

@@ -46,8 +46,6 @@ else
     _USER_LOG_PATH_FMT=""
 fi
 
-# TODO: POSIX SH (tested with dash) fails to properly interpret echo.
-# Figure out why... For now, use GNU echo, instead of builtin...
 _write_to_stdout() {
     printf "%b" "$@\n"
 }

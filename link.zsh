@@ -11,16 +11,24 @@ DIR_ROOT="$DIR_SCRIPT"
 LINK_CMD="command -p ln -sf"
 
 typeset -a links_config=(
-    "$DIR_CONFIG/zsh"         "$TARGET_CONFIG/zsh"
-    "$DIR_CONFIG/nvim"        "$TARGET_CONFIG/nvim"
-    "$DIR_CONFIG/alacritty"   "$TARGET_CONFIG/alacritty"
-    "$DIR_CONFIG/neofetch"    "$TARGET_CONFIG/neofetch"
+    '$root_config/zsh'         '$target_config/zsh'
+    '$root_config/nvim'        '$target_config/nvim'
+    '$root_config/alacritty'   '$target_config/alacritty'
+    '$root_config/neofetch'    '$target_config/neofetch'
 
-    "$DIR_ROOT/xinitrc"          "$TARGET_ROOT/.xinitrc"
-    "$DIR_CONFIG/zsh/zshenv"     "$TARGET_ROOT/.zshenv"
-    "$DIR_CONFIG/tmux/tmux.conf" "$TARGET_ROOT/.tmux.conf"
-
+    '$root_dir/xinitrc'          '$target_root/.xinitrc'
+    '$root_config/zsh/zshenv'     '$target_root/.zshenv'
+    '$root_config/tmux/tmux.conf' '$target_root/.tmux.conf'
 )
+
+link_for_user() {
+    local root_dir="${}"
+    local root_config="${}"
+    local target_root="${}"
+    local target_config="${}"
+
+    local user="${3:-$LOGNAME}"
+}
 
 main() {
     for path link_name in $links_config; do

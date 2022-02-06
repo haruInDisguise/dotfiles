@@ -2,8 +2,14 @@
 # Options
 # =======
 
-# Enable debugging
-zmodload 'zsh/zprof'
+# Debug
+if [[ -n "$DEBUG" ]]; then
+    zmodload 'zsh/zprof'
+    setopt SOURCE_TRACE
+fi
+
+# Docs on options:
+# https://zsh.sourceforge.io/Doc/Release/Options.html
 
 # Navigation and jumping around
 setopt AUTO_CD              # Go to folder path without using cd.
@@ -14,21 +20,39 @@ setopt EXTENDED_GLOB
 setopt PUSHD_IGNORE_DUPS
 setopt PUSHD_SILENT         # Do not print the directory stack after pushd or popd.
 
+# General
+setopt HASH_CMDS
+
 # Grammar
 setopt CORRECT
 
-# History
-setopt EXTENDED_HISTORY          # Write the history file in the ':start:elapsed;command' format.
-setopt SHARE_HISTORY             # Share history between all sessions.
-setopt HIST_EXPIRE_DUPS_FIRST    # Expire a duplicate event first when trimming history.
-setopt HIST_IGNORE_DUPS          # Do not record an event that was just recorded again.
-setopt HIST_IGNORE_ALL_DUPS      # Delete an old recorded event if a new event is a duplicate.
-setopt HIST_FIND_NO_DUPS         # Do not display a previously found event.
-setopt HIST_IGNORE_SPACE
-setopt HIST_SAVE_NO_DUPS
-setopt HIST_VERIFY               # Do not execute immediately upon history expansion.
+# Jobs
+setopt AUTO_CONTINUE            # Disowned jobs are automatically continued
+setopt CHECK_JOBS               # Check for suspended jobs on exit (default in bash)
+setopt CHECK_RUNNING_JOBS       # Check for running and suspended jobs on exit
+setopt HUP                      # Send the HUP singnal to running jobs, when the shell exits
 
-unsetopt FLOWCONTROL             # Disable "flow control"/sending the STOP char on C-s/C-q
+# History
+
+# The 'shared_history' option automatically sets 'extended_history'. The additional
+# prefix to each entry, prevents 'hist_ignore_all_dups' from working as one might
+# expect, since the additional timestamps create a uniq entry in the history list.
+
+#setopt EXTENDED_HISTORY         # Write the history file in the ':start:elapsed;command' format.
+setopt HIST_FCNTL_LOCK          # use fcntl syscall to lock hist file,
+
+setopt HIST_EXPIRE_DUPS_FIRST   # Expire a duplicate event first when trimming history.
+setopt HIST_IGNORE_DUPS         # Do not record an event that was just recorded again.
+setopt HIST_IGNORE_ALL_DUPS     # Delete an old recorded event if a new event is a duplicate.
+                                # only accounts for the current session!
+setopt HIST_SAVE_NO_DUPS
+setopt HIST_FIND_NO_DUPS        # Do not display a previously found event.
+setopt HIST_IGNORE_SPACE        # Don't record input that starts with a blank
+setopt HIST_VERIFY              # Do not execute immediately upon history expansion.
+setopt HIST_NO_FUNCTIONS        # Don't append functions to the history
+setopt HIST_REDUCE_BLANKS       # Truncate additional blanks
+
+unsetopt FLOWCONTROL            # Disable "flow control"/sending the STOP char on C-s/C-q
 
 # =======
 # General
