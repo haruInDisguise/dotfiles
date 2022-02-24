@@ -1,31 +1,40 @@
 #!/usr/bin/zsh
 
 # Launch librespot... and handle some things... yay
-# UNSAFE: Leaks account credentials to the
-#         "process stack" (cmdline).
 
-typeset -rg PID_PATH="/tmp/${LOGNAME}_librespot_lck.pid"
-typeset -rg CACHE_PATH="${XDG_CACHE_HOME}/librespot"
+# see: https://zdharma-continuum.github.io/Zsh-100-Commits-Club/Zsh-Plugin-Standard.html#zero-handling
+SCRIPT_PATH="${ZERO:-${${0:#$ZSH_ARGZERO}:-${(%):-%N}}}"
+SCRIPT_PATH="${${(M)0:#/*}:-$PWD/$0}"
 
-typeset -rg IS_DEBUG=true
-typeset -rg SCRIPT_NAME="$0"
-typeset -rg SCRIPT_DIR="$0:h"
+typeset -A script_options=(
+    librespot_cache_path "$XDG_CACHE_HOME/librespot"
+    script_cache_path    "$XDG_CACHE_HOME/script_spotify"
+    download_util        aria2c
+    log_level            debug
+    #
+    headless             true
+    quiet                true
+)
+
+typeset -a librespot_options=(
+    --backend   rodio # TODO: Look into 'gstreamer' backend...
+    --cache     "$script_options[librespot_cache_path]"
+    --name      "$(uname -n)"
+    --bitrate   320
+    --format    F32
+    --onevent   "librespot_event"
+    --initial-volume 100
+)
 
 # Fancy prints
-_fmt_print() {
-    print -P -- "%F{black}[%f$(date -u '+%Y-%m-%dT%H:%M:%SZ') %F{$2}$1%f ${SCRIPT_NAME:t}%F{black}]%f\t" "${(%%)3}"
-}
+_fmt_print() \
+    print -P -- "%F{black}[%f$(date '+%Y-%m-%dT%H:%M:%SZ') %F{$2}$1%f ${SCRIPT_PATH:t}%F{black}]%f\t" "${(%%)3}"
+print_error()   { _fmt_print 'ERROR' red     "$@" }
+print_warn()    { _fmt_print 'WARN ' yellow  "$@" }
+print_info()    { _fmt_print 'INFO ' green   "$@" }
+print_error_and_exit() { print_error $@; exit 1 }
 
-print_error()   { _fmt_print ERROR  red     "$@" }
-print_warn()    { _fmt_print WARN   yellow  "$@" }
-print_info()    { _fmt_print INFO   green   "$@" }
-
-print_error_and_exit() {
-    print_error $@
-    exit 1
-}
-
-if [[ $IS_DEBUG = true ]]; then
+if [[ $script_options[log_level] == debug ]]; then
     print_debug()   { _fmt_print DEBUG cyan "$@" }
 else
     print_debug() {}
@@ -38,125 +47,93 @@ show_help() {
         ''
         '  Arguments:'
         '      help:   Display this text'
-        "      event:  Mainly a hook for desktop notifications using 'dunst'."
-        "              Should be called by librespot's 'onevent' hook"
+        '      exit:   Terminate any running librespot instances'
         '      run:    [default] Launch librespot and pass it all supsequent arguments'
         '              NOTE:   this might effect the cache and therefore further'
         '                      script invocations. TODO: Make this practical/functional'
         ''
         "This script trys to launch 'librespot' using"
-        "the following cache path: '"'$XDG_CACHE_HOME/librespot'"' ('current value: $CACHE_PATH')."
-        "If the file does not exist, it will be created."
+        "the following cache path: '"'$XDG_CACHE_HOME/librespot'"' ('current value: $script_options[librespot_cache_path]')."
         ''
         "A fresh launch might leak credentials into the"
         "process tree/'cmdline', as librespot takes credentials"
         "in the form of arguments (one might pass the password"
         "through stdin by omitting the '--password' field)."
-        "On supsequent startups, librespot will use/consult the"
+        "On subsequent calls, this script will use/consult the"
         "cached data."
     )
 
     print -rC1 -- "$msg[@]"
 }
 
-# ENV:
-# PLAYER_EVENT - event type:
-#       changed,
-#       paused
-#       playing,
-#       preloading,
-#       started,
-#       volume_set,
-# POSITION_MS:  playing,    paused
-# DURATION_MS:  playing,    paused
-# TRACK_ID:     playing,    paused, preloading, changed, started
-# VOLUME:       volume_set
-handle_event() {
-    print_warn "${0}: TODO\n"
-
-    print_debug "PLAYER_EVENT: ${PLAYER_EVENT:-unknown}"
-    print_debug "TRACK_ID:     ${TRACK_ID:-none}"
-    print_debug "POSITION_MS:  ${POSITION_MS:-none}"
-    print_debug "DURATION_MS:  ${DURATION_MS:-none}\n"
-}
-
 handle_unknown() {
     print_warn "Unknown argument: $@\n"
     show_help
+    exit 2
 }
 
 handle_exit() {
     # TODO: Maybe use a PID file?
-    local pid exit_code
-
-    print_warn "handle_exit: Not yet fully implemented! Proceeding to 'kill -TERM librespot' ..."
-    pid="$(pidof librespot)"
-
-    if [[ $? != 0 ]]; then
-        print_error_and_exit "Failed to quit librespot. Process not found (matching against 'librespot')"
-    fi
-
-    if ! kill $pid; then
-        print_error_and_exit "Failed to terminate librespot: $?"
+    print_warn "handle_exitd This is a bit ugly... fix me pls, also proceeding to 'kill -TERM librespot' ... (͡ ° ͜ʖ ͡ °)"
+    if ! builtin kill -TERM $(pidof librespot) 2>/dev/null; then
+        print_error_and_exit "Failed to terminate librespot"
     fi
 }
 
 launch_librespot() {
-    # TODO: fix the pass store situation..
-    local -a cmd_args=(
-        --backend   rodio # TODO: Look into 'gstreamer' backend...
-        --cache "$CACHE_PATH"
-        --name  "$(uname -n)"
-        --bitrate 320
-        --format 'F32'
-        --initial-volume 100
-        --onevent "$SCRIPT_NAME event"
-    )
+    local pid_librespot cmd
 
-    # Check for cache
-    if [[ ! -x "$CACHE_PATH" ]]; then
-        export PASSWORD_STORE_DIR="$XDG_DATA_HOME/pass_mobile"
+    # Librespot uses a directory to store cache (execute = 'cd' able)
+    if [[ ! -x "$script_options[librespot_cache_path]" ]]; then
+        print_warn 'Unable to locate librespot cache'
 
-        # Note: Cache is created by librespot
-        cmd_args+=(
+        librespot_options+=(
           --username  "$(pass web/spotify/username)" # TODO: Auth using zeroconf?
           --password  "$(pass web/spotify/password)"
         )
     fi
 
-    librespot ${(u)cmd_args} ${@}
+    cmd="librespot ${(u)librespot_options}"
 
-    exit
+    [[ $script_options[quiet] == true ]] && cmd+=" &>/dev/null"
+    [[ $script_options[headless] == true ]] && cmd+=" &!"
+
+    eval "$cmd"
 }
 
 main() {
-    if pidof librespot &>/dev/null; then
-        print_error 'there is already a running instance of librespot'
-        exit 1
-    fi
+    command pidof librespot 2>/dev/null && \
+        print_error_and_exit 'there is already a running instance of librespot'
+
+    command -v wget >/dev/null || \
+        print_error_and_exit "unable to locate 'wget' binary in PATH (required to check network access)"
+
+    # :>)
+    command wget -q --tries=10 --timeout=3 --spider 'https://duckduckgo.com' &>/dev/null || \
+        print_error_and_exit 'unable to connect to the internet'
 
     launch_librespot $@
 }
 
+emulate -L zsh
+
+# TODO: Improve argument handeling...
 _cmd="$1"
 
-if [[ -z "$@" ]]; then
-    print_warn "No sub-command specified. Falling back to 'start'"
+if [[ "$_cmd" == "" ]]; then
+    print_debug "No command specified. Falling back to 'start'"
     _cmd='start'
 fi
 
 case "$_cmd" in
-    'event')
-        handle_event $@
+    'start')
+        main $@
+        ;;
+    'exit')
+        handle_exit
         ;;
     'help')
         show_help
-        ;;
-    ('start'|'run'))
-        main $@
-        ;;
-    ('exit'|'quit'|'stop'))
-        handle_exit $@
         ;;
     ?*)
         handle_unknown $@
