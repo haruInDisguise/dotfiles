@@ -24,6 +24,8 @@ global_set_keymap('n', 'J', '<Nop>', {})
 global_set_keymap('n', 'K', '<Nop>', {})
 global_set_keymap('n', 'H', '<Nop>', {})
 global_set_keymap('n', 'L', '<Nop>', {})
+global_set_keymap('n', 'j', '<Nop>', {})
+global_set_keymap('n', 'k', '<Nop>', {})
 
 -- more "powerful" version of hjkl or something
 global_set_keymap('n', 'H', '^', mapping_options)

@@ -4,10 +4,15 @@ local ts_config = require 'nvim-treesitter.configs'
 
 local init = function()
     ts_config.setup {
-        ensure_installed = { 
-        "bash", "bibtex", "cpp", "c", "cmake", "devicetree", "dockerfile", "html", "javascript",
-        "json", "latex", "lua", "python", "regex", "rust", "toml", "typescript", "vim", "yaml",
-        "glsl"
+        ensure_installed = {
+        "bash", "fish",
+        "cpp", "c", "rust", "toml",
+        "devicetree", "dockerfile", "cmake",
+        "html", "css", "json",
+        "javascript", "typescript", "python", "lua",
+        "regex", "vim", "yaml",
+        "glsl",
+        "latex", "bibtex",
         },
         -- ensure_installed = "maintained",
         ignore_install = {""}, 
