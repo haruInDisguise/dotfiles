@@ -1,12 +1,6 @@
-[submodule "config/zsh/extern/zsh-syntax-highlighting"]
-	path = config/zsh/extern/zsh-syntax-highlighting
-	url = git@github.com:zsh-users/zsh-syntax-highlighting
-[submodule "config/zsh/extern/zsh-async"]
-	path = config/zsh/extern/zsh-async
-	url = https://github.com/mafredri/zsh-async
-[submodule "config/zsh/extern/zsh-autosuggestions"]
-	path = config/zsh/extern/zsh-autosuggestions
-	url = https://github.com/zsh-users/zsh-autosuggestions
-[submodule "config/zsh/extern/zsh-theme-niice"]
-	path = config/zsh/extern/zsh-theme-niice
-	url = git@github.com:haruInDisguise/zsh-theme-niice
+[submodule "config/zsh"]
+	path = config/zsh
+	url = git@github.com:haruInDisguise/zsh-config
+[submodule "config/fish"]
+	path = config/fish
+	url = git@github.com:harInDisguise/fish-config
