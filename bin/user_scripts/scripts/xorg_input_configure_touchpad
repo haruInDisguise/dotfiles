@@ -1,0 +1,25 @@
+#!/usr/bin/sh
+
+# A script to configure my laptops touchpad
+
+DEVICE="${1:-06CBCDC2:00 06CB:CDE9 Touchpad}"
+
+list_props() {
+  xinput list-props "$DEVICE"
+}
+
+set_prop_i8() {
+  prop="$1"
+  value="$2"
+
+  xinput set-int-prop "$DEVICE" "$prop" 8 "$value"
+}
+
+main() {
+  set_prop_i8 'libinput Disable While Typing Enabled' 1
+  set_prop_i8 'libinput Tapping Drag Enabled' 1
+  set_prop_i8 'libinput Tapping Enabled' 1
+  set_prop_i8 'libinput Natural Scrolling Enabled' 1
+}
+
+main

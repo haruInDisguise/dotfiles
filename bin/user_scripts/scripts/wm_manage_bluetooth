@@ -1,0 +1,20 @@
+#!/usr/bin/zsh
+
+typeset -A devices=(
+    "WH-1000XM3" "95:DB:56:19:03:A3"
+    "AnnePro2"   "18:45:16:8E:3F:B6"
+)
+
+typeset BLUETOOTH_CMD="bluetoothctl"
+typeset BLUETOOTH_CMD_ARGS="--timeout 3"
+
+main() {
+    eval "$BLUETOOTH_CMD power on $BLUETOOTH_CMD_ARGS" \
+        print_error_and_exit 'Unable to start/find bluetooth controller'
+
+    eval "$BLUETOOTH_CMD power on $BLUETOOTH_CMD_ARGS"
+    eval "$BLUETOOTH_CMD power on $BLUETOOTH_CMD_ARGS"
+}
+
+main $@
+

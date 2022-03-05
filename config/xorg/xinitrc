@@ -1,0 +1,28 @@
+# Lauch things ... thats it. nice
+# 'startx' uses sh: might be dunst. no bashisms pls
+
+# Some mobile/desktop specific stuff
+case "$(uname -n)" in
+    'artbox' )
+        xrandr --output DP-2 --primary --auto --left-of DVI-D-0 & ;;
+    'box_mobile' )
+        setxkbmap us -option caps:escape & ;;
+esac
+
+# TODO: Implement a proper status bar...
+while :; do
+    xsetroot -name "bat: $(cat /sys/class/power_supply/BAT1/capacity)%"
+    sleep 5
+done &
+
+# Scripts...
+eval "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_set_background" &
+eval "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_input_configure_touchpad" &
+
+# huh...
+redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &
+unclutter --ignore-scrolling --timeout 5 &
+dunst &
+
+exec dwm
+#exec $HOME/projects/coding/rust/penrose_config/target/release/penrose_client
