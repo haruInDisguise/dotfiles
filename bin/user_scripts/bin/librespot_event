@@ -1,0 +1,24 @@
+#!/usr/bin/zsh
+
+# A script to handle events, emited by librespot
+
+# Known events:
+#   playing
+#   paused
+#   preload
+#   continue
+#   next
+#   previous
+
+handle_playing() {}
+handle_paused() {}
+handle_changed() {}
+handle_volume_set() {}
+handle_preload() {}
+
+main() {
+
+}
+
+main $@
+
