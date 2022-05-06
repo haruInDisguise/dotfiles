@@ -1,28 +1,30 @@
 # Lauch things ... thats it. nice
-# 'startx' uses sh: might be dunst. no bashisms pls
+# 'startx' uses sh: might be dunst
+# i. e. require POSIX compliance.
+# no bashisms pls
 
 # Some mobile/desktop specific stuff
 case "$(uname -n)" in
     'artbox' )
         xrandr --output DP-2 --primary --auto --left-of DVI-D-0 & ;;
     'box_mobile' )
+        sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_input_configure_touchpad" &
         setxkbmap us -option caps:escape & ;;
 esac
 
-# TODO: Implement a proper status bar...
-while :; do
-    xsetroot -name "bat: $(cat /sys/class/power_supply/BAT1/capacity)%"
-    sleep 5
-done &
-
-# Scripts...
-eval "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_set_background" &
-eval "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_input_configure_touchpad" &
+sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_set_background" &
+sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/wm_launch_statusbar" &
 
 # huh...
-redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &
+redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &>/dev/null &
 unclutter --ignore-scrolling --timeout 5 &
 dunst &
 
-exec dwm
-#exec $HOME/projects/coding/rust/penrose_config/target/release/penrose_client
+LAUNCH_WM='dwm'
+
+if [ "$LAUNCH_WM" = 'dwm' ]; then
+    # does not replace the login shell
+    exec dwm
+elif [ "$LAUNCH_WM" = 'penrose' ]; then
+    exec "$HOME/projects/coding/rust/penrose_config/target/release/penrose_client"
+fi
