@@ -26,7 +26,7 @@ local on_attach = function(client, bufnr)
     -- See `:help vim.lsp.*` for documentation on any of the below functions
     buf_set_keymap('n', 'gD', '<Cmd>lua vim.lsp.buf.declaration()<CR>', opts)
     buf_set_keymap('n', 'gd', '<Cmd>lua vim.lsp.buf.definition()<CR>', opts)
-    buf_set_keymap('n', 'gk', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
+    buf_set_keymap('n', 'gK', '<Cmd>lua vim.lsp.buf.hover()<CR>', opts)
     buf_set_keymap('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>', opts)
     buf_set_keymap('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<CR>', opts)
     buf_set_keymap('n', ',wa', '<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>', opts)
@@ -46,7 +46,7 @@ end
 -- Configuring lsp using passed through config
 -- TODO: Move server specific config out of init.lua?
 local init = function(utils, options)
-    local servers = {'rust_analyzer', 'clangd', 'pyright', 'texlab', 'denols'}
+    local servers = {'rust_analyzer', 'clangd', 'pyright', 'texlab', 'denols', 'tsserver'}
 
     for _, name in ipairs(servers) do
         lsp[name].setup {

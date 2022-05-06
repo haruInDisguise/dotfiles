@@ -12,12 +12,12 @@
 
 local config = {}
 
-local annoy_me_on_bootstrap = function() 
+local annoy_me_on_bootstrap = function()
 
 end
 
 -- options: Override some defaults in this setup
-local init = function(utils, options, ...)
+local init = function(utils, options)
     local options = options or {}
     local utils = utils
 
@@ -36,8 +36,6 @@ local init = function(utils, options, ...)
       fn.system({'git', 'clone', package_manager_repo, install_path})
       execute 'packadd packer.nvim'
     end
-
-    annoy_me_on_bootstrap()
-end 
+end
 
 init()

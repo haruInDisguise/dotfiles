@@ -37,5 +37,20 @@ local init = function()
     }
 end
 
+local load_mcfuntion_parser = function()
+    local parser_config = require 'nvim-treesitter.parsers'.get_parser_configs()
+
+    parser_config.mcfunction_lang = {
+      install_info = {
+        url = "https://github.com/theusaf/tree-sitter-mcfunction-lang",
+        files = {"src/parser.c"},
+        generate_requires_npm = true,
+        requires_generate_from_grammar = false,
+      },
+      filetype = "mcfunction",
+    }
+end
+
 init()
+load_mcfuntion_parser()
 

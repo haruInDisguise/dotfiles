@@ -9,7 +9,7 @@
 -- "Everything you need to know to configure neovim using lua": https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/
 -- "Nvim-lua-guide": https://github.com/nanotee/nvim-lua-guide
 
--- Load pre_init functions and enable this config to bootstrap itself
+-- TODO: FIX ME PLS. Load pre_init functions and enable this config to bootstrap itself
 local pre_init = require 'pre_init'
 
 -- Load utils and several helper functions into the global scope
@@ -25,6 +25,11 @@ local plugins = require 'plugins'
 local keymap = require 'keymap' -- {leader: [[ ]]}
 
 -- OPTIONS
+
+-- experimental .7 stuff...
+vim.g.do_filetype_lua = 1
+vim.g.did_load_filetypes = 0
+
 opt.completeopt = 'menuone,noselect'
 opt.relativenumber = true
 opt.number = true
@@ -35,7 +40,9 @@ opt.so = 7
 opt.wildmenu = true
 opt.wildignore = '*/.git,*.o.so'
 
--- Explicitly disable mouses support
+opt.laststatus = 3
+
+-- Explicitly disable mouse support...
 opt.mouse = ''
 
 -- disable swapfiles and automatic backups
@@ -49,7 +56,6 @@ opt.tabstop = 4
 opt.shiftwidth = 4
 opt.expandtab = true
 opt.autoindent = true
-opt.smartindent = true
 opt.scrolloff = 3
 
 opt.backspace = 'indent,start,eol'

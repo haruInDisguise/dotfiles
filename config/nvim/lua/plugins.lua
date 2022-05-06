@@ -23,7 +23,7 @@ local init = function(options)
         config = [[ require 'config.colorizer' ]]
     }
 
-    -- LSP, Completion, Troubleshooting and Treesitter
+    -- LSP, Completion, Snippets, Troubleshooting and Treesitter
     use {
         'neovim/nvim-lspconfig',
         config = [[ require 'config.lsp' ]],
@@ -53,6 +53,7 @@ local init = function(options)
         config = [[ require 'config.treesitter' ]],
         run = ':TSUpdate' 
     }
+
     use {
         'lervag/vimtex',
         config = [[ require 'config.vimtex' ]]
@@ -65,10 +66,17 @@ local init = function(options)
         requires = {
             'nvim-lua/plenary.nvim',
             'kyazdani42/nvim-web-devicons',
+            'nvim-telescope/telescope-ui-select.nvim',
+
             'nvim-telescope/telescope-file-browser.nvim',
+            { 'nvim-telescope/telescope-fzf-native.nvim', run = 'make' },
+
+            'nvim-telescope/telescope-project.nvim',
+            'sudormrfbin/cheatsheet.nvim',
         }
     }
 
+    -- Rust dev
     use {
         'simrat39/rust-tools.nvim',
         config = [[ require 'config.rust-tools' ]],
