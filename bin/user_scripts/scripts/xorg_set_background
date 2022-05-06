@@ -1,7 +1,5 @@
-#!/bin/bash
+IMG_PATH="${1:-$HOME/.local/share/bg}"
+CMD="feh --bg-fill --no-fehbg"
 
-readonly IMG_PATH="${1:-$HOME/.local/share/bg}"
-readonly CMD="feh --bg-fill --no-fehbg"
-
-$CMD "$IMG_PATH"
+eval "$CMD" "$IMG_PATH"
 
