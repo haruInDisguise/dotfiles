@@ -2,12 +2,18 @@
 local set_keymap = vim.keymap.set
 local mapping_options   = { silent = true }
 
+-- mappings for plugins are specified in there
+-- respective config/<plugin>.lua file
+
 vim.g.mapleader = [[ ]]
 -- FANCY LEADER BINDINGS...
+-- nvim > 0.7's vim.keymap.set includes noremap by default (see: :h lua-keymap)
 
 -- switch to prev, next buffer
 set_keymap('n', '<Tab>', '<cmd>bn<cr>zz')
 set_keymap('n', '<bs>', '<cmd>bp<cr>zz')
+
+set_keymap('n', '<Leader><bs>', '<cmd>bd<cr>zz')
 
 -- "de-highlight"
 set_keymap('n', '<Leader><esc>', '<cmd>nohlsearch<cr>', mapping_options)
@@ -18,6 +24,10 @@ set_keymap('n', '<Leader>W', '<cmd>w !sudo tee % >/dev/null<CR>', mapping_option
 
 -- Quit buffer or exit
 set_keymap('n', '<Leader>q', '<cmd>bd<CR>', mapping_options)
+
+set_keymap('n', 'H', 'Hzz')
+set_keymap('n', 'M', 'Mzz')
+set_keymap('n', 'L', 'Lzz')
 
 -- Remapping some default bindings and overall quality of life stuff...
 set_keymap('n', '<Space>', '<Nop>', {})
