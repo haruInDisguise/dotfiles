@@ -1,10 +1,9 @@
 -- My Neovim configuration! Yea!
--- TODO
---
+
 -- Inspiration
 -- "How to Do 90% of What Plugins Do": https://www.youtube.com/watch?v=XA2WjJbmmoM
 -- "The Ultimate vimrc": https://github.com/amix/vimrc
---
+
 -- Resources and Tutorials
 -- "Everything you need to know to configure neovim using lua": https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/
 -- "Nvim-lua-guide": https://github.com/nanotee/nvim-lua-guide
@@ -26,9 +25,13 @@ local keymap = require 'keymap' -- {leader: [[ ]]}
 
 -- OPTIONS
 
--- experimental .7 stuff...
+-- Experimental .7 stuff...
 vim.g.do_filetype_lua = 1
 vim.g.did_load_filetypes = 0
+
+-- Time to wait for swap file writes
+-- and 'CursorHold' events
+vim.o.updatetime = 400
 
 opt.completeopt = 'menuone,noselect'
 opt.relativenumber = true
@@ -77,6 +80,15 @@ opt.list = true
 -- colorscheme
 opt.termguicolors = true
 opt.background = 'dark'
+
+-- colorscheme: gruvbox-material
+vim.g.gruvbox_material_diagnostic_text_highlight = true
+vim.g.gruvbox_material_diagnostic_line_highlight = true
+vim.g.gruvbox_material_diagnostic_virtual_text = 'colored'
+
+vim.g.gruvbox_material_statusline_style = 'default'
+
+vim.g.gruvbox_material_better_performance = true
 
 vim.cmd 'colorscheme gruvbox-material'
 
