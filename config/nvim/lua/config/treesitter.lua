@@ -1,4 +1,4 @@
--- Config for nvim-treesitter: https://github.com/nvim-treesitter/nvim-treesitter
+-- config for: https://github.com/nvim-treesitter/nvim-treesitter
 local config = {}
 local ts_config = require 'nvim-treesitter.configs'
 

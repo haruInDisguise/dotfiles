@@ -1,9 +1,10 @@
--- Config for nivm-colorizer.lua: https://github.com/norcalli/nvim-colorizer.lua
--- Currently just using the defaults.
+-- config for nivm-colorizer.lua: https://github.com/norcalli/nvim-colorizer.lua
 local colorizer = require 'colorizer'
 
-local init = function()
-    colorizer.setup()
-end
+colorizer.setup = {
+    '*',
+    c = { names = false },
+    cpp = { names = false },
+    rust = { names = false },
+}
 
-init()

@@ -1,3 +1,4 @@
+-- config for nvim-cmp: https://github.com/hrsh7th/nvim-cmp
 local t = function(str)
     return vim.api.nvim_replace_termcodes(str, true, true, true)
 end

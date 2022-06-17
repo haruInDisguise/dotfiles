@@ -1,7 +1,9 @@
+-- config for: https://github.com/simrat39/rust-tools.nvim
 local rust_tools = require('rust-tools')
 
 rust_tools.setup({
-    tools = { -- rust-tools options
+    tools = {
+        -- rust-tools options
         -- Automatically set inlay hints (type hints)
         autoSetHints = true,
 
@@ -100,7 +102,9 @@ rust_tools.setup({
     -- all the opts to send to nvim-lspconfig
     -- these override the defaults set by rust-tools.nvim
     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
-    server = {}, -- rust-analyer options
+    server = {
+        on_attach = lsp_setup_server_on_attach,
+    },
 
     -- debugging stuff
     dap = {

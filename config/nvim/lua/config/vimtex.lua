@@ -1,3 +1,4 @@
+-- config for: https://github.com/lervag/vimtex
 vim.g.vimtex_view_method = 'zathura'
 -- vim.g.tex_flavour = 'latex'
 

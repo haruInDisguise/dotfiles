@@ -1,4 +1,4 @@
--- Config for lualine: https://github.com/hoob3rt/lualine.nvim
+-- config for: https://github.com/hoob3rt/lualine.nvim
 local lualine = require 'lualine'
 local config = {}
 

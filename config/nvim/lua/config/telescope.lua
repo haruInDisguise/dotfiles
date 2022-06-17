@@ -1,3 +1,6 @@
+-- config for: https://github.com/nvim-telescope/telescope.nvim
+-- Also includes config for various addons/extensions.
+-- See 'lua/plugins.lua' for more information... im lazy
 local telescope = require 'telescope'
 local themes = require 'telescope.themes'
 local load_extension = telescope.load_extension
