@@ -29,10 +29,14 @@ window:
   # Number of lines/columns (not pixels) in the terminal. The number of columns
   # must be at least `2`, while using a value of `0` for columns and lines will
   # fall back to the window manager's recommended size.
-  dimensions:
-    columns: 0
-    lines: 0
+  #  dimensions:
+  #  columns: 0
+  #  lines: 0
 
+  # Window padding (changes require restart)
+  padding:
+    x: 3
+    y: 3
   # Window position (changes require restart)
   #
   # Specified in number of pixels.
@@ -41,56 +45,15 @@ window:
   #  x: 0
   #  y: 0
 
-  # Window padding (changes require restart)
-  #
-  # Blank space added around the window in pixels. This padding is scaled
-  # by DPI and the specified value is always added at both opposing sides.
-  padding:
-    x: 5
-    y: 5
-
   # Spread additional padding evenly around the terminal content.
   dynamic_padding: true
 
-  # Window decorations
-  #
-  # Values for `decorations`:
-  #     - full: Borders and title bar
-  #     - none: Neither borders nor title bar
-  #
-  # Values for `decorations` (macOS only):
-  #     - transparent: Title bar, transparent background and title bar buttons
-  #     - buttonless: Title bar, transparent background and no title bar buttons
-  decorations: full
-
-  # Startup Mode (changes require restart)
-  #
-  # Values for `startup_mode`:
-  #   - Windowed
-  #   - Maximized
-  #   - Fullscreen
-  #
-  # Values for `startup_mode` (macOS only):
-  #   - SimpleFullscreen
-  #startup_mode: Windowed
-
-  # Window title
   #title: Alacritty
-
-  # Allow terminal applications to change Alacritty's window title.
   #dynamic_title: true
-
-  # Window class (Linux/BSD only):
   #class:
-    # Application instance name
     #instance: Alacritty
-    # General application class
     #general: Alacritty
 
-  # GTK theme variant (Linux/BSD only)
-  #
-  # Override the variant of the GTK theme. Commonly supported values are `dark`
-  # and `light`. Set this to `None` to use the default theme variant.
   #gtk_theme_variant: None
 
 scrolling:
@@ -105,65 +68,42 @@ scrolling:
 font:
   # Normal (roman) font face
   normal:
-    # Font family
-    #
-    # Default:
-    #   - (macOS) Menlo
-    #   - (Linux/BSD) monospace
-    #   - (Windows) Consolas
-    family: "Source Code Pro" 
-
-   # The `style` can be specified to pick a specific face.
+    family: "Comic Code Nerd Font"
     style: Regular
 
   # Bold font face
-  #bold:
-    # Font family
-    #
-    # If the bold family is not specified, it will fall back to the
-    # value specified for the normal font.
-    # family: monospace
-
-    # The `style` can be specified to pick a specific face.
-    #style: Bold
+  bold:
+    family: "Comic Code Nerd Font"
+    style: Bold
 
   # Italic font face
-  #italic:
-    # Font family
-    #
-    # If the italic family is not specified, it will fall back to the
-    # value specified for the normal font.
-    #family: monospace
-
-    # The `style` can be specified to pick a specific face.
-    #style: Italic
+  italic:
+    family: "Comic Code Nerd Font"
+    style: Italic
 
   # Bold italic font face
-  #bold_italic:
-    # Font family
-    #
-    # If the bold italic family is not specified, it will fall back to the
-    # value specified for the normal font.
-    #family: monospace
-
-    # The `style` can be specified to pick a specific face.
-    #style: Bold Italic
+  bold_italic:
+    family: "Comic Code Nerd Font"
+    style: Bold Italic
 
   # Point size
-  size: 7
+  size: 12
 
   # Offset is the extra space around each character. `offset.y` can be thought
   # of as modifying the line spacing, and `offset.x` as modifying the letter
   # spacing.
-  #offset:
-  #  x: 0
-  #  y: 0
+  # FIXME: Patching Comic Code seems to patch out vertical padding. I don't know
+  #       anything about fontforge to be able to write my own script
+  #       So far, this works just fine
+  offset:
+    x: 0
+    y: 3
 
   # Glyph offset determines the locations of the glyphs within their cells with
   # the default being at the bottom. Increasing `x` moves the glyph to the
   # right, increasing `y` moves the glyph upward.
   #glyph_offset:
-  #  x: 0
+  #  x: 127
   #  y: 0
 
   # Thin stroke font rendering (macOS only)
@@ -197,9 +137,9 @@ font:
   #
   # Allowed values are CellForeground/CellBackground, which reference the
   # affected cell, or hexadecimal colors like #ff00ff.
-  #cursor:
-  #  text: CellBackground
-  #  cursor: CellForeground
+  cursor:
+    text: CellBackground
+    cursor: CellForeground
 
   # Vi mode cursor colors
   #
@@ -207,9 +147,9 @@ font:
   #
   # Allowed values are CellForeground/CellBackground, which reference the
   # affected cell, or hexadecimal colors like #ff00ff.
-  #vi_mode_cursor:
-  #  text: CellBackground
-  #  cursor: CellForeground
+  vi_mode_cursor:
+    text: CellBackground
+    cursor: CellForeground
 
   # Search colors
   #
@@ -337,50 +277,6 @@ schemes:
       magenta: '0xd3869b'
       cyan:    '0x89b482'
       white:   '0xd4be98'
-  gruvbox_material_medium_dark: &gruvbox_material_medium_dark
-    primary:
-      background: '0x282828'
-      foreground: '0xd4be98'
-    normal:
-      black:   '0x3c3836'
-      red:     '0xea6962'
-      green:   '0xa9b665'
-      yellow:  '0xd8a657'
-      blue:    '0x7daea3'
-      magenta: '0xd3869b'
-      cyan:    '0x89b482'
-      white:   '0xd4be98'
-    bright:
-      black:   '0x3c3836'
-      red:     '0xea6962'
-      green:   '0xa9b665'
-      yellow:  '0xd8a657'
-      blue:    '0x7daea3'
-      magenta: '0xd3869b'
-      cyan:    '0x89b482'
-      white:   '0xd4be98'
-  gruvbox_material_soft_dark: &gruvbox_material_soft_dark
-    primary:
-      background: '0x32302f'
-      foreground: '0xd4be98'
-    normal:
-      black:   '0x45403d'
-      red:     '0xea6962'
-      green:   '0xa9b665'
-      yellow:  '0xd8a657'
-      blue:    '0x7daea3'
-      magenta: '0xd3869b'
-      cyan:    '0x89b482'
-      white:   '0xd4be98'
-    bright:
-      black:   '0x45403d'
-      red:     '0xea6962'
-      green:   '0xa9b665'
-      yellow:  '0xd8a657'
-      blue:    '0x7daea3'
-      magenta: '0xd3869b'
-      cyan:    '0x89b482'
-      white:   '0xd4be98'
   # Base16 Gruvbox dark, hard - alacritty color config
   # Dawid Kurek (dawikur@gmail.com), morhetz (https://github.com/morhetz/gruvbox)
   base16_gruvbox_dark: &base16_gruvbox_dark
@@ -483,7 +379,7 @@ cursor:
     #   - ▇ Block
     #   - _ Underline
     #   - | Beam
-    shape: Block
+    shape: Beam
 
     # Cursor blinking state
     #
@@ -492,7 +388,7 @@ cursor:
     #   - Off: Disable blinking by default
     #   - On: Enable blinking by default
     #   - Always: Force the cursor to always blink
-    #blinking: Off
+    blinking: Off
 
   # Vi mode cursor style
   #
