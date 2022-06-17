@@ -1,16 +1,28 @@
 # Lauch things ... thats it. nice
-# 'startx' uses sh: might be dunst
-# i. e. require POSIX compliance.
-# no bashisms pls
+# 'startx' uses sh and might
+# require POSIX compliance.
+# No bashisms pls
+
+HOSTNAME="$(uname -n)"
+LAUNCH_WM='dwm'
 
 # Some mobile/desktop specific stuff
-case "$(uname -n)" in
-    'artbox' )
-        xrandr --output DP-2 --primary --auto --left-of DVI-D-0 & ;;
-    'box_mobile' )
-        sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_input_configure_touchpad" &
-        setxkbmap us -option caps:escape & ;;
+case "$HOSTNAME" in
+'art_box' )
+    xrandr --output DP-2 --primary --auto --left-of DVI-D-0 & ;;
+'box_mobile' )
+    sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_input_configure_touchpad" &
+    setxkbmap us -option caps:escape & ;;
+*)
+    echo "ERROR: Unknown hostname: $HOSTNAME. Aborting"
+    exit 1
+    ;;
 esac
+
+if [ -z "$USER_CONFIG_SCRIPTS_ROOT" ]; then
+    echo "ERROR: USER_CONFIG_SCRIPTS_ROOT not set. Aborting"
+    exit 1
+fi
 
 sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_set_background" &
 sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/wm_launch_statusbar" &
@@ -20,11 +32,10 @@ redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" 
 unclutter --ignore-scrolling --timeout 5 &
 dunst &
 
-LAUNCH_WM='dwm'
-
-if [ "$LAUNCH_WM" = 'dwm' ]; then
-    # does not replace the login shell
+case "$LAUNCH_WM" in
+'dwm')
     exec dwm
-elif [ "$LAUNCH_WM" = 'penrose' ]; then
+        ;;
+'penrose')
     exec "$HOME/projects/coding/rust/penrose_config/target/release/penrose_client"
-fi
+esac
