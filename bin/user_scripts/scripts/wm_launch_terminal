@@ -1,5 +1,0 @@
-#!/usr/bin/sh
-
-tty >/dev/null && exit 1
-exec "alacritty -e zsh $USER_CONFIG_DOTFILES_ROOT/config/tmux/session_default.zsh"
-
