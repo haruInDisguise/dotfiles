@@ -7,10 +7,6 @@
 [[ $(which dbus-launch >/dev/null) && -z "$DBUS_SESSION_BUS_ADDRESS" ]] && \
    eval "$(dbus-launch --sh-syntax --exit-with-session)"
 
-pipewire &!
-pipewire-pulse &!
-pipewire-media-session &!
-
 # Start the X session using xinit wrapper
 startx
 

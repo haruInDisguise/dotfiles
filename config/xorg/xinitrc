@@ -11,7 +11,7 @@ case "$HOSTNAME" in
 'art_box' )
     xrandr --output DP-2 --primary --auto --left-of DVI-D-0 & ;;
 'box_mobile' )
-    sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_input_configure_touchpad" &
+    xorg_input_configure_touchpad
     setxkbmap us -option caps:escape & ;;
 *)
     echo "ERROR: Unknown hostname: $HOSTNAME. Aborting"
@@ -19,18 +19,16 @@ case "$HOSTNAME" in
     ;;
 esac
 
-if [ -z "$USER_CONFIG_SCRIPTS_ROOT" ]; then
-    echo "ERROR: USER_CONFIG_SCRIPTS_ROOT not set. Aborting"
-    exit 1
-fi
+xorg_set_background &
+wm_launch_statusbar &
 
-sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_set_background" &
-sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/wm_launch_statusbar" &
-
-# huh...
 redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &>/dev/null &
 unclutter --ignore-scrolling --timeout 5 &
 dunst &
+
+pipewire &!
+pipewire-pulse &!
+wireplumber &!
 
 case "$LAUNCH_WM" in
 'dwm')
