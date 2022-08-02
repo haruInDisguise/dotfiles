@@ -1,0 +1,22 @@
+#!/usr/bin/zsh
+
+# A small (dirty) script to quickly
+# switch between de and us layout
+
+typeset -r KEYMAP_CURRENT=${(M)$(setxkbmap -query):#(de|us)}
+
+typeset -A targets=(
+    de  us
+    us  de
+)
+
+typeset -r KEYMAP="$targets[$KEYMAP_CURRENT]"
+typeset ARGS=""
+
+[[ -z "$KEYMAP" ]] && { print -- "Unknown keymap: $KEYMAP_CURRENT"; exit 1 }
+# TODO: This is kinda nasty.. maybe use different git branches instead...
+[[ "$HOST" != "artbox" ]] && ARGS+="-option caps:escape"
+
+eval "setxkbmap $KEYMAP $ARGS"
+dunstify -r 543234 "changed keymap to: ${(c)KEYMAP}"
+

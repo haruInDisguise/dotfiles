@@ -1,0 +1,6 @@
+#!/usr/bin/zsh
+
+SCRIPT_DIR="$(dirname "$PWD/$0")"
+print -- "$SCRIPT_DIR"
+
+source "$SCRIPT_DIR/scripts/link_config.zsh"

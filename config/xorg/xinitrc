@@ -1,0 +1,41 @@
+# Lauch things ... thats it. nice
+# 'startx' uses sh and might
+# require POSIX compliance.
+# No bashisms pls
+
+HOSTNAME="$(uname -n)"
+LAUNCH_WM='dwm'
+
+# Some mobile/desktop specific stuff
+case "$HOSTNAME" in
+'art_box' )
+    xrandr --output DP-2 --primary --auto --left-of DVI-D-0 & ;;
+'box_mobile' )
+    sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_input_configure_touchpad" &
+    setxkbmap us -option caps:escape & ;;
+*)
+    echo "ERROR: Unknown hostname: $HOSTNAME. Aborting"
+    exit 1
+    ;;
+esac
+
+if [ -z "$USER_CONFIG_SCRIPTS_ROOT" ]; then
+    echo "ERROR: USER_CONFIG_SCRIPTS_ROOT not set. Aborting"
+    exit 1
+fi
+
+sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/xorg_set_background" &
+sh "$USER_CONFIG_SCRIPTS_ROOT/scripts/wm_launch_statusbar" &
+
+# huh...
+redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &>/dev/null &
+unclutter --ignore-scrolling --timeout 5 &
+dunst &
+
+case "$LAUNCH_WM" in
+'dwm')
+    exec dwm
+        ;;
+'penrose')
+    exec "$HOME/projects/coding/rust/penrose_config/target/release/penrose_client"
+esac
