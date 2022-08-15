@@ -12,7 +12,6 @@ local init = function(options)
 
     -- Colorscheme
     use { 'sainnhe/gruvbox-material' }
-
     use {
         'hoob3rt/lualine.nvim',
         config = [[ require 'config.lualine' ]],
@@ -20,13 +19,13 @@ local init = function(options)
 
     use {
         'norcalli/nvim-colorizer.lua',
-        config = [[ require 'config.colorizer' ]]
+        config = [[ require 'config.colorizer' ]],
     }
 
     -- LSP, Completion, Snippets, Troubleshooting and Treesitter
     use {
         'neovim/nvim-lspconfig',
-    config = [[ require 'config.lsp' ]],
+        config = [[ require 'config.lsp' ]],
     }
 
     use {
@@ -45,20 +44,21 @@ local init = function(options)
         config = [[ require 'config.ultisnips' ]],
         requires = {
             'honza/vim-snippets'
-        }
+        },
     }
 
     -- Treesitter for fancy syntax highlighting
     use {
         'nvim-treesitter/nvim-treesitter',
         config = [[ require 'config.treesitter' ]],
-        run = ':TSUpdate' 
+        run = ':TSUpdate',
     }
 
     -- Latex for writing
     use {
         'lervag/vimtex',
-        config = [[ require 'config.vimtex' ]]
+        config = [[ require 'config.vimtex' ]],
+        ft = {'tex', 'bib'},
     }
 
     -- Telescope! Yay
@@ -85,13 +85,14 @@ local init = function(options)
         'simrat39/rust-tools.nvim',
         config = [[ require 'config.rust-tools' ]],
         requires = 'nvim-telescope/telescope-ui-select.nvim',
+        ft = { 'rs' },
     }
 
     -- clangd
-    use {
-        'p00f/clangd_extensions.nvim',
-        config = [[ require 'config.clangd_extensions' ]],
-    }
+    --use {
+    --    'p00f/clangd_extensions.nvim',
+    --    config = [[ require 'config.clangd_extensions' ]],
+    --}
 end
 
 init()

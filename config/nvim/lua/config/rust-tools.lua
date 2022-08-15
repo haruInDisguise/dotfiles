@@ -103,7 +103,7 @@ rust_tools.setup({
     -- these override the defaults set by rust-tools.nvim
     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
     server = {
-        on_attach = lsp_setup_server_on_attach,
+        on_attach = lsp_server_on_attach_default
     },
 
     -- debugging stuff
