@@ -3,6 +3,9 @@
 -- See 'lua/plugins.lua' for more information... im lazy
 local telescope = require 'telescope'
 local themes = require 'telescope.themes'
+local builtin = require 'telescope.builtin'
+local extensions = require 'telescope'.extensions
+
 local load_extension = telescope.load_extension
 
 local init = function()
@@ -12,8 +15,7 @@ local init = function()
                 theme = 'dropdown'
             }
         },
-        extensions = {
-            ['file_browser'] = {
+        extensions = { ['file_browser'] = {
                 theme = 'ivy',
             },
             ['fzf'] = {
@@ -34,29 +36,39 @@ local init = function()
     load_extension('file_browser')
     load_extension('ui-select')
 
-    load_extension('project')
-
     -- Lazy loading cheatsheet...
-    -- load_extension('cheatsheet')
-
+    load_extension('cheatsheet')
 
 end
 
-local map = function()
-    local keymap = vim.api.nvim_set_keymap
+local setup_mappings = function()
+    local keymap = vim.keymap.set
     local keymap_options = {
         silent = true,
         noremap = true,
     }
 
-    local file_browser_options = "{hidden=true, dir_icon = ''}"
 
-    keymap('n', '<leader>tt', '<cmd>Telescope<CR>', keymap_options)
-    keymap('n', '<leader>ff', '<cmd>Telescope find_files<CR>', keymap_options)
-    keymap('n', '<leader>fb', string.format("<cmd>lua require 'telescope'.extensions.file_browser.file_browser(%s)<CR>", file_browser_options), keymap_options)
+    local func_find_files = function()
+        builtin.find_files();
+    end
+
+    local func_file_browser = function()
+        local options = { hidden=true, dir_icon = '' }
+        extensions.file_browser.file_browser(options);
+    end
+
+    local func_buffer = function()
+        local options = {sort_mru = true}
+        builtin.buffers(options)
+    end
+
+    keymap('n', '<leader>ff', func_find_files, keymap_options)
+    keymap('n', '<leader>fb', func_file_browser, keymap_options)
+    keymap('n', '<leader>bb', func_buffer, keymap_options)
 
 end
 
 init()
-map()
+setup_mappings()
 
