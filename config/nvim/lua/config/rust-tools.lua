@@ -7,13 +7,9 @@ rust_tools.setup({
         -- Automatically set inlay hints (type hints)
         autoSetHints = true,
 
-        -- Whether to show hover actions inside the hover window
-        -- This overrides the default hover handler 
-        hover_with_actions = true,
-
-		-- how to execute terminal commands
-		-- options right now: termopen / quickfix
-		executor = require("rust-tools/executors").termopen,
+        -- how to execute terminal commands
+        -- options right now: termopen / quickfix
+        executor = require("rust-tools/executors").termopen,
 
         runnables = {
             -- whether to use telescope for selection menu or not
@@ -103,7 +99,7 @@ rust_tools.setup({
     -- these override the defaults set by rust-tools.nvim
     -- see https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#rust_analyzer
     server = {
-        on_attach = lsp_server_on_attach_default
+        on_attach = lsp_setup_server_on_attach,
     },
 
     -- debugging stuff

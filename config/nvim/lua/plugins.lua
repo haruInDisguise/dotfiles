@@ -12,6 +12,7 @@ local init = function(options)
 
     -- Colorscheme
     use { 'sainnhe/gruvbox-material' }
+
     use {
         'hoob3rt/lualine.nvim',
         config = [[ require 'config.lualine' ]],
@@ -19,7 +20,7 @@ local init = function(options)
 
     use {
         'norcalli/nvim-colorizer.lua',
-        config = [[ require 'config.colorizer' ]],
+        config = [[ require 'config.colorizer' ]]
     }
 
     -- LSP, Completion, Snippets, Troubleshooting and Treesitter
@@ -32,6 +33,7 @@ local init = function(options)
         'hrsh7th/nvim-cmp',
         config = [[ require 'config.cmp' ]],
         requires = {
+            'hrsh7th/cmp-lspconfig',
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-path',
@@ -40,25 +42,26 @@ local init = function(options)
     }
 
     use {
-        'sirver/UltiSnips',
-        config = [[ require 'config.ultisnips' ]],
+        'L3MON4D3/LuaSnip',
+        tag = 'v<CurrentMajor>.*',
+        config = [[ require 'config.luasnip' ]],
         requires = {
-            'honza/vim-snippets'
-        },
+            'saadparwaiz1/cmp_luasnip',
+            'honza/vim-snippets',
+        }
     }
 
     -- Treesitter for fancy syntax highlighting
     use {
         'nvim-treesitter/nvim-treesitter',
         config = [[ require 'config.treesitter' ]],
-        run = ':TSUpdate',
+        run = ':TSUpdate' 
     }
 
     -- Latex for writing
     use {
         'lervag/vimtex',
-        config = [[ require 'config.vimtex' ]],
-        ft = {'tex', 'bib'},
+        config = [[ require 'config.vimtex' ]]
     }
 
     -- Telescope! Yay
@@ -85,14 +88,13 @@ local init = function(options)
         'simrat39/rust-tools.nvim',
         config = [[ require 'config.rust-tools' ]],
         requires = 'nvim-telescope/telescope-ui-select.nvim',
-        ft = { 'rs' },
     }
 
     -- clangd
-    --use {
-    --    'p00f/clangd_extensions.nvim',
-    --    config = [[ require 'config.clangd_extensions' ]],
-    --}
+    use {
+        'p00f/clangd_extensions.nvim',
+        config = [[ require 'config.clangd_extensions' ]],
+    }
 end
 
 init()
