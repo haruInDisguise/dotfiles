@@ -3,37 +3,46 @@
 # require POSIX compliance.
 # No bashisms pls
 
-HOSTNAME="$(uname -n)"
-LAUNCH_WM='dwm'
+TARGET_WM="dwm"
+WM_CMD="exec"
 
-# Some mobile/desktop specific stuff
-case "$HOSTNAME" in
-'art_box' )
-    xrandr --output DP-2 --primary --auto --left-of DVI-D-0 & ;;
-'box_mobile' )
-    xorg_input_configure_touchpad
-    setxkbmap us -option caps:escape & ;;
-*)
-    echo "ERROR: Unknown hostname: $HOSTNAME. Aborting"
-    exit 1
-    ;;
-esac
+launch_scripts() {
+    xorg_set_background &
+    wm_launch_statusbar &
 
-xorg_set_background &
-wm_launch_statusbar &
+    redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &>/dev/null &
+    unclutter --ignore-scrolling --timeout 5 &
+    dunst &
+}
 
-redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &>/dev/null &
-unclutter --ignore-scrolling --timeout 5 &
-dunst &
-
-pipewire &!
-pipewire-pulse &!
-wireplumber &!
-
-case "$LAUNCH_WM" in
-'dwm')
-    exec dwm
+launch_host_specific() {
+    # Some mobile/desktop specific stuff
+    case "$(uname -n)" in
+    'artbox' )
+        xrandr --output DP-2 --primary --auto --left-of DVI-D-0 &
         ;;
+    'box_mobile' )
+        xorg_input_configure_touchpad
+        setxkbmap us -option caps:escape &
+        ;;
+    esac
+}
+
+launch_pipewire() {
+    pidof pipewire || {
+        pipewire &
+        pipewire-pulse &
+        wireplumber &
+    }
+}
+
+launch_pipewire
+launch_scripts
+launch_host_specific
+
+case "$TARGET_WM" in
+'dwm')
+    exec dwm ;;
 'penrose')
-    exec "$HOME/projects/coding/rust/penrose_config/target/release/penrose_client"
+    exec "$HOME/projects/coding/rust/penrose_config/target/release/penrose_client" ;;
 esac
