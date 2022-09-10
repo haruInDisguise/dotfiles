@@ -17,6 +17,9 @@ alias bc='command bc -lq'
 alias pa='command ping 1.1.1.1 -c3'
 alias pn='command ping "cloudflare.com" -c3'
 
+alias pgrep='command pgrep -l'
+alias pkill='command pkill -e'
+
 # dirstack and jump up
 for i ({0..9}) alias "$i"="pushd +$i"
 for i ({0..9}) alias "-$i"="pushd -$i"

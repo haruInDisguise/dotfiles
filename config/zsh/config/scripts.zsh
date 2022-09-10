@@ -1,7 +1,3 @@
-# Quickly switch kbmap, while preserving xkb config
-# TODO: Write a proper implementation...
-kbmap() command -p setxkbmap "${1:?error: missing keymap argument}" -option caps:escape
-
 drop_cache() {
     emulate -L zsh
 
@@ -18,3 +14,12 @@ drop_cache() {
     print -- $level | sudo tee /proc/sys/vm/drop_caches &>/dev/null
     print -- "$msg"
 }
+
+
+# ZLE "widgets" for custom mappings
+
+pipe-command-results-to-pager() {
+    local pager='less'
+    eval "r | $pager"
+}
+

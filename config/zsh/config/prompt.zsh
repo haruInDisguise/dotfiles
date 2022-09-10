@@ -37,20 +37,35 @@ _prompt_setup_vimode() {
     zle -N zle-keymap-select
 }
 
+# TODO: AHHH
+_prompt_setup_exectime() {
+    zmodload 'zsh/datetime'
+
+    typeset -gF _prompt_exectime_start_epoch_nsec=0
+}
+
 _prompt_hook_precmd() {
+    _prompt_exectime_diff_epoch_nsec="$((EPOCHREALTIME - _prompt_exectime_start_epoch_nsec))"
+
     vcs_info
 
-    print -n -- $'\n'
+    print
+}
+
+_prompt_hook_preexec() {
+    _prompt_exectime_start_epoch_nsec="$EPOCHREALTIME"
 }
 
 _prompt_setup() {
-    # on prompt expansion: https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Prompt-Expansion
+    # see https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Prompt-Expansion
     setopt promptsubst
 
     _prompt_setup_vimode
     _prompt_setup_vcs_info
+    _prompt_setup_exectime
 
     precmd_functions+=( _prompt_hook_precmd )
+    preexec_functions+=( _prompt_hook_preexec )
 
     local prompt_section_status='%(?..%? )'
     local prompt_section_symbol='%(!.#.>)'
@@ -59,7 +74,7 @@ _prompt_setup() {
     local prompt_section_indicator_color='%B%F{%(?.green.red)}'
 
     # unterminated text
-    PROMPT_EOL_MARK="%K{black} %k"
+    PROMPT_EOL_MARK="%K{white} %k"
 
     # PS1 - primary prompt
     PS1="$prompt_section_path"
