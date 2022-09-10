@@ -1,4 +1,4 @@
-# This file launches utillitys, that do not depend
+# This file launches utillities, that do not depend
 # on a running X session
 
 [[ "$(tty)" = '/dev/tty1' && ! $(pidof Xorg) ]] || return
@@ -8,5 +8,5 @@
    eval "$(dbus-launch --sh-syntax --exit-with-session)"
 
 # Start the X session using xinit wrapper
-startx
+ startx
 
