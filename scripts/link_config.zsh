@@ -6,15 +6,15 @@ TARGET_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
 TARGET_HOME="$HOME"
 
 typeset -a paths=(
-    "$DOTFILES_CONFIG/wireplumber"  "$TARGET_CONFIG/wireplumber"
     "$DOTFILES_CONFIG/nvim"         "$TARGET_CONFIG/nvim"
     "$DOTFILES_CONFIG/zsh"          "$TARGET_CONFIG/zsh"
     "$DOTFILES_CONFIG/alacritty"    "$TARGET_CONFIG/alacritty"
     "$DOTFILES_CONFIG/gdb"          "$TARGET_CONFIG/gdb"
+    "$DOTFILES_CONFIG/polybar"      "$TARGET_CONFIG/polybar"
 
     "$DOTFILES_CONFIG/tmux/tmux.conf" "$TARGET_HOME/.tmux.conf"
-    "$DOTFILES_CONFIG/xorg/xinitrc" "$TARGET_HOME/.xinitrc"
-    "$DOTFILES_CONFIG/zsh/zshenv"   "$TARGET_HOME/.zshenv"
+    "$DOTFILES_CONFIG/xorg/xinitrc"   "$TARGET_HOME/.xinitrc"
+    "$DOTFILES_CONFIG/zsh/zshenv"     "$TARGET_HOME/.zshenv"
 )
 
 # TODO: use 'tput' instead?
@@ -40,8 +40,8 @@ create_directory() {
     fi
 }
 
-create_directory "$TARGET_CONFIG"
 create_directory "$TARGET_HOME"
+create_directory "$TARGET_CONFIG"
 
 typeset -i count=1
 for _ in ${(u)paths}

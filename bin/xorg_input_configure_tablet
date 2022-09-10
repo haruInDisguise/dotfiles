@@ -1,7 +1,6 @@
 #!/usr/bin/zsh
 
 # Setup my wacom tablet. Mostly used for osu...
-
 reset() {
     xsetwacom set "$1" ResetArea
 }
@@ -16,7 +15,7 @@ get_prop() {
 
 main() {
     local tablet_id="Wacom Intuos PT S 2 Pen stylus"
-    local -E ratio="$1"
+    local -E ratio="${1:?Missing ratio}"
     local output="${2:-HEAD-0}"
 
     reset "$tablet_id"
