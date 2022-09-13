@@ -33,11 +33,11 @@ local init = function(options)
         'hrsh7th/nvim-cmp',
         config = [[ require 'config.cmp' ]],
         requires = {
-            'hrsh7th/cmp-lspconfig',
             'hrsh7th/cmp-nvim-lsp',
             'hrsh7th/cmp-buffer',
             'hrsh7th/cmp-path',
             'hrsh7th/cmp-cmdline',
+            'onsails/lspkind.nvim',
         }
     }
 
@@ -46,8 +46,7 @@ local init = function(options)
         tag = 'v<CurrentMajor>.*',
         config = [[ require 'config.luasnip' ]],
         requires = {
-            'saadparwaiz1/cmp_luasnip',
-            'honza/vim-snippets',
+            'rafamadriz/friendly-snippets',
         }
     }
 
@@ -88,12 +87,6 @@ local init = function(options)
         'simrat39/rust-tools.nvim',
         config = [[ require 'config.rust-tools' ]],
         requires = 'nvim-telescope/telescope-ui-select.nvim',
-    }
-
-    -- clangd
-    use {
-        'p00f/clangd_extensions.nvim',
-        config = [[ require 'config.clangd_extensions' ]],
     }
 end
 
