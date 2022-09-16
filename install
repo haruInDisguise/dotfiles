@@ -1,6 +1,21 @@
 #!/usr/bin/zsh
 
 SCRIPT_DIR="$(dirname "$PWD/$0")"
-print -- "$SCRIPT_DIR"
 
-source "$SCRIPT_DIR/scripts/link_config.zsh"
+_install_cmd="$1"
+
+if [[ $_install_cmd = "" ]]; then
+    echo "Missing command" >&2
+    exit 2
+fi
+
+case "$_install_cmd" in
+    'config')
+        source "$SCRIPT_DIR/scripts/link_config.zsh";;
+    'efistub')
+        shift
+        eval sh "$SCRIPT_DIR/scripts/efistub.sh" $@;;
+    *)
+        echo "Invalid command: \"$_install_cmd\"" >&2
+        exit 2;;
+esac
