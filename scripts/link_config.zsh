@@ -15,6 +15,7 @@ typeset -a paths=(
     "$DOTFILES_CONFIG/tmux/tmux.conf" "$TARGET_HOME/.tmux.conf"
     "$DOTFILES_CONFIG/xorg/xinitrc"   "$TARGET_HOME/.xinitrc"
     "$DOTFILES_CONFIG/zsh/zshenv"     "$TARGET_HOME/.zshenv"
+    "$DOTFILES_CONFIG/clang-format"   "$TARGET_HOME/.clang-format"
 )
 
 # TODO: use 'tput' instead?

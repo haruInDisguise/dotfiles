@@ -20,10 +20,12 @@ alias pn='command ping "cloudflare.com" -c3'
 alias pgrep='command pgrep -l'
 alias pkill='command pkill -e'
 
-# dirstack and jump up
+# dirstack
 for i ({0..9}) alias "$i"="pushd +$i"
 for i ({0..9}) alias "-$i"="pushd -$i"
 
+# move up, in a more comfortable fashion...
+# (i.e. '..2' instead of 'cd ../../')
 for i ({2..5}) alias "..$i"="builtin cd $(printf '../%.0s' {1..${i}})"
 
 case "$(uname -r)" in
