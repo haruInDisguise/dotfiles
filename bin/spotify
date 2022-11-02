@@ -2,6 +2,8 @@
 
 # Launch librespot... and handle some things... yay
 
+. "$DOTFILES_ROOT/lib/log.sh"
+
 typeset -A script_options=(
     librespot_cache "$XDG_CACHE_HOME/librespot"
     quiet               false
@@ -21,21 +23,9 @@ typeset -a librespot_options=(
     --initial-volume 100
 )
 
-# Fancy prints
-_fmt_print() {
-    print -P -- \
-        "%F{black}[%f$(date '+%Y-%m-%dT%H:%M:%SZ') \
-        %F{$2}$1%f ${SCRIPT_PATH:t}%F{black}]%f\t" \
-        "${(%%)3}"
-}
-error()   { _fmt_print 'ERROR' red     "$@"; }
-warn()    { _fmt_print 'WARN ' yellow  "$@"; }
-info()    { _fmt_print 'INFO ' green   "$@"; }
-error_and_exit() { error $@; exit 1 }
-
 handle_exit() {
     # TODO: Maybe use a PID file?
-    warn "$0: This is a bit ugly... proceeding to 'killall -TERM librespot' ... (͡ ° ͜ʖ ͡ °)"
+    log_warn "$0: This is a bit ugly... proceeding to 'killall -TERM librespot' ... (͡ ° ͜ʖ ͡ °)"
     if ! builtin kill -TERM $(pidof librespot) 2>/dev/null; then
         error_and_exit "$0: Failed to terminate librespot"
     fi
@@ -46,7 +36,7 @@ launch_librespot() {
 
     # Librespot uses a directory to store cache (execute = 'cd' able)
     if [[ ! -x "$script_options[librespot_cache]" ]]; then
-        warn "$0: "'Unable to locate librespot cache'
+        log_warn "$0: "'Unable to locate librespot cache'
 
         librespot_options+=(
           --username  "$(pass web/spotify/username)" # TODO: Auth using zeroconf?
@@ -66,7 +56,7 @@ launch_librespot() {
 handle_run() {
     if command pidof librespot >/dev/null; then
         if [[ $script_options[restart_if_running] == true ]]; then
-            info "$0: found running instance. restarting"
+            log_info "$0: found running instance. restarting"
             handle_exit
         else
             error_and_exit "$0: there is already a running instance of librespot"
@@ -94,8 +84,8 @@ parse_arguments() {
     done
 }
 
-warn 'FIX: argument parsing is work in progress'
-warn 'FIX: skip argument parsing'
+log_warn 'FIX: argument parsing is work in progress'
+log_warn 'FIX: skip argument parsing'
 #parse_arguments $argv
 
 _cmd=start

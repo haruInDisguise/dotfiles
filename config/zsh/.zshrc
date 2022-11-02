@@ -59,12 +59,10 @@ unsetopt FLOWCONTROL            # Disable "flow control"/sending the STOP char o
 # General
 # =======
 
-# Add my plugins to the functions path
-fpath=("$ZDOTDIR/functions" $fpath)
+fpath=("${XDG_DATA_HOME:-$HOME/.local/share}/zsh/functions" $fpath)
 
-# Move ZSH completion cache
 autoload -Uz compinit
-compinit -d "$XDG_CACHE_HOME/zsh/zcompdump-$ZSH_VERSION"
+compinit -d "$XDG_CACHE_HOME/.zcompdump"
 
 # Set keymap to viins
 KEYTIMEOUT=10; bindkey -v
@@ -96,14 +94,14 @@ command -v 'zoxide' &>/dev/null && eval "$(zoxide init zsh)"
 
 # spt:      Spotify client for the terminal
 # source:   https://github.com/Rigellute/spotify-tui
-#command -v 'spt' &>/dev/null && eval "$(spt --completions zsh)"
+#command -v 'spt' &>/dev/null && echo "$(spt --completions zsh)" > "$ZDOTDIR/functions/comp_spt"
 
 # fzf:      A very useful and universal cli fuzzy finder
 # source:   https://github.com/junegunn/fzf
-command -v 'fzf' &>/dev/null && {
-    source /usr/share/fzf/completion.zsh
-    source /usr/share/fzf/key-bindings.zsh
-}
+#command -v 'fzf' &>/dev/null && [ ! -f "$ZDOTDIR/functions/comp_fzf" ] {
+#    cat /usr/share/fzf/completion.zsh > "$ZDOTDIR/functions/comp_fzf"
+#    source /usr/share/fzf/key-bindings.zsh
+#}
 
 # broot:    A fancy way to view files
 # source:   https://github.com/Canop/broot
@@ -126,3 +124,6 @@ source "$ZDOTDIR/extern/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
 # note:     To be sourced at the end of the config or after every call to zle that
 #           binds/invokes a (default) widget.
 source "$ZDOTDIR/extern/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
+
+# bun completions
+[ -s "/home/haru/.bun/_bun" ] && source "/home/haru/.bun/_bun"

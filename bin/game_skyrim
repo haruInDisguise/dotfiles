@@ -1,0 +1,52 @@
+#!/usr/bin/sh
+
+DISK_PATH="/mnt/DATA_0/"
+
+GAME_EXEC="$DISK_PATH/games/proton/skyrim_se/prefix/pfx/drive_c/Modding/MO2/ModOrganizer.exe"
+GAME_DIR="$DISK_PATH/games/steam/steamapps/common/Skyrim Special Edition/"
+
+PROTON_DIR="$DISK_PATH/games/steam/steamapps/common/Proton 6.3/"
+PROTON_EXEC="$PROTON_DIR/proton"
+PROTON_ARGS=''
+
+# see: https://github.com/GloriousEggroll/proton-ge-custom#Modification
+export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.local/share/Steam/"
+export STEAM_COMPAT_DATA_PATH="/mnt/DATA_0/games/proton/skyrim_se/prefix"
+export NOSTEAM=1
+
+export WINEARCH=win64
+export WINEPREFIX="$STEAM_COMPAT_DATA_PATH"
+
+enable_debug() {
+    export PROTON_DEBUG_DIR=/tmp
+    export PROTON_DUMP_DEBUG_COMMANDS=1 # $PROTON_DEBUG_DIR/proton_$USER/
+    export PROTON_LOG=1
+    export DXVK_LOG_LEVEL=warn
+
+    export WINEDEBUG='+relay'
+}
+
+launch_proton() {
+    mkdir -p "$STEAM_COMPAT_DATA_PATH"
+    eval "'$PROTON_EXEC' $PROTON_ARGS run '$GAME_EXEC'"
+}
+
+launch_protontricks() {
+    mkdir -p "$STEAM_COMPAT_DATA_PATH"
+    protontricks
+}
+
+_cmd="${1:-proton}"
+
+case "$_cmd" in
+'tricks')
+    launch_protontricks;;
+'proton')
+    launch_proton;;
+'clear_pfx')
+    echo "removing prefix: $STEAM_COMPAT_DATA_PATH"
+    rm -rf "$STEAM_COMPAT_DATA_PATH";;
+*)
+    echo "Unknown value '$_cmd'" >&2
+    exit 1;;
+esac

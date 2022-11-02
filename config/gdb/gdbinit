@@ -1,9 +1,11 @@
 # General options
 set disassembly-flavor intel
 
-set history save on
+set debuginfod enabled off
+
+set confirm off
+set verbose off
 
 set tui border-kind acs
 set tui compact-source on
-set tui 
 

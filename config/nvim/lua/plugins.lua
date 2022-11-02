@@ -83,11 +83,11 @@ local init = function(options)
     -- LSP CONFIG
 
     -- rust
-    use {
-        'simrat39/rust-tools.nvim',
-        config = [[ require 'config.rust-tools' ]],
-        requires = 'nvim-telescope/telescope-ui-select.nvim',
-    }
+    --use {
+    --    'simrat39/rust-tools.nvim',
+    --    config = [[ require 'config.rust-tools' ]],
+    --    requires = 'nvim-telescope/telescope-ui-select.nvim',
+    --}
 end
 
 init()

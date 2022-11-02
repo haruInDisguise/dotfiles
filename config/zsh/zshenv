@@ -74,7 +74,7 @@ export _JAVA_AWT_WM_NONREPARENTING=1
 _BIN_USER="$HOME/.local/bin"
 _BIN_CARGO="$CARGO_HOME/bin"
 _BIN_NPM="$npm_config_prefix/bin"
-_BIN_BUN="$XDG_DATA_HOME/bun/bin"
+_BIN_BUN="$HOME/.bun/bin"
 
 export PATH="$_BIN_USER:$_BIN_NPM:$_BIN_CARGO:$DENO_INSTALL_ROOT:$_BIN_BUN:$PATH"
 unset _BIN_CARGO _BIN_NPM _BIN_USER _BIN_BUN

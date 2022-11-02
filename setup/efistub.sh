@@ -3,10 +3,12 @@
 # A simple script to install a very basic UEFI boot entry
 # Make sure your UEFI supports directly booting images
 
+. "$DOTFILES_ROOT/lib/log.sh"
+
 DISK="${1:?Missing target disk}"
 DISK_PART_BOOT="${2:?Missing part number of efi partition}"
 DISK_PART_ROOT="${3:?Missing path to root partition}"
-DISK_PART_ROOT_UUID="$()"
+DISK_PART_ROOT_UUID=""
 
 LABEL="${LABEL:-arch}"
 
@@ -14,7 +16,7 @@ get_root_uuid() {
     DISK_PART_ROOT_UUID="$(blkid -s PARTUUID -o value ${DISK_PART_ROOT})"
 
     if [ ! "$?" -eq 0 ] || [ "$DISK_PART_ROOT_UUID" = "" ]; then
-        echo "Failed to query UUID for root partition "${DISK_PART_ROOT}"" 2>&1
+        log_error "Failed to query UUID for root partition "${DISK_PART_ROOT}"" 2>&1
         exit 1
     fi
 }

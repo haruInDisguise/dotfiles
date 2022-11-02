@@ -4,7 +4,7 @@
 -- Config taken and modified from: https://github.com/neovim/nvim-lspconfig#keybindings-and-completion
 
 local lsp = require 'lspconfig'
-local cmp_capabilities = require('cmp_nvim_lsp').update_capabilities(vim.lsp.protocol.make_client_capabilities())
+local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities();
 
 -- Use an on_attach function to only map the following keys
 -- after the language server attaches to the current buffer
@@ -34,9 +34,22 @@ function lsp_setup_server_on_attach(client, bufnr)
         end, bufopts)
 end
 
+local clangd_overwrite = "/home/haru/.local/src/clangd_15.0.1/bin/clangd"
+lsp['clangd'].setup {
+    capabilities = cmp_capabilities,
+    on_attach = function()
+        lsp_setup_server_on_attach()
+        print("Using binary: " .. clangd_overwrite)
+    end,
+    cmd = {clangd_overwrite},
+    flags = {
+        debounce_text_changes = 150,
+    },
+}
+
 -- Configuring lsp using passed through config
 -- NOTE: rust   uses a seperate plugin: rust-tools.nvim
-local servers = {'clangd', 'pyright', 'texlab', 'tsserver'}
+local servers = {'pyright', 'texlab', 'tsserver', 'rust_analyzer'}
 
 for _, name in ipairs(servers) do
     lsp[name].setup {

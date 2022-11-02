@@ -1,0 +1,40 @@
+#!/usr/bin/sh
+
+. "$DOTFILES_ROOT/lib/log.sh"
+
+GAME_DIR="$HOME/.local/share/osu/"
+GAME_EXEC="/mnt/DATA_0/games/osu.AppImage"
+
+UPDATE_PATH="$HOME/downloads/osu.AppImage"
+
+run() {
+    _run_tablet_area='.40'
+
+    log_debug "Setting tablet area to $_run_tablet_area"
+    xorg_input_configure_tablet "$_run_tablet_area"
+
+    log_debug "Launching game"
+    eval "exec '$GAME_EXEC'"
+}
+
+update() {
+    if [ -e "$UPDATE_PATH" ]; then
+        # TODO: Figure out, which install method is
+        #       more "standart compliant"
+        #install "$UPDATE_PATH" "$GAME_EXEC"
+        mv -f "$UPDATE_PATH" "$GAME_EXEC"
+        chmod 700 "$GAME_EXEC"
+        log_info "Game updated"
+    else
+        log_error "File not found: $UPDATE_PATH"
+        exit 1
+    fi
+}
+
+_cmd="${1:-run}"
+
+case $_cmd in
+    'run') run $@;;
+    'update') update $@;;
+    *) echo 'Invalid command'; exit 2;;
+esac

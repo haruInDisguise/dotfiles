@@ -1,5 +1,7 @@
 # Link my config. like totaly automatic and such.
 
+. "$DOTFILES_ROOT/lib/log.sh"
+
 DOTFILES_CONFIG="$(readlink -f "${SCRIPT_DIR:?Missing script root}/config")"
 
 TARGET_CONFIG="${XDG_CONFIG_HOME:-$HOME/.config}"
@@ -17,12 +19,6 @@ typeset -a paths=(
     "$DOTFILES_CONFIG/zsh/zshenv"     "$TARGET_HOME/.zshenv"
     "$DOTFILES_CONFIG/clang-format"   "$TARGET_HOME/.clang-format"
 )
-
-# TODO: use 'tput' instead?
-_log_fmt() { print -- "\x1b[30m$(date -u '+%Y-%m-%dT%H:%m:%SZ')\x1b[0m [$1] - $argv[2,-1]"; }
-log_info() { _log_fmt $'\x1b[32m'"INFO "$'\x1b[0m' $@; }
-log_error() { _log_fmt $'\x1b[31m'"ERROR"$'\x1b[0m' $@; }
-log_warn() { _log_fmt $'\x1b[33m'"WARN "$'\x1b[0m' $@; }
 
 link() {
     if ln -s "$1" "$2" 2>/dev/null; then

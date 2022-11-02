@@ -6,7 +6,6 @@ alias shd='sudo shutdown -h now'
 
 alias ls='command ls --color=auto'
 alias l='ls -lah'
-alias d='cd'
 
 alias cp='command cp -v'
 alias mv='command mv -v'
@@ -20,6 +19,8 @@ alias pn='command ping "cloudflare.com" -c3'
 alias pgrep='command pgrep -l'
 alias pkill='command pkill -e'
 
+alias objdump='command objdump -M intel'
+
 # dirstack
 for i ({0..9}) alias "$i"="pushd +$i"
 for i ({0..9}) alias "-$i"="pushd -$i"
@@ -32,15 +33,15 @@ case "$(uname -r)" in
     *(artix|arch)*)
         local pac='pacman --color=auto'
 
-        alias pacin="sudo $pac -S"
-        alias pacupg="sudo $pac -Syu"
-        alias pacupd="sudo $pac -Sy"
-        alias pacrm="sudo $pac -Rs"
+        alias pacin="command sudo $pac -S"
+        alias pacupg="command sudo $pac -Syu"
+        alias pacupd="command sudo $pac -Sy"
+        alias pacrm="command sudo $pac -Rs"
 
-        alias pacsearch="$pac -Ss"
-        alias pacinfo="$pac -Si"
-        alias pacls="$pac -Qe"
-        alias pacown="$pac -Qo"
+        alias pacsearch="command $pac -Ss"
+        alias pacinfo="command $pac -Si"
+        alias pacls="command $pac -Qe"
+        alias pacown="command $pac -Qo"
 
         unset pac
         ;;
@@ -48,13 +49,14 @@ esac
 
 ## Some useful and commonly used stuff
 
+# mute license banner on startup
+alias gdb='command gdb --quiet'
+alias rust-gdb='command rust-gdb --quiet'
+
 # an ls alternative
 [[ -x "$CARGO_HOME/bin/exa" ]] && alias e='exa -la --git'
 
-# no spam in gdb and tui mode! yee
-alias gdb='command gdb --quiet --tui'
-
-# xorg
+#  xorg
 alias xpropc='command xprop | grep "WM_CLASS"'
 
 # ffmpeg
@@ -63,3 +65,7 @@ alias ffmpeg='command ffmpeg -hide_banner'
 # neovim
 alias n='$EDITOR'
 
+# git stuff
+alias gs='git status'
+alias gc='git commit'
+alias ga='git add'

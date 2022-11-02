@@ -1,0 +1,57 @@
+#!/usr/bin/sh
+
+GAME_DIR="/mnt/DATA_0/games/guild_wars_2"
+GAME_EXEC="$GAME_DIR/Gw2-64.exe"
+#GAME_EXEC="$HOME/downloads/Gw2Setup-64.exe"
+
+PROTON_DIR="$HOME/.steam/root/compatibilitytools.d/GE-Proton7-37"
+#PROTON_DIR="/mnt/DATA_0/games/steam/steamapps/common/Proton - Experimental"
+PROTON_EXEC="$PROTON_DIR/proton"
+PROTON_ARGS=''
+
+# see: https://github.com/GloriousEggroll/proton-ge-custom#Modification
+export STEAM_COMPAT_CLIENT_INSTALL_PATH="$HOME/.local/share/Steam/"
+export STEAM_COMPAT_DATA_PATH="/mnt/DATA_0/games/proton/prefix/proton_tmp"
+
+#export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
+#export __GL_SHADER_DISK_CACHE_PATH='/mnt/DATA_0/games/guild_wars2'
+#export __GL_FSAA_MODE=0
+#export __GL_DEFAULT_LOG_ANISO=0
+#export __GL_LOG_MAX_ANISO=0
+#export __GL_THREADED_OPTIMIZATIONS=1
+#export __GL_SYNC_TO_VBLANK=0
+#export __GL_YIELD=NOTHING
+
+#export LD_PRELOAD="libpthread.so.0 libGL.so.1"
+#export WINEFSYNC=1
+#export STAGING_SHARED_MEMORY=1
+
+export WINEARCH=win64
+export NOSTEAM=1
+
+# DEBUGGING
+
+export PROTON_DEBUG_DIR=/tmp
+export PROTON_DUMP_DEBUG_COMMANDS=1 # $PROTON_DEBUG_DIR/proton_$USER/
+export PROTON_LOG=1
+
+#export DXVK_LOG_LEVEL=debug
+export WINEDEBUG='+relay'
+
+launch_proton() {
+    mkdir -p "$STEAM_COMPAT_DATA_PATH"
+    eval "'$PROTON_EXEC' $PROTON_ARGS run '$GAME_EXEC'"
+}
+
+_cmd="${1:-proton}"
+
+case "$_cmd" in
+'proton')
+    launch_proton;;
+'clear_pfx')
+    echo "removing prefix: $STEAM_COMPAT_DATA_PATH"
+    rm -rf "$STEAM_COMPAT_DATA_PATH";;
+*)
+    echo "Unknown value '$_cmd'" >&2
+    exit 1;;
+esac

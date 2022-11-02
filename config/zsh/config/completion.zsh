@@ -10,7 +10,6 @@ setopt AUTO_LIST           # Automatically list choices on ambiguous completion.
 setopt AUTO_PARAM_SLASH    # If completed parameter is a directory, add a trailing slash.
 setopt EXTENDED_GLOB       # Needed for file modification glob modifiers with compinit
 setopt MENU_COMPLETE     # Do not autoselect the first completion entry.
-# unsetopt FLOW_CONTROL      # Disable start/stop characters in shell editor.
 
 # Use caching to make completion for commands such as dpkg and apt usable.
 zstyle ':completion::complete:*' use-cache on

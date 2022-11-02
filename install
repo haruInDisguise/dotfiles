@@ -11,10 +11,10 @@ fi
 
 case "$_install_cmd" in
     'config')
-        source "$SCRIPT_DIR/scripts/link_config.zsh";;
+        source "$SCRIPT_DIR/setup/link_config.zsh";;
     'efistub')
         shift
-        eval sh "$SCRIPT_DIR/scripts/efistub.sh" $@;;
+        eval sh "$SCRIPT_DIR/setup/efistub.sh" $@;;
     *)
         echo "Invalid command: \"$_install_cmd\"" >&2
         exit 2;;

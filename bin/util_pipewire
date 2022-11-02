@@ -1,0 +1,27 @@
+#!/usr/bin/zsh
+
+LOGFILE=/dev/null
+
+close() {
+    print -- 'Terminating current session'
+
+    local pid_pipewire="$(pidof pipewire)"
+    local pid_pipewire_pulse="$(pidof pipwire_pulse)"
+    local pid_wireplumber="$(pidof wireplumber)"
+
+    kill $pid_pipewire $pid_pipewire_pulse $pid_wireplumber 2>/dev/null
+}
+
+start() {
+    pipewire &>"$LOGFILE" &!
+    pipewire-pulse &>"$LOGFILE" &!
+    wireplumber &>"$LOGFILE" &!
+}
+
+restart() {
+    close
+    start
+}
+
+restart
+
