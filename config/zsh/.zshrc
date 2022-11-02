@@ -126,4 +126,4 @@ source "$ZDOTDIR/extern/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
 source "$ZDOTDIR/extern/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
 
 # bun completions
-[ -s "/home/haru/.bun/_bun" ] && source "/home/haru/.bun/_bun"
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
