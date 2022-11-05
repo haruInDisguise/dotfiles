@@ -8,5 +8,5 @@
    eval "$(dbus-launch --sh-syntax --exit-with-session)"
 
 # Start the X session using xinit wrapper
- startx
+startx
 
