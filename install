@@ -10,8 +10,10 @@ if [[ $_install_cmd = "" ]]; then
 fi
 
 case "$_install_cmd" in
+    'system')
+        source "$SCRIPT_DIR/setup/system.zsh";;
     'config')
-        source "$SCRIPT_DIR/setup/link_config.zsh";;
+        source "$SCRIPT_DIR/setup/config.zsh";;
     'efistub')
         shift
         eval sh "$SCRIPT_DIR/setup/efistub.sh" $@;;

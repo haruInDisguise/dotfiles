@@ -1,9 +1,9 @@
-#!/usr/bin/sh
+#!/usr/bin/zsh
 
 # A simple script to install a very basic UEFI boot entry
 # Make sure your UEFI supports directly booting images
 
-. "$DOTFILES_ROOT/lib/log.sh"
+source "$DOTFILES_ROOT/lib/log.sh"
 
 DISK="${1:?Missing target disk}"
 DISK_PART_BOOT="${2:?Missing part number of efi partition}"

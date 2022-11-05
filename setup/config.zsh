@@ -1,6 +1,6 @@
 # Link my config. like totaly automatic and such.
 
-. "$DOTFILES_ROOT/lib/log.sh"
+source "$DOTFILES_ROOT/lib/log.sh"
 
 DOTFILES_CONFIG="$(readlink -f "${SCRIPT_DIR:?Missing script root}/config")"
 
@@ -30,7 +30,7 @@ link() {
 
 create_directory() {
     if [[ -x $1 ]]; then
-        log_error "Directory exists: $1"
+        log_warn "Directory exists: $1"
     else
         log_info "Creating directory $@"
         mkdir -p "$@"
