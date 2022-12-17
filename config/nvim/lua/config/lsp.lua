@@ -1,18 +1,14 @@
 -- config for: https://github.com/neovim/nvim-lspconfig
--- TODO Achieve independence tm? And maybe use block comments...
 
--- Config taken and modified from: https://github.com/neovim/nvim-lspconfig#keybindings-and-completion
+-- Taken and modified from: https://github.com/neovim/nvim-lspconfig#keybindings-and-completion
 
 local lsp = require 'lspconfig'
 local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities();
+local leader = ','
 
--- Use an on_attach function to only map the following keys
--- after the language server attaches to the current buffer
--- TODO: Global to allow for easy plugin integration. Change this?
+-- TODO: Global to allow for easy plugin integration.
 function lsp_setup_server_on_attach(client, bufnr)
-    -- Mappings
     local bufopts = { noremap=true, silent=true, buffer=bufnr }
-    local leader = ','
 
     vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
     vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
@@ -29,27 +25,31 @@ function lsp_setup_server_on_attach(client, bufnr)
     vim.keymap.set('n', leader .. 'ca', vim.lsp.buf.code_action, bufopts)
     vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
     vim.keymap.set('n', leader .. 'f', function()
-            --vim.lsp.buf.format{ async = false };
-            vim.lsp.buf.formatting();
+            vim.lsp.buf.format{ async = false };
         end, bufopts)
 end
 
-local clangd_overwrite = "/home/haru/.local/src/clangd_15.0.1/bin/clangd"
+vim.keymap.set('n', leader .. 'e', vim.diagnostic.open_float, opts)
+vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+vim.keymap.set('n', leader .. 'q', vim.diagnostic.setloclist, opts)
+
+local clangd_path_overwrite = "/home/haru/.local/src/clangd_15.0.1/bin/clangd"
 lsp['clangd'].setup {
     capabilities = cmp_capabilities,
     on_attach = function()
         lsp_setup_server_on_attach()
-        print("Using binary: " .. clangd_overwrite)
+        print("Using binary: " .. clangd_path_overwrite)
     end,
-    cmd = {clangd_overwrite},
+    cmd = { clangd_path_overwrite },
     flags = {
         debounce_text_changes = 150,
     },
 }
 
--- Configuring lsp using passed through config
--- NOTE: rust   uses a seperate plugin: rust-tools.nvim
-local servers = {'pyright', 'texlab', 'tsserver', 'rust_analyzer'}
+-- NOTE: rust uses a seperate plugin: rust-tools.nvim
+-- local servers = {'pyright', 'texlab', 'tsserver', 'rust_analyzer'}
+local servers = {'pyright', 'texlab', 'tsserver'}
 
 for _, name in ipairs(servers) do
     lsp[name].setup {
@@ -60,7 +60,3 @@ for _, name in ipairs(servers) do
         },
     }
 end
-
--- show line diagnostic that exceeds the line width
--- in a hover window?
-

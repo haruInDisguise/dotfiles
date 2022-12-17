@@ -3,6 +3,7 @@ local colorizer = require 'colorizer'
 
 colorizer.setup = {
     '*',
+    css = { names = true },
     c = { names = false },
     cpp = { names = false },
     rust = { names = false },

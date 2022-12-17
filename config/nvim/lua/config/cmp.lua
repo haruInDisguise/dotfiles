@@ -1,4 +1,5 @@
 -- config for nvim-cmp: https://github.com/hrsh7th/nvim-cmp
+-- and: https://github.com/saadparwaiz1/cmp_luasnip
 
 local cmp = require('cmp')
 local luasnip = require('luasnip')
