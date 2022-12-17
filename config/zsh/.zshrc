@@ -98,14 +98,10 @@ command -v 'zoxide' &>/dev/null && eval "$(zoxide init zsh)"
 
 # fzf:      A very useful and universal cli fuzzy finder
 # source:   https://github.com/junegunn/fzf
-#command -v 'fzf' &>/dev/null && [ ! -f "$ZDOTDIR/functions/comp_fzf" ] {
-#    cat /usr/share/fzf/completion.zsh > "$ZDOTDIR/functions/comp_fzf"
-#    source /usr/share/fzf/key-bindings.zsh
-#}
-
-# broot:    A fancy way to view files
-# source:   https://github.com/Canop/broot
-command -v 'broot' &>/dev/null && eval "$(broot --print-shell-function zsh)"
+command -v 'fzf' &>/dev/null && {
+    #cat /usr/share/fzf/completion.zsh > "$ZDOTDIR/functions/comp_fzf"
+    source /usr/share/fzf/key-bindings.zsh
+}
 
 # ===========
 # ZSH plugins
@@ -127,3 +123,6 @@ source "$ZDOTDIR/extern/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.z
 
 # bun completions
 [ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
+# bun completions
+[ -s "/home/haru/.bun/_bun" ] && source "/home/haru/.bun/_bun"

@@ -1,6 +1,7 @@
 # My aliases
 
 alias shd='sudo shutdown -h now'
+alias rbt='sudo reboot'
 
 ## Builtins and Coreutils
 
@@ -54,7 +55,7 @@ alias gdb='command gdb --quiet'
 alias rust-gdb='command rust-gdb --quiet'
 
 # an ls alternative
-[[ -x "$CARGO_HOME/bin/exa" ]] && alias e='exa -la --git'
+alias e='exa -la --git'
 
 #  xorg
 alias xpropc='command xprop | grep "WM_CLASS"'
@@ -66,6 +67,6 @@ alias ffmpeg='command ffmpeg -hide_banner'
 alias n='$EDITOR'
 
 # git stuff
-alias gs='git status'
-alias gc='git commit'
-alias ga='git add'
+alias gs='command git status'
+alias gc='command git commit'
+alias ga='command git add'
