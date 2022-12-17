@@ -11,7 +11,7 @@ fi
 
 case "$_install_cmd" in
     'system')
-        source "$SCRIPT_DIR/setup/system.zsh";;
+        source "$SCRIPT_DIR/setup/config_system.zsh";;
     'config')
         source "$SCRIPT_DIR/setup/config.zsh";;
     'efistub')
