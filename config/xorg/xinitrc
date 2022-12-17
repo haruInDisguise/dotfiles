@@ -1,6 +1,6 @@
+# vim: ft=sh
 # Lauch things ... thats it. nice
-# 'startx' uses sh and might
-# require POSIX compliance.
+# 'startx' uses sh and might require POSIX compliance.
 # No bashisms pls
 
 TARGET_WM="dwm"
@@ -10,7 +10,9 @@ launch_scripts() {
     xorg_set_background &
     wm_launch_statusbar &
 
-    redshift -l "${USER_CONFIG_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &>/dev/null &
+    eval "$(ssh-agent)"
+
+    redshift -l "${DOTFILES_XORG_REDSHIFT_LOCATION:?redshift: missing location}" &>/dev/null &
     unclutter --ignore-scrolling --timeout 5 &
     dunst &
 }
@@ -31,18 +33,18 @@ launch_host_specific() {
 launch_pipewire() {
     pidof pipewire || {
         pipewire &
-        pipewire-pulse &
+        pipewire -c '/etc/pipewire/pipewire-pulse.conf' &
         wireplumber &
     }
 }
 
-launch_pipewire
-launch_scripts
 launch_host_specific
+launch_scripts
+launch_pipewire
 
 case "$TARGET_WM" in
 'dwm')
     exec dwm ;;
 'penrose')
-    exec "$HOME/projects/coding/rust/penrose_config/target/release/penrose_client" ;;
+    exec "$HOME/projects/coding/rust/penrose_client/target/release/penrose_client" ;;
 esac
