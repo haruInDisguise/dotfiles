@@ -1,32 +1,32 @@
 #!/usr/bin/zsh
+# Setup my wacom tablet. Mostly used for "osu!"..
 
-# Setup my wacom tablet. Mostly used for osu...
-reset() {
-    xsetwacom set "$1" ResetArea
-}
+. "$DOTFILES_ROOT/lib/log.sh"
 
-set_prop() {
-    xsetwacom set "$1" "$2" "$3"
-}
+TABLET_ID="${TABLET_ID:-Wacom Intuos PT S 2 Pen stylus}"
+OUTPUT="${2:-HEAD-0}"
 
-get_prop() {
-    xsetwacom get "$1" "$2"
+reset_area() {
+    xsetwacom --set "$1" ResetArea
 }
 
 main() {
-    local tablet_id="Wacom Intuos PT S 2 Pen stylus"
     local -E ratio="${1:?Missing ratio}"
-    local output="${2:-HEAD-0}"
 
-    reset "$tablet_id"
+    log_info "Setting properties for: \"$TABLET_ID\""
+    reset_area "$TABLET_ID"
 
-    local -a default_area=( $(get_prop "$tablet_id" Area) )
+    local -a default_area=( $(xsetwacom --get "$TABLET_ID" Area) )
     local -i mod_area_x="$(( $default_area[3] * $ratio ))"
     local -i mod_area_y="$(( $default_area[4] * $ratio))"
 
-    set_prop "$tablet_id" Area "0 0 $mod_area_x $mod_area_y"
-    set_prop "$tablet_id" MapToOutput "$output"
-    set_prop "$tablet_id" Touch off
+    xsetwacom --set "$TABLET_ID" Area "0 0 $mod_area_x $mod_area_y"
+    xsetwacom --set "$TABLET_ID" MapToOutput "$OUTPUT"
+    xsetwacom --set "$TABLET_ID" Touch off
+
+    xsetwacom --set "$TABLET_ID" Button 1 0
+    xsetwacom --set "$TABLET_ID" Button 2 0
+    xsetwacom --set "$TABLET_ID" Button 3 0
 }
 
 main $@

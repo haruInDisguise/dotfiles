@@ -15,7 +15,7 @@ typeset -A script_options=(
 
 typeset -a librespot_options=(
     --backend   pulseaudio # TODO: Look into 'gstreamer' backend...
-    --cache     $script_options[librespot_cache]
+    --cache     "$script_options[librespot_cache]"
     --name      "$(uname -n)"
     --bitrate   320
     --format    F32
