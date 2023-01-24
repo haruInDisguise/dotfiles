@@ -43,3 +43,5 @@ set_keymap('n', 'N', 'Nzz', mapping_options)
 
 -- is this a good idea?
 set_keymap('n', ';', ':', mapping_options)
+
+set_keymap('n', [['']], [[''zz]])
