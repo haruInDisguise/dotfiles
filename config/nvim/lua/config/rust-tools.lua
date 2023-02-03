@@ -96,7 +96,10 @@ rust_tools.setup({
     },
 
     server = {
-        on_attach = lsp_setup_server_on_attach,
+        -- FIXME: Passing 'lsp_setup_server_on_attach' directly prevents the function from being called
+        on_attach = function(client, bufnr)
+            lsp_setup_server_on_attach(client, bufnr)
+        end
     },
 })
 

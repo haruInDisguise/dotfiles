@@ -88,6 +88,7 @@ local init = function(options)
         'simrat39/rust-tools.nvim',
         config = [[ require 'config.rust-tools' ]],
         requires = 'nvim-telescope/telescope-ui-select.nvim',
+        after = 'neovim/nvim-lspconfig',
     }
 end
 
