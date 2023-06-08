@@ -56,6 +56,10 @@ _prompt_hook_preexec() {
     _prompt_exectime_start_epoch_nsec="$EPOCHREALTIME"
 }
 
+_prompt_hook_chpwd() {
+    command exa -la --git
+}
+
 _prompt_setup() {
     # see https://zsh.sourceforge.io/Doc/Release/Prompt-Expansion.html#Prompt-Expansion
     setopt promptsubst
@@ -66,24 +70,25 @@ _prompt_setup() {
 
     precmd_functions+=( _prompt_hook_precmd )
     preexec_functions+=( _prompt_hook_preexec )
+    chpwd_functions+=(  _prompt_hook_chpwd )
 
-    local prompt_section_status='%(?..%? )'
-    local prompt_section_symbol='%(!.#.>)'
+    local section_status='%(?..%? )'
+    local section_symbol='%(!.#.>)'
 
-    local prompt_section_path='%~ '
-    local prompt_section_indicator_color='%B%F{%(?.green.red)}'
+    local section_path='%~ '
+    local section_indicator_color='%B%F{%(?.green.red)}'
 
     # unterminated text
     PROMPT_EOL_MARK="%K{white} %k"
 
     # PS1 - primary prompt
-    PS1="$prompt_section_path"
-    PS1+="$prompt_section_indicator_color$prompt_section_status$prompt_section_symbol%f%b "
+    PS1="${section_path}"
+    PS1+="${section_indicator_color}${section_status}${section_symbol}%f%b "
 
     RPROMPT='${vcs_info_msg_0_}'
 
     # PS2 - blocks
-    PS2='%F{green}%_%f %B%F{yellow}>%E '
+    PS2='%F{green}%_%f %B%F{yellow}>%f%b '
 }
 
 _prompt_setup

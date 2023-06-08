@@ -1,0 +1,14 @@
+#!/usr/bin/sh
+
+GAME_DIR="/mnt/data_0/games/steam/steamapps/common/Terraria/"
+GAME_EXEC="$GAME_DIR/Terraria"
+
+# My keyboard (AnnePro2) implements joystick features, which cause Terraria
+# to recognize it as a controller, instead of a keyboard...
+# This is a dirty workaround, by preventing the joystick parts from being
+# recognized by Terraria
+notify-send "Arguments:" "$@"
+notify-send "WOA DUDE" "Unsetting premissions for AnnePro2 joystick feature"
+sudo chmod 000 /dev/input/by-id/usb-OBINS_OBINS_AnnePro2_00000000000000000000000000000000-if03-*
+
+eval "$GAME_EXEC"

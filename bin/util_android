@@ -1,0 +1,68 @@
+#!/usr/bin/sh
+
+. "$DOTFILES_ROOT/lib/log.sh"
+
+ANDROID_CMD_ECHO="echo '[DEVICE] '"
+
+android_emulator() {
+    local cmd="${1:?Missing subcommand}"
+
+    export ANDROID_SDK_ROOT="$HOME/.local/share/android/android_sdk/"
+
+    case "$cmd" in
+        'stop')
+            ;;
+        'start')
+            ;;
+        'clear')
+            ;;
+    esac
+}
+
+wait_for_device() {
+    log_info "Waiting for device..."
+    adb wait-for-device
+}
+
+push_directory() {
+    local path_tmp="$(mktemp '/tmp/XXXXXXXXXXX.tar')"
+    local path_source="${1:?Missing source}"
+
+    local path_device_dest="${2:?Missing destination}"
+    local path_device_tmp="$(adb shell mktemp '/data/local/tmp/tar.XXXXXXXXXXX')"
+
+    log_debug "Creating archive"
+
+    tar cf "$path_tmp" --directory="$path_source" . || \
+        error_and_exit "Failed to create archive: '$path_source' => '$path_tmp'"
+
+    adb push "$path_tmp" "$path_device_tmp" || \
+        error_and_exit "Failed to push archive: '$path_tmp' => '$path_device_tmp'"
+
+    adb shell << EOF
+        mkdir -p "$path_device_dest"
+
+        # TODO: Partial error: settime not permitted?
+        eval "$ANDROID_CMD_ECHO" "Extracting archive \'$path_device_tmp\' to \'$path_device_dest\'"
+        tar xf "$path_device_tmp" --directory="$path_device_dest" >/dev/null
+
+        eval "$ANDROID_CMD_ECHO" "Removing temporary file: $path_device_tmp"
+        rm -rf "$path_device_tmp"
+EOF
+
+    rm -f "$path_tmp"
+}
+
+_cmd="${1:-help}"
+
+case "$1" in
+    'push_dir')
+        wait_for_device
+        push_directory "$2" "$3"
+        ;;
+    'emu')
+        android_emulator "$2"
+        ;;
+    'help')
+        echo 'This does something related to android. I think'
+esac
