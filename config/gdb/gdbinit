@@ -9,3 +9,10 @@ set verbose off
 set tui border-kind acs
 set tui compact-source on
 
+define gef_init
+    source ~/.local/share/gef.py
+end
+document gef_init
+Load the gef python api for convenient reverse engineering or something...
+Usage: load_gef
+end
