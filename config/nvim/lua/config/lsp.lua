@@ -7,7 +7,7 @@ local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities();
 local leader = [[,]]
 
 -- TODO: Global to allow for easy plugin integration.
-function _G.lsp_setup_server_on_attach(client, bufnr)
+function lsp_setup_server_on_attach(client, bufnr)
     local bufopts = { noremap=true, silent=true, buffer=bufnr }
 
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)

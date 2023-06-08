@@ -11,12 +11,12 @@
 -- TODO: FIX ME PLS. Load pre_init functions and enable this config to bootstrap itself
 local pre_init = require 'pre_init'
 
--- Load utils and several helper functions into the global scope
+-- Some helper functions
 local utils = require 'utils'
 
 local opt = vim.opt -- AllInOne Solution to set options
 
--- Load my plugins and there respective config
+-- Load plugins and there respective config
 local plugins = require 'plugins'
 
 -- Custom keybindings and leader mappings! yaaay
@@ -87,7 +87,6 @@ vim.g.gruvbox_material_diagnostic_line_highlight = true
 vim.g.gruvbox_material_diagnostic_virtual_text = 'colored'
 
 vim.g.gruvbox_material_statusline_style = 'default'
-
 vim.g.gruvbox_material_better_performance = true
 
 vim.cmd 'colorscheme gruvbox-material'
