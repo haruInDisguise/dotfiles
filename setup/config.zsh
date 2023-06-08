@@ -13,6 +13,7 @@ typeset -a paths=(
     "$DOTFILES_CONFIG/alacritty"    "$TARGET_CONFIG/alacritty"
     "$DOTFILES_CONFIG/gdb"          "$TARGET_CONFIG/gdb"
     "$DOTFILES_CONFIG/polybar"      "$TARGET_CONFIG/polybar"
+    "$DOTFILES_CONFIG/rizin"        "$TARGET_CONFIG/rizin"
 
     "$DOTFILES_CONFIG/tmux/tmux.conf" "$TARGET_HOME/.tmux.conf"
     "$DOTFILES_CONFIG/xorg/xinitrc"   "$TARGET_HOME/.xinitrc"

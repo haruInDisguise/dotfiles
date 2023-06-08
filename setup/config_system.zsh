@@ -9,6 +9,7 @@ DOTFILES_SYSTEM="$(readlink -f "${SCRIPT_DIR:?Missing script root}")/config_syst
 #   already exists, the sources contents will be copied recursively)
 # - Files must map to files (missing directories will be created)
 typeset -a paths=(
+    "$DOTFILES_SYSTEM/pacman.conf" "/etc/pacman.conf"
     "$DOTFILES_SYSTEM/pacman/hooks" "/etc/pacman.d/hooks"
     "$DOTFILES_SYSTEM/udev/rules.d" "/etc/udev/rules.d"
 )
