@@ -15,7 +15,6 @@ drop_cache() {
     print -- "$msg"
 }
 
-
 # ZLE "widgets" for custom mappings
 
 pipe-command-results-to-pager() {

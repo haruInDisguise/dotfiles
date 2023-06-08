@@ -19,11 +19,21 @@ export XDG_BIN_HOME="$HOME/.local/bin"
 export XDG_DOWNLOADS_DIR="$HOME/downloads"
 export XDG_DESKTOP_DIR="/dev/null"
 
-# Shell
+# Login shell
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export HISTFILE="$XDG_DATA_HOME/.zhistory"
 export HISTSIZE=10000
 export SAVEHIST=10000
+
+# Interactive shell
+# Using fish as a login shell can cause issues on some linux
+# distributions.
+# See: https://fishshell.com/docs/current/language.html#configuration
+# My primary reason for still reling on zsh
+# is that I'm emotionally attached to my config :^)
+
+# This is just the default
+export __fish_config_dir="$XDG_CONFIG_HOME/fish"
 
 # Cargo/Rust
 export RUSTUP_HOME="$XDG_DATA_HOME/rustup"
@@ -66,6 +76,13 @@ export GPG_TTY="$(tty)"
 
 # GNU GDB
 export GDBHISTORYPATH="$XDG_CACHE_HOME/gdb/gdbhist"
+
+# Perl
+export PATH="$XDG_DATA_HOME/perl5/bin${PATH:+:${PATH}}"
+export PERL5LIB="$XDG_DATA_HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
+export PERL_LOCAL_LIB_ROOT="$XDG_DATA_HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
+export PERL_MB_OPT="--install_base \"$XDG_DATA_HOME/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=$XDG_DATA_HOME/perl5"
 
 # Fixing "bugs" in dwm... see dwm(1)
 export _JAVA_AWT_WM_NONREPARENTING=1

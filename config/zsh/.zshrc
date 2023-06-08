@@ -83,6 +83,9 @@ source "$ZDOTDIR/config/scripts.zsh"
 source "$ZDOTDIR/config/keymap.zsh"
 source "$ZDOTDIR/config/prompt.zsh"
 
+# bun completions
+[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
+
 # ==============
 # External tools
 # ==============
@@ -107,11 +110,7 @@ command -v 'fzf' &>/dev/null && {
 # ZSH plugins
 # ===========
 
-# desc:     Something that I'm working on. Probably already exists in a much more useful
-#           manner, but it was fun to create non the less and a great little learning exercise.
-# source:   TODO
-
-#           Neat auto completions!
+# desc:     Neat auto completions!
 # source:   https://github.com/zsh-users/zsh-autosuggestions
 source "$ZDOTDIR/extern/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
 
@@ -121,8 +120,3 @@ source "$ZDOTDIR/extern/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
 #           binds/invokes a (default) widget.
 source "$ZDOTDIR/extern/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
 
-# bun completions
-[ -s "$HOME/.bun/_bun" ] && source "$HOME/.bun/_bun"
-
-# bun completions
-[ -s "/home/haru/.bun/_bun" ] && source "/home/haru/.bun/_bun"
