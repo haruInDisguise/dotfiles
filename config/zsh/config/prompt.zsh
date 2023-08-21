@@ -23,9 +23,10 @@ _prompt_setup_vcs_info() {
 
 _prompt_setup_vimode() {
     zle-line-init zle-keymap-select() {
-        local cursor_insert=$'\x1b[5 q'
-        local cursor_cmd=$'\x1b[2 q'
-        local mode_disable_blink=$'\x1b[25'
+        # It seems linke alacritty does not support the 'set blinking mode' sequence... :^(
+        local disable_blink='\x1b[5m'
+        local cursor_insert="${disable_blink}\x1b[5 q"
+        local cursor_cmd="${disable_blink}\x1b[2 q"
 
         # $KEYMAP seems to equal 'main' AND
         # 'viins' when changing into insert mode
@@ -37,23 +38,50 @@ _prompt_setup_vimode() {
     zle -N zle-keymap-select
 }
 
-# TODO: AHHH
 _prompt_setup_exectime() {
     zmodload 'zsh/datetime'
 
     typeset -gF _prompt_exectime_start_epoch_nsec=0
 }
 
-_prompt_hook_precmd() {
-    _prompt_exectime_diff_epoch_nsec="$((EPOCHREALTIME - _prompt_exectime_start_epoch_nsec))"
+_prompt_exectime_print_elapsed() {
+    local epoch_diff="$((EPOCHREALTIME - _prompt_exectime_start_epochtime))"
+    epoch_diff=(${(s:.:)epoch_diff})
 
+    for diff_sec diff_nsec in $epoch_diff; do
+        [[ -z "$_prompt_stats_command" ]] && return
+        [[ $diff_sec -gt 3 ]] && return
+        [[ "$_prompt_stats_command" =~ "time .*" ]] && return
+
+        local hours=$((diff_sec / 3600))
+        local min=$((diff_sec / 60 % 60))
+        local sec="$diff_sec"
+        local msec="${diff_nsec[1,3]}"
+
+        local output="'${_prompt_stats_command}' took "
+        [[ "$hours" -gt 0 ]] && output+="${(l:2::0:)hours} h, "
+        [[ "$min"   -gt 0 ]] && output+="${(l:2::0:)min} min, "
+        output+="${(l:2::0:)sec} sec "
+        output+="and ${msec} msec"
+
+        print -P -- "%F{yellow}${output}"
+    done
+}
+
+_prompt_hook_precmd() {
+    # print exectime
+    _prompt_exectime_print_elapsed
+
+    # populate git
     vcs_info
 
+    # print a newline
     print
 }
 
 _prompt_hook_preexec() {
-    _prompt_exectime_start_epoch_nsec="$EPOCHREALTIME"
+    _prompt_exectime_start_epochtime="$EPOCHREALTIME"
+    _prompt_stats_command="$1"
 }
 
 _prompt_hook_chpwd() {
