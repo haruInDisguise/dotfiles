@@ -45,13 +45,20 @@ _prompt_setup_exectime() {
 }
 
 _prompt_exectime_print_elapsed() {
+    local cmd=(${(s: :)_prompt_stats_command})
+    cmd="$cmd[1]"
     local epoch_diff="$((EPOCHREALTIME - _prompt_exectime_start_epochtime))"
     epoch_diff=(${(s:.:)epoch_diff})
 
+    [[ -z "$_prompt_stats_command" ]] && return
+    # Ignore the 'time' reserved word
+    [[ $cmd == 'time' ]] && return
+    # Ignore any builtin commmands
+    [[ "${(v)builtins[$cmd]}" == 'defined' ]] && return
+
     for diff_sec diff_nsec in $epoch_diff; do
-        [[ -z "$_prompt_stats_command" ]] && return
-        [[ $diff_sec -gt 3 ]] && return
-        [[ "$_prompt_stats_command" =~ "time .*" ]] && return
+        # TODO: Add options for stats like this
+        [[ $diff_sec -lt 3 ]] && return
 
         local hours=$((diff_sec / 3600))
         local min=$((diff_sec / 60 % 60))
@@ -64,13 +71,15 @@ _prompt_exectime_print_elapsed() {
         output+="${(l:2::0:)sec} sec "
         output+="and ${msec} msec"
 
-        print -P -- "%F{yellow}${output}"
+        print -P -- "\n%F{yellow}${output}"
     done
 }
 
 _prompt_hook_precmd() {
     # print exectime
     _prompt_exectime_print_elapsed
+    _prompt_stats_command=""
+    _prompt_exectime_start_epochtime=""
 
     # populate git
     vcs_info

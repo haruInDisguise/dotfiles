@@ -13,6 +13,6 @@ define gef_init
     source ~/.local/share/gef.py
 end
 document gef_init
-Load the gef python api for convenient reverse engineering or something...
+Load the gef python api for comfortable reverse engineering.
 Usage: load_gef
 end

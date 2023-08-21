@@ -452,9 +452,9 @@ cursor:
 #
 # Terminal hints can be used to find text in the visible part of the terminal
 # and pipe it to other applications.
-hints:
+#hints:
   # Keys used for the hint labels.
-  alphabet: "jfkdls;ahgurieowpq"
+  #alphabet: "jfkdls;ahgurieowpq"
 
   # List with all available hints
   #
