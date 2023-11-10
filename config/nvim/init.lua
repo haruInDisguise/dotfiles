@@ -8,7 +8,7 @@
 -- "Everything you need to know to configure neovim using lua": https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/
 -- "Nvim-lua-guide": https://github.com/nanotee/nvim-lua-guide
 
-require 'pre_init'
+require 'bootstrap'
 require 'utils'
 require 'keymap'
 
