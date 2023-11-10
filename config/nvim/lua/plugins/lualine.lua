@@ -1,9 +1,10 @@
 -- config for: https://github.com/hoob3rt/lualine.nvim
 local lualine = require 'lualine'
-local config = {}
 
-local init = function()
-    lualine.setup({
+return {
+    'hoob3rt/lualine.nvim',
+    event = 'BufEnter',
+    opts = {
         options = {
             icons_enabled = true,
             theme = 'gruvbox-material',
@@ -25,9 +26,7 @@ local init = function()
             lualine_z = {}
         },
         tabline = {},
-        extensions = {}
-    })
-end
-
-init()
+        extensions = {},
+    }
+}
 

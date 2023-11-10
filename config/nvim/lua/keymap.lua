@@ -23,7 +23,7 @@ set_keymap('n', '<Leader>w', '<cmd>w<CR>', mapping_options)
 set_keymap('n', '<Leader>W', '<cmd>w !sudo tee % >/dev/null<CR>', mapping_options)
 
 -- Quit buffer or exit
-set_keymap('n', '<Leader>q', '<cmd>bd<CR>', mapping_options)
+set_keymap('n', '<Leader>Q', '<cmd>bd<CR>', mapping_options)
 
 set_keymap('n', 'H', 'Hzz')
 set_keymap('n', 'M', 'Mzz')

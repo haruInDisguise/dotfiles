@@ -1,13 +1,7 @@
 -- config for: https://github.com/neovim/nvim-lspconfig
-
--- Taken and modified from: https://github.com/neovim/nvim-lspconfig#keybindings-and-completion
-
-local lsp = require 'lspconfig'
-local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities();
 local leader = [[,]]
 
--- TODO: Global to allow for easy plugin integration.
-function lsp_setup_server_on_attach(client, bufnr)
+function _G.lsp_setup_server_on_attach(client, bufnr)
     local bufopts = { noremap=true, silent=true, buffer=bufnr }
 
     vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
@@ -40,27 +34,26 @@ function lsp_setup_server_on_attach(client, bufnr)
         end, bufopts)
 end
 
-
-lsp['clangd'].setup {
-    capabilities = cmp_capabilities,
-    on_attach = function()
-        lsp_setup_server_on_attach()
-    end,
-    flags = {
-        debounce_text_changes = 150,
+return {
+    'neovim/nvim-lspconfig',
+    lazy = true,
+    dependencies = {
+        'hrsh7th/cmp-nvim-lsp'
     },
+    config = function()
+        -- NOTE: rust uses a seperate plugin: rust-tools.nvim
+        -- local servers = {'pyright', 'texlab', 'tsserver', 'rust_analyzer'}
+        local servers = {'pyright', 'texlab', 'tsserver', 'clangd'}
+        local lsp = require 'lspconfig'
+
+        for _, name in ipairs(servers) do
+            lsp[name].setup {
+                capabilities = require('cmp_nvim_lsp').default_capabilities(),
+                on_attach = lsp_setup_server_on_attach,
+                flags = {
+                    debounce_text_changes = 150,
+                },
+            }
+        end
+    end,
 }
-
--- NOTE: rust uses a seperate plugin: rust-tools.nvim
--- local servers = {'pyright', 'texlab', 'tsserver', 'rust_analyzer'}
-local servers = {'pyright', 'texlab', 'tsserver'}
-
-for _, name in ipairs(servers) do
-    lsp[name].setup {
-        capabilities = cmp_capabilities,
-        on_attach = lsp_setup_server_on_attach,
-        flags = {
-            debounce_text_changes = 150,
-        },
-    }
-end
