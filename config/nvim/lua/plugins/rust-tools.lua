@@ -15,9 +15,10 @@ return {
     },
     {
         'neovim/nvim-lspconfig',
-        opts = {
-            servers = {
+        opts = function()
+            return {
                 rust_analyzer = {
+                    capabilities = require('cmp_nvim_lsp').default_capabilities(),
                     settings = {
                         ["rust-analyzer"] = {
                             cargo = {
@@ -43,7 +44,7 @@ return {
                     }
                 }
             }
-        }
+        end
     }
 }
 

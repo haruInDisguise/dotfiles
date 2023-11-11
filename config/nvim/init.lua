@@ -23,7 +23,7 @@ vim.o.updatetime = 400
 
 local opt = vim.opt
 
-opt.completeopt = 'menuone,noselect'
+opt.completeopt = {'menu', 'menuone', 'noselect'}
 opt.relativenumber = true
 opt.number = true
 opt.hidden = true
