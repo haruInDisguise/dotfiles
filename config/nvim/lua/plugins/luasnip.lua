@@ -2,7 +2,7 @@
 return {
     'L3MON4D3/LuaSnip',
     version = 'v2.*',
-    event = 'VeryLazy',
+    lazy = true,
     dependencies = { 'rafamadriz/friendly-snippets'},
     build = 'make install_jsregexp',
     config = function()
