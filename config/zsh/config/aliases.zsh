@@ -22,8 +22,9 @@ alias pkill='command pkill -ei'
 alias objdump='command objdump -M intel'
 
 # dirstack
-for i ({0..9}) alias "$i"="pushd +$i"
-for i ({0..9}) alias "-$i"="pushd -$i"
+alias d='builtin dirs -pv'
+for i ({1..4}) alias "$i"="pushd +$i"
+for i ({1..4}) alias "-$i"="pushd -$i"
 
 # move up, in a more comfortable fashion...
 # (i.e. '..2' instead of 'cd ../../')
@@ -51,7 +52,8 @@ esac
 
 # mute license banner on startup
 alias gdb='command gdb --quiet'
-alias rust-gdb='command rust-gdb --quiet'
+alias gdb-rust='command rust-gdb --quiet'
+alias gdb-asan='ASAN_OPTIONS=abort_on_error=1:detect_leaks=0 command gdb --quiet'
 
 alias e='exa -la --git'
 

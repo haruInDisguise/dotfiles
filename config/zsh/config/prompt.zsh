@@ -51,18 +51,15 @@ _prompt_exectime_print_elapsed() {
     epoch_diff=(${(s:.:)epoch_diff})
 
     [[ -z "$_prompt_stats_command" ]] && return
-    # Ignore the 'time' reserved word
     [[ $cmd == 'time' ]] && return
-    # Ignore any builtin commmands
     [[ "${(v)builtins[$cmd]}" == 'defined' ]] && return
 
     for diff_sec diff_nsec in $epoch_diff; do
-        # TODO: Add options for stats like this
         [[ $diff_sec -lt 3 ]] && return
 
         local hours=$((diff_sec / 3600))
         local min=$((diff_sec / 60 % 60))
-        local sec="$diff_sec"
+        local sec=$((diff_sec % 60))
         local msec="${diff_nsec[1,3]}"
 
         local output="'${_prompt_stats_command}' took "
