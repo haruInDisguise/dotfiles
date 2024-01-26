@@ -1,12 +1,17 @@
--- config for nivm-colorizer.lua: https://github.com/norcalli/nvim-colorizer.lua
+-- config for: https://github.com/norcalli/nvim-colorizer.lua
 return {
-    'norcalli/nvim-colorizer.lua',
+    'NvChad/nvim-colorizer.lua',
     event = 'VeryLazy',
-    opts = {
-        css = { names = true },
-        c = { names = false },
-        cpp = { names = false },
-        rust = { names = false },
-    }
+    config = function()
+        local colorizer = require 'colorizer'
+        colorizer.setup({
+            filetypes = { "c", "html", "css", "rust", "norg" },
+            user_default_options = {
+                names = false,
+                AARRGGBB = true,
+                RRGGBBAA = true,
+            },
+        })
+    end,
 }
 

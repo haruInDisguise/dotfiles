@@ -8,8 +8,6 @@ return {
         'nvim-lua/plenary.nvim',
         'kyazdani42/nvim-web-devicons',
         'nvim-telescope/telescope-ui-select.nvim',
-
-        'nvim-telescope/telescope-file-browser.nvim',
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     },
     config = function()
@@ -18,27 +16,18 @@ return {
         local extensions = require('telescope').extensions
 
         load_extension('fzf')
-        load_extension('file_browser')
         load_extension('ui-select')
 
-        -- Lazy loading cheatsheet...
-        -- load_extension('cheatsheet')
-
-        local keymap = vim.keymap.set
+        local keymap_set = vim.keymap.set
         local keymap_options = {
             silent = true,
             noremap = true,
         }
 
-        keymap('n', '<leader>ff', builtin.find_files, keymap_options)
-        keymap('n', '<leader>fg', builtin.live_grep, keymap_options)
-        keymap('n', '<leader>fr', builtin.registers, keymap_options)
-        keymap('n', '<leader>fb', function()
-            extensions.file_browser.file_browser({
-                hidden=true,
-                dir_icon = ''
-            })
-        end, keymap_options)
+        keymap_set('n', '<leader>ff', builtin.find_files, keymap_options)
+        keymap_set('n', '<leader>fb', builtin.buffers, keymap_options)
+        keymap_set('n', '<leader>fg', builtin.live_grep, keymap_options)
+        keymap_set('n', '<leader>fr', builtin.registers, keymap_options)
     end,
 
     opts = {
@@ -47,17 +36,6 @@ return {
                 theme = 'dropdown'
             }
         },
-        extensions = {
-            ['file_browser'] = {
-                theme = 'ivy',
-            },
-            ['fzf'] = {
-                -- fuzzy = true,
-                -- override_generic_sorter = true,
-                -- override_file_sorter = true,
-                -- case_mode = 'smart_case',
-            },
-            ['ui-select'] = {}
-        },
+        extensions = {},
     }
 }

@@ -42,8 +42,8 @@ return {
     config = function()
         -- NOTE: rust uses a seperate plugin: rust-tools.nvim
         -- local servers = {'pyright', 'texlab', 'tsserver', 'rust_analyzer'}
-        local servers = {'pyright', 'texlab', 'tsserver', 'clangd'}
         local lsp = require 'lspconfig'
+        local servers = {'pyright', 'texlab', 'tsserver', 'clangd'}
 
         for _, name in ipairs(servers) do
             lsp[name].setup {

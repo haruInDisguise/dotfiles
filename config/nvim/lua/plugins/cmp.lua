@@ -1,59 +1,32 @@
--- config for nvim-cmp: https://github.com/hrsh7th/nvim-cmp
--- and: https://github.com/saadparwaiz1/cmp_luasnip
-
+-- config for: https://github.com/hrsh7th/nvim-cmp
 return {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
     dependencies = {
-        'L3MON4D3/LuaSnip',
         'onsails/lspkind.nvim',
         'hrsh7th/cmp-nvim-lsp',
-        'hrsh7th/cmp-buffer',
-        'hrsh7th/cmp-path',
-        'hrsh7th/cmp-cmdline',
     },
     config = function(_, opts)
-        local cmp = require('cmp') cmp.setup(opts)
-        cmp.setup.cmdline('/', {
-            completion = { autocomplete = false },
-            sources = {
-                { name = 'buffer', opts = { keyword_pattern = [=[[^[:blank:]].*]=] } },
-            }
-        })
-
-        cmp.setup.cmdline(':', {
-            completion = { autocomplete = false },
-            sources = cmp.config.sources({
-                { name = 'path' }
-            }, {
-                { name = 'cmdline' }
-            })
-        })
+        require('cmp').setup(opts)
     end,
     opts = function(_, opts)
         local cmp = require('cmp')
-        local luasnip = require('luasnip')
-
-        local default_win_config = {
-            border = 'rounded',
-            winhighlight = 'Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None',
-            zindex = 1001,
-            col_offset = 2,
-            side_padding = 1,
-            scrollbar = true,
-        }
+        local window_style = _G.default_config.window_style;
 
         return {
             snippet = {
                 expand = function(args)
-                    require('luasnip').lsp_expand(args.body)
+                    require('luasnip').lsp_expand(asnicwprgs.body, {
+                        -- default behaviour
+                        jump_into_func = function(snip)
+                            return snip:jump_into(1)
+                        end,
+                    })
                 end,
             },
             sources = cmp.config.sources({
                 { name = 'path' },
-                { name = 'luasnip' },
                 { name = 'nvim_lsp' },
-                { name = 'buffer' },
             }),
             view = {
                 entries = {
@@ -62,8 +35,8 @@ return {
                 }
             },
             window = {
-                documentation = vim.tbl_extend("force", default_win_config, {}),
-                completion = vim.tbl_extend("force", default_win_config, {}),
+                documentation = vim.tbl_extend("force", window_style, {}),
+                completion = vim.tbl_extend("force", window_style, {}),
                 },
             formatting = {
                 format = function(entry, vim_item)

@@ -8,12 +8,13 @@
 -- "Everything you need to know to configure neovim using lua": https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/
 -- "Nvim-lua-guide": https://github.com/nanotee/nvim-lua-guide
 
-require 'bootstrap'
-require 'utils'
-require 'keymap'
+require('bootstrap')
+require('utils')
+require('keymap')
 
-require 'lazy'.setup('plugins')
+require('lazy').setup('plugins')
 
+vim.g.did_load_filetypes = false
 
 -- OPTIONS
 
@@ -23,7 +24,7 @@ vim.o.updatetime = 400
 
 local opt = vim.opt
 
-opt.completeopt = {'menu', 'menuone', 'noselect'}
+opt.shortmess = opt.shortmess + 'c'
 opt.relativenumber = true
 opt.number = true
 opt.hidden = true
@@ -31,7 +32,7 @@ opt.history = 500
 opt.so = 7
 
 opt.wildmenu = true
-opt.wildignore = '*/.git,*.o.so'
+opt.wildignore = '*/.git'
 
 opt.laststatus = 3
 

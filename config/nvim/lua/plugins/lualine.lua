@@ -1,6 +1,4 @@
 -- config for: https://github.com/hoob3rt/lualine.nvim
-local lualine = require 'lualine'
-
 return {
     'hoob3rt/lualine.nvim',
     event = 'BufEnter',
