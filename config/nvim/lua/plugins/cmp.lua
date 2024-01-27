@@ -11,19 +11,8 @@ return {
     end,
     opts = function(_, opts)
         local cmp = require('cmp')
-        local window_style = _G.default_config.window_style;
 
         return {
-            snippet = {
-                expand = function(args)
-                    require('luasnip').lsp_expand(asnicwprgs.body, {
-                        -- default behaviour
-                        jump_into_func = function(snip)
-                            return snip:jump_into(1)
-                        end,
-                    })
-                end,
-            },
             sources = cmp.config.sources({
                 { name = 'path' },
                 { name = 'nvim_lsp' },
@@ -35,8 +24,8 @@ return {
                 }
             },
             window = {
-                documentation = vim.tbl_extend("force", window_style, {}),
-                completion = vim.tbl_extend("force", window_style, {}),
+                documentation = _G.default_config.window_style,
+                completion = _G.default_config.window_style
                 },
             formatting = {
                 format = function(entry, vim_item)
@@ -54,7 +43,7 @@ return {
                 ['<C-b>'] = cmp.mapping(cmp.mapping.scroll_docs(4), {'i', 'c'}),
 
                 ['<C-Space>'] = cmp.mapping(cmp.mapping.complete(), {'i', 'c'}),
-                ['<CR>'] = cmp.mapping(cmp.mapping.confirm({select = true}), {'i', 'c'}),
+                ['<CR>'] = cmp.mapping(cmp.mapping.confirm({select = false}), {'i', 'c'}),
                 ['<C-e>'] = cmp.mapping(cmp.mapping.abort(), {'i', 'c'}),
             },
         }
