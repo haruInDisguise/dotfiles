@@ -1,3 +1,33 @@
-IndentWidth: 4
-ColumnLimit: 100
 BasedOnStyle: llvm
+
+AlignConsecutiveMacros:
+  Enabled: true
+
+AlignEscapedNewlines: Left
+AllowShortBlocksOnASingleLine: Empty
+AlwaysBreakAfterDefinitionReturnType: None
+
+BreakBeforeBraces: Attach
+
+ColumnLimit: 100
+IndentWidth: 4
+TabWidth: 4
+
+IndentPPDirectives: BeforeHash
+IncludeBlocks: Preserve
+InsertBraces: true
+
+# FIXME: This option does not respect typedefs :^(
+QualifierAlignment: Custom
+QualifierOrder: [ static , inline, volatile, const, type]
+SpaceBeforeParens: ControlStatements
+
+#AlwaysBreakAfterDefinitionReturnType: 'None'
+AlwaysBreakAfterReturnType: None
+
+# TODO: Find a way to move the closing braced to a new line, like so:
+# char values[] = {
+#   0x00, 0x01, 0x02,
+# }
+AlignAfterOpenBracket: BlockIndent
+Cpp11BracedListStyle: false
