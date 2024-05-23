@@ -23,9 +23,7 @@ _prompt_setup_vcs_info() {
 
 _prompt_setup_vimode() {
     zle-line-init zle-keymap-select() {
-        # It seems linke alacritty does not support the 'set blinking mode' sequence... :^(
-        local disable_blink='\x1b[5m'
-        local cursor_insert="${disable_blink}\x1b[5 q"
+        local cursor_insert="${disable_blink}\x1b[6 q"
         local cursor_cmd="${disable_blink}\x1b[2 q"
 
         # $KEYMAP seems to equal 'main' AND
@@ -62,7 +60,10 @@ _prompt_exectime_print_elapsed() {
         local sec=$((diff_sec % 60))
         local msec="${diff_nsec[1,3]}"
 
-        local output="'${_prompt_stats_command}' took "
+        # FIXME: CMD might contain characters that will be expanded
+        # by the shell, leading to misformatted results. Escape cmd.
+        # Example: "sleep 3 && print -- $_"
+        local output="\"%F{cyan}${_prompt_stats_command}%F{yellow}\" took "
         [[ "$hours" -gt 0 ]] && output+="${(l:2::0:)hours} h, "
         [[ "$min"   -gt 0 ]] && output+="${(l:2::0:)min} min, "
         output+="${(l:2::0:)sec} sec "
@@ -91,7 +92,7 @@ _prompt_hook_preexec() {
 }
 
 _prompt_hook_chpwd() {
-    command exa -la --git
+    { alias e &>/dev/null && e } || ls -lAh
 }
 
 _prompt_setup() {
