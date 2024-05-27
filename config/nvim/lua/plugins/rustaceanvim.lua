@@ -9,16 +9,12 @@ return {
             capabilities.textDocument.completion.completionItem.snippetSupport = false
 
             vim.g.rustaceanvim = {
-                -- Plugin configuration
-                tools = {
+                dap = {
+                    autoload_configurations = false,
                 },
-                -- LSP configuration
                 server = {
                     capabilities = capabilities,
-                    on_attach = _G.lsp_setup_server_on_attach,
-                },
-                -- DAP configuration
-                dap = {
+                    semanticTokensProvider = false,
                 },
             }
 

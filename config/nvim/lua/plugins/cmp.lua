@@ -4,6 +4,7 @@ return {
     event = 'InsertEnter',
     dependencies = {
         'onsails/lspkind.nvim',
+        'hrsh7th/cmp-path',
         'hrsh7th/cmp-nvim-lsp',
     },
     config = function(_, opts)
@@ -26,7 +27,7 @@ return {
             window = {
                 documentation = _G.default_config.window_style,
                 completion = _G.default_config.window_style
-                },
+            },
             formatting = {
                 format = function(entry, vim_item)
                     local lspkind = require('lspkind')

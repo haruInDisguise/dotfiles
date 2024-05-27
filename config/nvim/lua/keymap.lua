@@ -1,5 +1,6 @@
 -- Keymaps for my vim configuration! WOW
 local set_keymap = vim.keymap.set
+local delete_keymap = vim.keymap.del
 local mapping_options   = { silent = true }
 
 -- mappings for plugins are specified in there
@@ -32,8 +33,6 @@ set_keymap('n', 'L', 'Lzz')
 -- Remapping some default bindings and overall quality of life stuff...
 set_keymap('n', '<Space>', '<Nop>', {})
 
-set_keymap('n', 'j', '<Nop>', {})
-set_keymap('n', 'k', '<Nop>', {})
 set_keymap('n', 'j', 'gj', mapping_options)
 set_keymap('n', 'k', 'gk', mapping_options)
 

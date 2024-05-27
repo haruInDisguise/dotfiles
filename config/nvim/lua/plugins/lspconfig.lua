@@ -1,55 +1,75 @@
--- config for: https://github.com/neovim/nvim-lspconfig
+-- config for:
+-- https://github.com/williamboman/mason.nvim
+-- https://github.com/williamboman/mason-lspconfig.nvim
+-- https://github.com/neovim/nvim-lspconfig
 local leader = [[,]]
 
+-- default stuff for all "lsp sessions"
 vim.api.nvim_create_autocmd("LspAttach", {
+    desc = "Default keybindings for Lsp sessions",
     callback = function(args)
-        print("LspAttach autocmd")
-        local bufopts = { noremap=true, silent=true, buffer=args.bufnr }
+        local opts = { noremap=true, silent=true, buffer=args.bufnr }
 
-        vim.keymap.set('n', 'K', vim.lsp.buf.hover, bufopts)
+        vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 
-        vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, bufopts)
-        vim.keymap.set('n', ']d', vim.diagnostic.goto_next, bufopts)
+        vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
+        vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
 
-        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, bufopts)
-        vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, bufopts)
-        vim.keymap.set('n', 'gr', vim.lsp.buf.references, bufopts)
-        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, bufopts)
-        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, bufopts)
+        vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
+        vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
+        vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts)
+        vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts)
+        vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts)
 
-        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, bufopts)
+        vim.keymap.set('n', '<C-k>', vim.lsp.buf.signature_help, opts)
 
         vim.keymap.set('n', leader .. 'e', vim.diagnostic.open_float, opts)
         vim.keymap.set('n', leader .. 'q', vim.diagnostic.setloclist, opts)
 
-        vim.keymap.set('n', leader .. 'wa', vim.lsp.buf.add_workspace_folder, bufopts)
-        vim.keymap.set('n', leader .. 'wr', vim.lsp.buf.remove_workspace_folder, bufopts)
+        vim.keymap.set('n', leader .. 'wa', vim.lsp.buf.add_workspace_folder, opts)
+        vim.keymap.set('n', leader .. 'wr', vim.lsp.buf.remove_workspace_folder, opts)
         vim.keymap.set('n', leader .. 'wl', function()
                 print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-            end, bufopts)
+            end, opts)
 
-        vim.keymap.set('n', leader .. 'rn', vim.lsp.buf.rename, bufopts)
-        vim.keymap.set('n', leader .. 'ca', vim.lsp.buf.code_action, bufopts)
+        vim.keymap.set('n', leader .. 'rn', vim.lsp.buf.rename, opts)
+        vim.keymap.set('n', leader .. 'ca', vim.lsp.buf.code_action, opts)
 
         vim.keymap.set('n', leader .. 'f', function()
                 vim.lsp.buf.format{ async = false };
-            end, bufopts)
+            end, opts)
     end,
 })
+
 
 return {
     'neovim/nvim-lspconfig',
     dependencies = {
-        'hrsh7th/cmp-nvim-lsp'
+        'williamboman/mason.nvim',
+        "williamboman/mason-lspconfig.nvim",
+        'hrsh7th/cmp-nvim-lsp',
     },
     config = function()
-        -- NOTE: rust uses a seperate plugin: rust-tools.nvim
-        -- local servers = {'pyright', 'texlab', 'tsserver', 'rust_analyzer'}
-        local lsp = require 'lspconfig'
+        -- NOTE: "mason.nvim is optimized to load as little as possible during setup. Lazy-loading the plugin, or somehow deferring the setup, is not recommended."
+        require('mason').setup()
+
+        -- FIXME: clangd is included in Archs 'clang' package. Decide which version to use
         local servers = {'pyright', 'texlab', 'tsserver', 'clangd'}
+        local mason_lspconfig = require("mason-lspconfig")
+
+        -- NOTE: rust-analyzer is configured by 'rustaceanvim'. See ':h rustaceanvim.mason'
+        mason_lspconfig.setup_handlers {
+            ['rust_analyzer'] = function() end,
+        }
+        mason_lspconfig.setup {
+            ensure_installed = servers,
+        }
+
+        local lsp = require('lspconfig')
+        lsp['rust_analyzer'] = function() return true end
 
         local capabilities = require('cmp_nvim_lsp').default_capabilities()
-        -- i don't like snippets..
+        -- see: https://github.com/hrsh7th/nvim-cmp/issues/1129#issuecomment-1837594834
         capabilities.textDocument.completion.completionItem.snippetSupport = false
         for _, name in ipairs(servers) do
             lsp[name].setup {
