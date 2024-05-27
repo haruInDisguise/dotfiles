@@ -9,18 +9,16 @@ TARGET_HOME="$HOME"
 
 typeset -a paths=(
     "$DOTFILES_CONFIG/alacritty"    "$TARGET_CONFIG/alacritty"
-    "$DOTFILES_CONFIG/fish"         "$TARGET_CONFIG/fish"
     "$DOTFILES_CONFIG/gdb"          "$TARGET_CONFIG/gdb"
     "$DOTFILES_CONFIG/ncspot"       "$TARGET_CONFIG/ncspot"
     "$DOTFILES_CONFIG/nvim"         "$TARGET_CONFIG/nvim"
-    "$DOTFILES_CONFIG/polybar"      "$TARGET_CONFIG/polybar"
+    "$DOTFILES_CONFIG/river"        "$TARGET_CONFIG/river"
     "$DOTFILES_CONFIG/rizin"        "$TARGET_CONFIG/rizin"
     "$DOTFILES_CONFIG/zathura"      "$TARGET_CONFIG/zathura"
     "$DOTFILES_CONFIG/zsh"          "$TARGET_CONFIG/zsh"
 
     "$DOTFILES_CONFIG/clang-format"   "$TARGET_HOME/.clang-format"
     "$DOTFILES_CONFIG/tmux/tmux.conf" "$TARGET_HOME/.tmux.conf"
-    "$DOTFILES_CONFIG/xorg/xinitrc"   "$TARGET_HOME/.xinitrc"
     "$DOTFILES_CONFIG/zsh/zshenv"     "$TARGET_HOME/.zshenv"
 )
 

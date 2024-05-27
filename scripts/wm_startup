@@ -12,7 +12,7 @@ launch_host_specific() {
     # Some mobile/desktop specific stuff
     case "$(uname -n)" in
     'main-pad' )
-        wlr-randr --output DP-0 --auto --primary --output DP-1 --auto --rotate left --right-of DP-0
+        wlr-randr --output DP-1 --preferred --output DP-2 --transform 90
         ;;
     'boxpad' )
         # TODO: Port this script to wayland
