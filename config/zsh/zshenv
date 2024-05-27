@@ -97,7 +97,7 @@ export PATH="$_BIN_USER:$_BIN_NPM:$_BIN_CARGO:$DENO_INSTALL_ROOT:$_BIN_BUN:$PATH
 unset _BIN_CARGO _BIN_NPM _BIN_USER _BIN_BUN
 
 # Personal exports for script mangement... AHHHAH
-export DOTFILES_XORG_REDSHIFT_LOCATION='52.3127:13.3427'
 export DOTFILES_ROOT="$HOME/dotfiles"
+export DISK_ONE="/mnt/data_0"
 
 PATH="$DOTFILES_ROOT/bin:$PATH"

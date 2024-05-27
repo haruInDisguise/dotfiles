@@ -59,6 +59,8 @@ unsetopt FLOWCONTROL            # Disable "flow control"/sending the STOP char o
 # General
 # =======
 
+export GPG_TTY="$(tty)"
+
 fpath=("${XDG_DATA_HOME:-$HOME/.local/share}/zsh/functions" $fpath)
 
 autoload -Uz compinit
@@ -105,6 +107,10 @@ command -v 'fzf' &>/dev/null && {
     #cat /usr/share/fzf/completion.zsh > "$ZDOTDIR/functions/comp_fzf"
     source /usr/share/fzf/key-bindings.zsh
 }
+
+# ast-grep: Structural code search
+# Source:   https://github.com/ast-grep/ast-grep
+command -v 'ast-grep' &>/dev/null && eval "$(ast-grep completions zsh)"
 
 # ===========
 # ZSH plugins

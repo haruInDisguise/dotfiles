@@ -1,9 +1,6 @@
-# My aliases
-alias shd='sudo shutdown -h now'
-alias rbt='sudo reboot'
+alias shd='command sudo systemctl poweroff'
 
 ## Builtins and Coreutils
-
 alias ls='command ls --color=auto'
 alias l='ls -lAh'
 
@@ -23,18 +20,18 @@ alias objdump='command objdump -M intel'
 
 # dirstack
 alias d='builtin dirs -pv'
-for i ({1..4}) alias "$i"="pushd +$i"
-for i ({1..4}) alias "-$i"="pushd -$i"
+for i ({1..4}) alias "$i"="builtin pushd +$i"
+for i ({1..4}) alias "-$i"="builtin pushd -$i"
 
 # move up, in a more comfortable fashion...
 # (i.e. '..2' instead of 'cd ../../')
 for i ({2..5}) alias "..$i"="builtin cd $(printf '../%.0s' {1..${i}})"
 
-case "$(uname -r)" in
+case "$(command uname -r)" in
     *(artix|arch)*)
         local pac='pacman --color=auto'
 
-        alias pacin="command sudo $pac -S"
+        alias pacin="command sudo $pac -Sy"
         alias pacupg="command sudo $pac -Syu"
         alias pacupd="command sudo $pac -Sy"
         alias pacrm="command sudo $pac -Rs"
@@ -50,23 +47,19 @@ esac
 
 ## Some useful and commonly used stuff
 
-# mute license banner on startup
 alias gdb='command gdb --quiet'
-alias gdb-rust='command rust-gdb --quiet'
 alias gdb-asan='ASAN_OPTIONS=abort_on_error=1:detect_leaks=0 command gdb --quiet'
 
-alias e='exa -la --git'
+alias e='command eza -la --git --group-directories-first'
 
-#  xorg
+alias xclip='command xclip -selection clipboard'
 alias xpropc='command xprop | grep "WM_CLASS"'
-
-# ffmpeg
 alias ffmpeg='command ffmpeg -hide_banner'
-
-# neovim
 alias n='command $EDITOR'
 
 # git stuff
 alias gs='command git status'
 alias gc='command git commit'
 alias ga='command git add'
+
+alias gsign='eval "$(ssh-agent)"; ssh-add "$HOME/.ssh/github"'
