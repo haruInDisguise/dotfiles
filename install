@@ -16,7 +16,7 @@ case "$_install_cmd" in
         source "$SCRIPT_DIR/setup/config.zsh";;
     'efistub')
         shift
-        eval sh "$SCRIPT_DIR/setup/efistub.sh" $@;;
+        eval sh "$SCRIPT_DIR/setup/efistub.zsh" $@;;
     *)
         echo "Invalid command: \"$_install_cmd\"" >&2
         exit 2;;
