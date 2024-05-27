@@ -1,0 +1,36 @@
+#!/bin/sh
+# vim: ft=sh
+
+launch_scripts() {
+    eval "$(ssh-agent)"
+
+    wlsunset -l 52.22 -L 13.33 &
+    dunst &
+}
+
+launch_host_specific() {
+    # Some mobile/desktop specific stuff
+    case "$(uname -n)" in
+    'main-pad' )
+        wlr-randr --output DP-0 --auto --primary --output DP-1 --auto --rotate left --right-of DP-0
+        ;;
+    'boxpad' )
+        # TODO: Port this script to wayland
+        # xorg_input_configure_touchpad
+        # setxkbmap us -option caps:escape &
+        ;;
+    esac
+}
+
+launch_pipewire() {
+    if ! pidof pipewire >/dev/null 2>&1; then
+        pipewire-pulse &
+    fi
+    }
+
+launch_host_specific
+launch_scripts &
+disown
+
+launch_pipewire &
+disown
