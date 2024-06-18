@@ -1,52 +1,15 @@
 #!/usr/bin/sh
 
 PLAYERCTL="playerctl"
-# A list of programs to priorities over one another.
-# For programming convenience, a lower priority
-# is "better" than a higher value.
-# This list is sorted in descending order
-# (i.e. hightest to lowest priority, since
-# lower values are "better")
-PRIORITIES="ncspot spotifyd firefox"
-LOWEST_PRIORITY=99
-
-get_priority() {
-    local index=0
-    for match in $PRIORITIES; do
-        case $1 in
-            *$match* )
-                echo $index
-                return
-                ;;
-        esac
-        index=$(( index + 1 ))
-    done
-
-    echo $(( LOWEST_PRIORITY + 1 ))
-}
+PLAYER="ncspot,spotifyd,firefox"
+IGNORE=""
 
 run() {
-    local current_target=""
-    local current_priority=$LOWEST_PRIORITY
-    for player in $(playerctl --list-all); do
-        local tmp="$(get_priority $player)"
-        if (( tmp < current_priority )); then
-            current_priority="$tmp"
-            current_target="$player"
-        fi
-    done
-
-    # MPRIS compatible applications that are not listed in
-    # the priorities list should be ignored
-    [ -z "$current_target" ] && exit 2
-
-    echo "Target: $current_target"
-    # 'playerctl' blocks until the player responds. Disowning
-    # allows the script to complete 'async'/faster
-    eval "$PLAYERCTL" --player="$current_target" $1 &
-    disown
+    playerctl \
+        --ignore-player="$IGNORE" \
+        --player="$PLAYER" \
+        $@
 }
-
 display_banner() {
     local artist="$(playerctl metadata artist)"
     local title="$(playerctl metadata title)"
