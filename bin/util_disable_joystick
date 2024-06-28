@@ -1,0 +1,10 @@
+#!/usr/bin/sh
+
+# My keyboard also acts as a joystick, which confuses some programs/games
+JOYSTICK_PATH="/dev/input/by-id/*AnnePro2*joystick*"
+eval "sudo chmod 000 $JOYSTICK_PATH"
+
+if [[ $# -gt 0 ]] && command -v $1 > /dev/null 2>&1; then
+    exec $@
+fi
+
