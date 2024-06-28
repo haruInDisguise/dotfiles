@@ -1,0 +1,32 @@
+#!/usr/bin/zsh
+# Setup my wacom tablet. Mostly used for "osu!"..
+
+. "$DOTFILES_ROOT/lib/log.sh"
+
+TABLET_ID="${TABLET_ID:-Wacom Intuos PT S 2 Pen stylus}"
+OUTPUT="${2:-HEAD-0}"
+
+reset_area() {
+    xsetwacom --set "$1" ResetArea
+}
+
+main() {
+    local -E ratio="${1:?Missing ratio}"
+
+    log_info "Setting properties for: \"$TABLET_ID\""
+    reset_area "$TABLET_ID"
+
+    local -a default_area=( $(xsetwacom --get "$TABLET_ID" Area) )
+    local -i mod_area_x="$(( $default_area[3] * $ratio ))"
+    local -i mod_area_y="$(( $default_area[4] * $ratio))"
+
+    xsetwacom --set "$TABLET_ID" Area "0 0 $mod_area_x $mod_area_y"
+    xsetwacom --set "$TABLET_ID" MapToOutput "$OUTPUT"
+    xsetwacom --set "$TABLET_ID" Touch off
+
+    xsetwacom --set "$TABLET_ID" Button 1 0
+    xsetwacom --set "$TABLET_ID" Button 2 0
+    xsetwacom --set "$TABLET_ID" Button 3 0
+}
+
+main $@
