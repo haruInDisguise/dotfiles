@@ -18,8 +18,8 @@ run() {
     restart_pipewire
     _run_tablet_area='.40'
 
-    log_debug "Setting tablet area to $_run_tablet_area"
-    xorg_input_configure_tablet "$_run_tablet_area"
+    # log_debug "Setting tablet area to $_run_tablet_area"
+    # xorg_input_configure_tablet "$_run_tablet_area"
 
     log_debug "Launching game"
     eval "exec '$GAME_EXEC'"
