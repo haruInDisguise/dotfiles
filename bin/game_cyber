@@ -2,35 +2,44 @@
 
 . "$DOTFILES_ROOT/lib/log.sh"
 
-WINE_TOOLCHAIN_ROOT="/mnt/data_0/opt/dev"
+WINE_TOOLCHAIN_ROOT="/mnt/data_0/opt/wine-dev"
 
-GAME_DIR="/mnt/data_0/games/guild_wars_2"
-GAME_EXEC="$GAME_DIR/Gw2-64.exe"
-GAME_ARGS="-autologin"
+GAME_DIR="/mnt/data_0/games/steam/steamapps/common/Cyberpunk 2077"
+GAME_EXEC="$GAME_DIR/bin/x64/Cyberpunk2077.exe"
+GAME_ARGS="-skipStartScreen"
+
+# enable raytracing
+export VKD3D_CONFIG=dxr
+export RADV_PERFTEST='rt,rtwave64'
 
 PROTON_DIR="$HOME/.local/share/Steam/compatibilitytools.d/proton-localbuild/"
 #PROTON_DIR="$HOME/.local/share/Steam/steamapps/common/Proton 8.0/"
 PROTON_EXEC="$PROTON_DIR/proton"
 PROTON_ARGS=""
 
+MODS_PATH="/mnt/data_0/games/cyberpunk_mods"
+
+export WINEDLLOVERRIDES="version,winmm"
+export WINEDEBUG="+all,err"
+
 # see: https://github.com/GloriousEggroll/proton-ge-custom#Modification
 export STEAM_COMPAT_CLIENT_INSTALL_PATH=""
-export STEAM_COMPAT_DATA_PATH="/mnt/data_0/games/proton/guild_wars_2/"
+export STEAM_COMPAT_DATA_PATH="/mnt/data_0/games/steam/steamapps/compatdata/1091500"
 
 export __GL_SHADER_DISK_CACHE_SKIP_CLEANUP=1
 export __GL_SHADER_DISK_CACHE_PATH="$GAME_DIR/cache"
 export __GL_THREADED_OPTIMIZATIONS=1
 
-export NOSTEAM=1
+export NOSTEAM=0
 
 # DEBUGGING
-PROTON_DEBUG_DIR="/tmp/proton_gw2"
+PROTON_DEBUG_DIR="/tmp/proton_cyber"
 export PROTON_LOG=1
 
-export VKD3D_DEBUG=false
-export VKD3D_SHADER_DEBUG=false
-export DXVK_LOG_LEVEL=error
-export MONO_LOG_LEVEL=error
+export VKD3D_DEBUG=1
+export VKD3D_SHADER_DEBUG=1
+export DXVK_LOG_LEVEL=all
+export MONO_LOG_LEVEL=all
 #export WINE_MONO_TRACE=
 
 export PROTON_DEBUG_DIR="$PROTON_DEBUG_DIR" # /proton_$USER
@@ -38,23 +47,16 @@ export PROTON_CRASH_REPORT_DIR="$PROTON_DEBUG_DIR/crash"
 #export PROTON_LOG_DIR="$GAME_DIR/logs/"
 export PROTON_DUMP_DEBUG_COMMANDS=1
 
-export WINEDEBUG="+all,err"
-
-# FIXME: proton appears to be missing some libraries that where added
-# in wine release 1.19.22: https://www.winehq.org/announce/1.9.22
-export WINEPATH="/usr/lib/wine/x86_64-windows:$WINEPATH"
-
 launch_in_prefix() {
     local cmd="$1"
     [ $# -gt 0 ] && shift
-    log_info "Executing command: '$PROTON_EXEC' $PROTON_ARGS run 'Z:$cmd' $@"
-    eval "'$PROTON_EXEC' $PROTON_ARGS run 'Z:$cmd' $@"
+    eval "'$PROTON_EXEC' $PROTON_ARGS run '$cmd' $@"
 }
 
 launch_debug() {
     local prog="${1:-$GAME_EXEC}"
 
-    GDB_PATH="$WINE_TOOLCHAIN_ROOT/../src/gdb-14.1/build/gdb/gdb"
+    GDB_PATH="$WINE_TOOLCHAIN_ROOT/src/gdb-13.1/build/gdb/gdb"
     GDB_ARGS="-q \
         -ex 'target extended-remote localhost:4242' \
         -ex 'set solib-search-path \"$WINEPATH\"' \
@@ -71,40 +73,23 @@ launch_debug_server() {
     eval "'$PROTON_EXEC' $PROTON_ARGS run 'Z:$GDBSERVER_PATH' $GDBSERVER_ARGS"
 }
 
-launch_winetricks() {
-    export WINEPREFIX="$STEAM_COMPAT_DATA_PATH/pfx"
-    winetricks
-}
-
-run_game() {
+launch_proton() {
+    cd "$GAME_DIR"
     mkdir -p "$STEAM_COMPAT_DATA_PATH"
-
-    #killall picom
-    #picom \
-    #    --focus-exclude 'name *?= "Blish HUD"' &
-    #picom_pid=$!
-
-    launch_in_prefix "$GAME_EXEC" $GAME_ARGS &
-    #launch_in_prefix '/mnt/data_0/games/guild_wars_2/addons/blish_hud/Blish HUD.exe' &
-    #blish_pid=$!
-    #sleep 10
-    #picom-trans -n "Blish HUD" -o 50
-
-    #kill $picom_pid $blish_pid
+    eval "'$PROTON_EXEC' $PROTON_ARGS run 'Z:$GAME_EXEC' $GAME_ARGS $@"
 }
 
-_cmd="${1:-run}"
+_cmd="${1:-proton}"
 
 case "$_cmd" in
-'run')
-    run_game
-    ;;
 'launch')
     shift
     launch_in_prefix $@
     ;;
-'tricks')
-    launch_winetricks;;
+'proton')
+    test "$1" = proton && shift
+    launch_proton $@
+    ;;
 'debug-server')
     shift
     launch_debug_server $@
@@ -114,7 +99,7 @@ case "$_cmd" in
     launch_debug $@
     ;;
 *)
-    echo "Unknown value '$_cmd'" >&2
+    log_error "Unknown command '$_cmd'"
     exit 1
     ;;
 esac

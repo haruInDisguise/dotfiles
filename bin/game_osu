@@ -1,13 +1,21 @@
 #!/usr/bin/sh
-
 . "$DOTFILES_ROOT/lib/log.sh"
 
 GAME_DIR="$HOME/.local/share/osu/"
-GAME_EXEC="/mnt/DATA_0/games/osu.AppImage"
+GAME_EXEC="/mnt/data_0/games/osu.AppImage"
 
 UPDATE_PATH="$HOME/downloads/osu.AppImage"
+UPDATE_PART_PATTERN="$HOME/downloads/osu*.AppImage.part"
+
+restart_pipewire() {
+    notify-send 'AHHHHHH' 'Restarting pipewire as a temorary workaround to get audio working...'
+    util_pipewire restart
+}
 
 run() {
+    local cmd="$1"
+
+    restart_pipewire
     _run_tablet_area='.40'
 
     log_debug "Setting tablet area to $_run_tablet_area"
@@ -18,13 +26,15 @@ run() {
 }
 
 update() {
+    eval test -f "$UPDATE_PART_PATTERN" && \
+        log_info "Found partial download. Waiting for it to finish... ["$(eval echo "$UPDATE_PART_PATTERN")"]"
+    while eval test -f "$UPDATE_PART_PATTERN"; do sleep 1; done
+
     if [ -e "$UPDATE_PATH" ]; then
-        # TODO: Figure out, which install method is
-        #       more "standart compliant"
-        #install "$UPDATE_PATH" "$GAME_EXEC"
-        mv -f "$UPDATE_PATH" "$GAME_EXEC"
-        chmod 700 "$GAME_EXEC"
+        install -DT "$UPDATE_PATH" "$GAME_EXEC"
+        rm -f "$UPDATE_PATH"
         log_info "Game updated"
+        run
     else
         log_error "File not found: $UPDATE_PATH"
         exit 1
@@ -36,5 +46,5 @@ _cmd="${1:-run}"
 case $_cmd in
     'run') run $@;;
     'update') update $@;;
-    *) echo 'Invalid command'; exit 2;;
+    *) log_error 'Invalid command'; exit 2;;
 esac
