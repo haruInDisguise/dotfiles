@@ -1,18 +1,23 @@
 #!/bin/sh
-# vim: ft=sh
 
 launch_scripts() {
     eval "$(ssh-agent)"
 
-    wlsunset -l 52.22 -L 13.33 &
-    dunst &
+    wlsunset -l 52.52 -L 13.29 &
+    mako --default-timeout 2000 &
+    swayidle -w \
+        timeout 600 'waylock -ignore-empty-password -fork-on-lock -init-color 0x2e3b3b -input-color 0x0d3138 -fail-color 0x3c1f1e' \
+        timeout 610 'wlopm --off DP-1; wlopm --off DP-2' \
+        resume 'wlopm --on DP-1; wlopm --on DP-2' &
+    riverctl spawn yambar
 }
 
 launch_host_specific() {
     # Some mobile/desktop specific stuff
     case "$(uname -n)" in
     'main-pad' )
-        wlr-randr --output DP-1 --preferred --output DP-2 --transform 90
+        wlr-randr --output DP-1 --mode 2560x1440@119.998001Hz --output DP-2 --transform 90
+        riverctl input 'tablet-1386-828-Wacom_Intuos_PT_S_2_Pen' map-to-output DP-1
         ;;
     'boxpad' )
         # TODO: Port this script to wayland
@@ -26,11 +31,10 @@ launch_pipewire() {
     if ! pidof pipewire >/dev/null 2>&1; then
         pipewire-pulse &
     fi
-    }
+}
+
+set +e
 
 launch_host_specific
-launch_scripts &
-disown
-
-launch_pipewire &
-disown
+launch_scripts
+launch_pipewire

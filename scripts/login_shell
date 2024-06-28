@@ -1,0 +1,22 @@
+#!/usr/bin/sh
+
+# A simple startup script to use nushell as a login shell.
+
+# Make sure we souce distro specific configurations
+source /etc/profile
+source /etc/locale.conf
+
+# $XDG_CONFIG_HOME: Required by nushell to locate its config
+export HOME="${HOME:-/home/haru}"
+export XDG_CONFIG_HOME="$HOME/.config"
+export XDG_DATA_HOME="$HOME/.local/share"
+export XDG_CACHE_HOME="$HOME/.cache"
+
+NU_ROOT_DIR="$XDG_CONFIG_HOME/nushell"
+
+exec "$XDG_DATA_HOME/cargo/bin/nu" \
+    --include-path "$NU_ROOT_DIR/scripts" \
+    --config "$NU_ROOT_DIR/config.nu" \
+    --env-config "$NU_ROOT_DIR/env.nu" \
+    --plugin-config "$NU_ROOT_DIR/plugins.msgpackz" \
+    --login

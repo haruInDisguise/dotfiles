@@ -9,11 +9,11 @@ run() {
         --ignore-player="$IGNORE" \
         --player="$PLAYER" \
         $@
-}
+    }
+
 display_banner() {
-    local artist="$(playerctl metadata artist)"
-    local title="$(playerctl metadata title)"
-    local cover="$(playerctl metadata artUrl)"
+    eval $(run metadata --format 'META_ARTIST="{{xesam:artist}}";META_ALBUM="{{xesam:album}}";META_TITLE="{{xesam:title}}";META_ART_URL="{{mpris:artUrl}}"')
+    notify-send --icon="$META_ART_URL" "$META_TITLE" "$META_ARTIST"
 }
 
 if [ -z "$1" ] && [ "$_cmd" != 'next' ] && [ "$_cmd" != 'previous' ] && [ "$_cmd" != 'play-pause' ]; then
@@ -21,4 +21,4 @@ if [ -z "$1" ] && [ "$_cmd" != 'next' ] && [ "$_cmd" != 'previous' ] && [ "$_cmd
 fi
 
 run $1
-#display_banner
+display_banner
