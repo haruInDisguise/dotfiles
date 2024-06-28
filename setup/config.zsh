@@ -12,8 +12,10 @@ typeset -a paths=(
     "$DOTFILES_CONFIG/gdb"          "$TARGET_CONFIG/gdb"
     "$DOTFILES_CONFIG/ncspot"       "$TARGET_CONFIG/ncspot"
     "$DOTFILES_CONFIG/nvim"         "$TARGET_CONFIG/nvim"
+    "$DOTFILES_CONFIG/nushell"      "$TARGET_CONFIG/nushell"
     "$DOTFILES_CONFIG/river"        "$TARGET_CONFIG/river"
     "$DOTFILES_CONFIG/rizin"        "$TARGET_CONFIG/rizin"
+    "$DOTFILES_CONFIG/yambar"       "$TARGET_CONFIG/yambar"
     "$DOTFILES_CONFIG/zathura"      "$TARGET_CONFIG/zathura"
     "$DOTFILES_CONFIG/zsh"          "$TARGET_CONFIG/zsh"
 
