@@ -1,1 +1,132 @@
-../../scripts/wm_init
+#!/usr/bin/sh
+
+# This is the example configuration file for river.
+#
+# If you wish to edit this, you will probably want to copy it to
+# $XDG_CONFIG_HOME/river/init or $HOME/.config/river/init first.
+#
+# See the river(1), riverctl(1), and rivertile(1) man pages for complete
+# documentation.
+
+get_tag() {
+    local tag="${1:?Missing tag}"
+    echo $((1 << (tag - 1)))
+}
+
+# Programs
+riverctl map normal Super Return spawn "alacritty -e sh '$DOTFILES_ROOT/config/tmux/default_session.sh'"
+# rofi sometimes fails to properly process input
+riverctl map normal Super P spawn 'kill $(cat "$XDG_RUNTIME_DIR/rofi.pid"); rofi -show run'
+
+# WM management mappings
+riverctl map normal Super C close
+riverctl map normal Super+Shift E exit
+
+riverctl map normal Super J focus-view next
+riverctl map normal Super K focus-view previous
+riverctl map normal Super+Shift J swap next
+riverctl map normal Super+Shift K swap previous
+
+riverctl map normal Super Period focus-output next
+riverctl map normal Super Comma focus-output previous
+riverctl map normal Super+Shift Period send-to-output next
+riverctl map normal Super+Shift Comma send-to-output previous
+
+riverctl map normal Super+Shift Return zoom
+
+riverctl map normal Super H send-layout-cmd rivercarro "main-ratio -0.05"
+riverctl map normal Super L send-layout-cmd rivercarro "main-ratio +0.05"
+# riverctl map normal Super+Shift H send-layout-cmd rivercarro "main-count +1"
+# riverctl map normal Super+Shift L send-layout-cmd rivercarro "main-count -1"
+riverctl map normal Super+Shift M send-layout-cmd rivercarro "main-location-cycle left,monocle"
+
+riverctl map -repeat normal Super+Alt H move left 100
+riverctl map -repeat normal Super+Alt J move down 100
+riverctl map -repeat normal Super+Alt K move up 100
+riverctl map -repeat normal Super+Alt L move right 100
+
+riverctl map normal Super+Alt+Control H snap left
+riverctl map normal Super+Alt+Control J snap down
+riverctl map normal Super+Alt+Control K snap up
+riverctl map normal Super+Alt+Control L snap right
+
+riverctl map -repeat normal Super+Alt+Shift H resize horizontal -100
+riverctl map -repeat normal Super+Alt+Shift J resize vertical 100
+riverctl map -repeat normal Super+Alt+Shift K resize vertical -100
+riverctl map -repeat normal Super+Alt+Shift L resize horizontal 100
+
+riverctl map-pointer normal Super BTN_LEFT move-view
+riverctl map-pointer normal Super BTN_RIGHT resize-view
+
+for i in $(seq 1 9)
+do
+    tags=$((1 << ($i - 1)))
+
+    # Super+[1-9] to focus tag [0-8]
+    riverctl map normal Super $i set-focused-tags $tags
+
+    # Super+Shift+[1-9] to tag focused view with tag [0-8]
+    riverctl map normal Super+Shift $i set-view-tags $tags
+
+    # Super+Control+[1-9] to toggle focus of tag [0-8]
+    riverctl map normal Super+Control $i toggle-focused-tags $tags
+
+    # Super+Shift+Control+[1-9] to toggle tag [0-8] of focused view
+    riverctl map normal Super+Shift+Control $i toggle-view-tags $tags
+done
+
+# Super+0 to focus all tags
+# Super+Shift+0 to tag focused view with all tags
+all_tags=$(((1 << 32) - 1))
+riverctl map normal Super 0 set-focused-tags $all_tags
+riverctl map normal Super+Shift 0 set-view-tags $all_tags
+
+# Super+Space to toggle float
+riverctl map normal Super Space toggle-float
+
+# Super+F to toggle fullscreen
+riverctl map normal Super F toggle-fullscreen
+
+# Declare a passthrough mode. This mode has only a single mapping to return to
+# normal mode. This makes it useful for testing a nested wayland compositor
+# riverctl declare-mode passthrough
+# riverctl map normal Super F11 enter-mode passthrough
+# riverctl map passthrough Super F11 enter-mode normal
+
+for mode in normal locked
+do
+    # Control MPRIS aware media players with playerctl (https://github.com/altdesktop/playerctl)
+    riverctl map $mode None XF86AudioMedia spawn "$DOTFILES_ROOT/scripts/wm_manage_media play-pause"
+    riverctl map $mode None XF86AudioPlay  spawn "$DOTFILES_ROOT/scripts/wm_manage_media play-pause"
+    riverctl map $mode None XF86AudioPrev  spawn "$DOTFILES_ROOT/scripts/wm_manage_media previous"
+    riverctl map $mode None XF86AudioNext  spawn "$DOTFILES_ROOT/scripts/wm_manage_media next"
+
+    # Control screen backlight brightness with brightnessctl (https://github.com/Hummer12007/brightnessctl)
+    riverctl map $mode None XF86MonBrightnessUp   spawn 'brightnessctl set +5%'
+    riverctl map $mode None XF86MonBrightnessDown spawn 'brightnessctl set 5%-'
+done
+
+# WM setup
+riverctl hide-cursor when-typing enabled
+riverctl keyboard-layout "us,de"
+
+# Set background and border color
+riverctl background-color 0x333333
+riverctl border-color-focused 0x286e75
+riverctl border-color-unfocused 0x93a1a1
+
+riverctl set-repeat 35 500
+
+riverctl rule-add -app-id 'float*' float
+riverctl rule-add -app-id "firefox*" ssd
+riverctl rule-add -app-id "firefox*" tags $(get_tag 2)
+riverctl rule-add -app-id "steam*" ssd
+riverctl rule-add -app-id "steam*" tags $(get_tag 3)
+
+riverctl default-layout rivercarro
+rivercarro -per-tag &
+disown
+
+# Run startup scripts
+sh "$DOTFILES_ROOT/scripts/wm_startup" &
+disown
