@@ -8,10 +8,21 @@ require('autocmds')
 require('lazy').setup('plugins')
 
 -- OPTIONS
-
 local opt = vim.opt
 
--- Disable providers (see ':h provider')
+-- vim.g.clipboard = {
+--   name = 'OSC 52',
+--   copy = {
+--     ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
+--     ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
+--   },
+--   paste = {
+--     ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
+--     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
+--   },
+-- }
+
+-- Disable providers I don't need (see ':h provider')
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_node_provider = 0
 vim.g.loaded_ruby_provider = 0

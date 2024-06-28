@@ -54,7 +54,7 @@ return {
         require('mason').setup()
 
         -- FIXME: clangd is included in Archs 'clang' package. Decide which version to use
-        local servers = {'pyright', 'texlab', 'tsserver', 'clangd'}
+        local servers = {'pyright', 'texlab', 'tsserver', 'clangd', 'zls'}
         local mason_lspconfig = require("mason-lspconfig")
 
         -- NOTE: rust-analyzer is configured by 'rustaceanvim'. See ':h rustaceanvim.mason'
