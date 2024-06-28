@@ -2,21 +2,20 @@ alias shd='command sudo systemctl poweroff'
 
 ## Builtins and Coreutils
 alias ls='command ls --color=auto'
-alias l='ls -lAh'
+alias l='ls --list --almost-all --human-readable'
 
-alias cp='command cp -v'
-alias mv='command mv -v'
-alias rm='command rm -v'
+alias cp='command cp --verbose'
+alias mv='command mv --verbose'
+alias rm='command rm --verbose'
 
 alias grep='command grep --color=auto'
-alias bc='command bc -lq'
-alias pa='command ping 1.1.1.1 -c3'
+alias bc='command bc --mathlib --quiet'
 alias pn='command ping "cloudflare.com" -c3'
 
-alias pgrep='command pgrep -li'
-alias pkill='command pkill -ei'
+alias pgrep='command pgrep --list-names --ignore-case'
+alias pkill='command pkill --echo --ignore-case'
 
-alias objdump='command objdump -M intel'
+alias objdump='command objdump --disassembler-options=intel'
 
 # dirstack
 alias d='builtin dirs -pv'
@@ -31,15 +30,15 @@ case "$(command uname -r)" in
     *(artix|arch)*)
         local pac='pacman --color=auto'
 
-        alias pacin="command sudo $pac -Sy"
-        alias pacupg="command sudo $pac -Syu"
-        alias pacupd="command sudo $pac -Sy"
-        alias pacrm="command sudo $pac -Rs"
+        alias pacin="command sudo $pac --sync --refresh"
+        alias pacupg="command sudo $pac --sync --refresh --sysupgrade"
+        alias pacrm="command sudo $pac --remove --recursive"
 
-        alias pacsearch="command $pac -Ss"
-        alias pacinfo="command $pac -Si"
-        alias pacls="command $pac -Qe"
-        alias pacown="command $pac -Qo"
+        alias pacsearch="command $pac --sync --search"
+        alias pacinfo="command $pac --sync --info"
+        alias pacls="command $pac --query --explicit"
+        alias pacown="command $pac --query --owns"
+        alias paccont="command $pac --query --list"
 
         unset pac
         ;;
@@ -47,8 +46,9 @@ esac
 
 ## Some useful and commonly used stuff
 
-alias gdb='command gdb --quiet'
-alias gdb-asan='ASAN_OPTIONS=abort_on_error=1:detect_leaks=0 command gdb --quiet'
+# Enable asan support by default?
+alias gdb='ASAN_OPTIONS=abort_on_error=1:detect_leaks=0 command gdb --quiet'
+alias gdb-mute='gdb --eval-command "start &>/dev/null"'
 
 alias e='command eza -la --git --group-directories-first'
 
