@@ -1,0 +1,74 @@
+default_font: &default_font "ComicCode Nerd Font:style=regular:size=15"
+default_font_bold: &default_font_bold "ComicCode Nerd Font:style=bold:size=11"
+
+color_background: &color_background 141617ff
+color_background_highlight: &color_background_highlight 32302fff
+color_highlight: &color_highlight 789984ff
+
+bar:
+  height: 20
+  location: bottom
+  spacing: 5
+  font: *default_font
+  background: *color_background
+
+  left:
+    - river:
+        anchors:
+          river_title: { string: { text: "{title}" }}
+
+          tag_text:     &tag_text     { margin: 5, text: "{id}" }
+          tag_actions:  &tag_actions  { margin: 5, on-click: "sh -c 'riverctl set-focused-tags $(( 1 << ({id} - 1) ))'" }
+          tag_empty:    &tag_empty    { deco: {background: {color: *color_background } } }
+          tag_focused:  &tag_focused  { deco: {background: {color: *color_highlight } }, font: *default_font_bold }
+          tag_urgent:   &tag_urgent   { deco: {background: {color: ea6962ff } }, font: *default_font_bold }
+          tag_occupied: &tag_occupied { deco: {background: {color: *color_background_highlight } } }
+
+        title:
+          - string: { margin: 5, text: "[{layout}]", deco: {background: { color: *color_background_highlight}}}
+        content:
+          map:
+            conditions:
+              # Reminder to make sure the order is correct.. see yambar-particles(5)
+              (urgent):               { string: { <<: [ *tag_actions, *tag_text, *tag_urgent ]}}
+              (focused):              { string: { <<: [ *tag_actions, *tag_text, *tag_focused]}}
+              (occupied):             { string: { <<: [ *tag_actions, *tag_text, *tag_occupied]}}
+              (~occupied && id <= 9): { string: { <<: [ *tag_actions, *tag_text, *tag_empty]}}
+    - foreign-toplevel:
+        content:
+          map:
+            conditions:
+              ~activated: {empty: {}}
+              activated:
+                - string: {text: "{app-id}", max: 30, foreground: *color_highlight }
+                - string: {text: " {title}", max: 30}
+  right:
+    - network:
+        poll-interval: 1000
+        spacing: 5
+        anchors:
+          color_upload: &color_upload ea6962ff
+          color_download: &color_download a9b665ff
+          color_up: &color_up a9b665ff
+          color_down: &color_down ea6962ff
+        content:
+          map:
+            conditions:
+              name == eno2:
+                  map:
+                    conditions:
+                      state == up:
+                        - string: { text: "{name} " }
+                        - string: { text: "{ipv4} ", foreground: *color_up }
+                        - string: { text: "{dl-speed:mib}\uea9a/{ul-speed:mib}\ueaa1Mb/s"}
+                      state != up && ipv4 == "":
+                        - string: { text: "{name}: {state}" }
+    - clock:
+        time-format: "%R"
+        date-format: "%a %d %b %Y"
+        content:
+          list:
+            items:
+              - string: {text: "{date}", right-margin: 5}
+              - string: {text: ""}
+              - string: {text: "{time}", right-margin: 10}
