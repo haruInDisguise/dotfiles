@@ -1,106 +1,107 @@
-#!/usr/bin/zsh
+#!/usr/bin/sh
 
-# Launch librespot... and handle some things... yay
+# A small script for controlling a running ncspot instance.
+# For now, all this script implements is a "quick search and play"
+# feature
+# TODO: Error handeling for curl requests and json parsing
+# TODO: Rewrite this script in nushell
 
+LOG_NAME="spotfiy"
 . "$DOTFILES_ROOT/lib/log.sh"
 
-typeset -A script_options=(
-    librespot_cache "$XDG_CACHE_HOME/librespot"
-    quiet               false
-    verbose             false
-    daemon              false
-    mute_librespot      false
-    restart_if_running  true
-)
+# Defines:
+# NCSPOT_USER_CONFIGURATION_PATH
+# NCSPOT_USER_CACHE_PATH
+# NCSPOT_USER_RUNTIME_PATH
+# Unused
+#eval $(ncspot info | sed -E 's/([A-Z_]*)\s(.*)/NCSPOT_\1=\2/')
+# Buffer to store function results. This allows me to use logging without clobbering the return values
+RESULT_BUFFER=""
+CREDENTIALS_PATH="$XDG_RUNTIME_DIR/dotfiles/spotify_credentials.json"
 
-typeset -a librespot_options=(
-    --backend   pulseaudio # TODO: Look into 'gstreamer' backend...
-    --cache     "$script_options[librespot_cache]"
-    --name      "$(uname -n)"
-    --bitrate   320
-    --format    F32
-    #--onevent   "librespot_event"
-    --initial-volume 100
-)
-
-handle_exit() {
-    # TODO: Maybe use a PID file?
-    log_warn "$0: This is a bit ugly... proceeding to 'killall -TERM librespot' ... (͡ ° ͜ʖ ͡ °)"
-    if ! builtin kill -TERM $(pidof librespot) 2>/dev/null; then
-        error_and_exit "$0: Failed to terminate librespot"
-    fi
+# Authentication method for simple CLI applications. Requires user authentication for token renewal
+# https://developer.spotify.com/documentation/web-api/tutorials/client-credentials-flow
+auth_token_is_valid() {
+    [ -r "$CREDENTIALS_PATH" ] || return 1
+    local time_file="$(date --reference "$CREDENTIALS_PATH" +%s)"
+    local time_now="$(date +%s)"
+    local time_expire="$(jq --raw-output '.expires_in' "$CREDENTIALS_PATH")"
+    # NOTE: Considering request times, it might be reasonable to assume
+    # that the token is no longer valid, even though the expiration
+    # preiod did not run out yet.
+    # I just reduce the expire time by a few seconds (abitrary) to make
+    # sure that requests always contain a valid token.
+    local diff="$(( time_now - time_file ))"
+    log_debug "Remaining auth time: $diff sec"
+    return $(( diff > ( time_expire - 2 ) ))
 }
 
-launch_librespot() {
-    local pid_librespot cmd
+auth_token_update() {
+    local client_id="$(pass web/spotify/hook_client_id)"
+    local client_secret="$(pass web/spotify/hook_client_secret)"
+    local token=$(echo -n "$client_id:$client_secret" | openssl base64 -A)
 
-    # Librespot uses a directory to store cache (execute = 'cd' able)
-    if [[ ! -x "$script_options[librespot_cache]" ]]; then
-        log_warn "$0: "'Unable to locate librespot cache'
+    log_debug "Quering 'api/token' endpoint"
+    "$HOME/.local/src/curl/build/src/curl" \
+        --silent \
+        --request POST \
+        --data 'grant_type=client_credentials' \
+        --header 'Content-Type: application/x-www-form-urlencoded' \
+        --header "Authorization: Basic $token" \
+        --output "$CREDENTIALS_PATH" \
+        'https://accounts.spotify.com/api/token'
+}
 
-        librespot_options+=(
-          --username  "$(pass web/spotify/username)" # TODO: Auth using zeroconf?
-          --password  "$(pass web/spotify/password)"
+spotify_search() {
+    local access_token="${1:?Missing access token}"; shift
+    local query="${@:?Missing query}"
+
+    log_debug "Quering 'api/search' endpoint"
+    RESULT_BUFFER=$( \
+        "$HOME/.local/src/curl/build/src/curl" \
+            --silent \
+            --get \
+            --data 'limit=4' \
+            --data 'type=track' \
+            --data 'offset=0' \
+            --data-urlencode "q=$query" \
+            --header "Authorization: Bearer $access_token" \
+            'https://api.spotify.com/v1/search'\
         )
+}
+
+print_track_info() {
+    local raw_json="${1:?Missing json input}"
+    local track_title="$(echo $raw_json | jq --raw-output '.name')"
+    local track_artist="$(echo $raw_json | jq --raw-output '.artists[].name')"
+    log_info "Playing: $track_artist - $track_title"
+}
+
+run_search() {
+    if [ ! -S "$XDG_RUNTIME_DIR/ncspot/ncspot.sock" ]; then
+        log_error "Is ncspot running?"
+        exit 1
     fi
 
-    cmd="librespot ${(u)librespot_options}"
-
-    [[ $script_options[mute_librespot] == true ]] && cmd+=" &>/dev/null"
-    [[ $script_options[daemon] == true ]] && cmd+=" &!"
-
-    eval "$cmd" &
-    pid_librespot=$!
-}
-
-handle_run() {
-    if command pidof librespot >/dev/null; then
-        if [[ $script_options[restart_if_running] == true ]]; then
-            log_info "$0: found running instance. restarting"
-            handle_exit
-        else
-            error_and_exit "$0: there is already a running instance of librespot"
-        fi
+    if (( $# == 0 )); then
+        log_error "Missing argument: <search terms>"
+        exit 1
     fi
 
-    command -v wget >/dev/null || \
-        error_and_exit "$0: unable to locate 'wget' binary in PATH (required to check network access, add option '--skip-network-check' to ignore this check)"
+    log_warn 'Using local curl build (8.9.0-DEV) to avoid a bug in version 8.8.0'
+    if ! auth_token_is_valid; then
+        log_info "Updating auth token"
+        auth_token_update
+    fi
 
-    # :p
-    command wget -q --tries=10 --timeout=3 --spider 'https://cloudflare.com' &>/dev/null || \
-        error_and_exit "$0: unable to connect to a network or name resolution failed"
-
-    launch_librespot $@
+    log_info "Search term: $@"
+    local access_token="$(jq --raw-output '.access_token' "$CREDENTIALS_PATH")" $@
+    spotify_search "$access_token" "$@"
+    local track_json="$(echo $RESULT_BUFFER | jq --raw-output '.tracks.items[0]')"
+    print_track_info "$track_json"
+    local uri="$(echo "$RESULT_BUFFER" | jq --raw-output '.tracks.items[0].uri')"
+    playerctl --player=ncspot open "$uri"
 }
 
-parse_arguments() {
-    while arg in "$@"; do
-        case "$arg" in
-            '--restart-if-running=true') $script_options[restart_if_running]=true;;
-            '--daemon') $script_options[daemon]=true;;
-            '--');;
-        esac
-
-    done
-}
-
-log_warn 'FIX: argument parsing is work in progress'
-log_warn 'FIX: skip argument parsing'
-#parse_arguments $argv
-
-_cmd=start
-case "$_cmd" in
-    'start')
-        handle_run $@
-        ;;
-    'exit')
-        handle_exit
-        ;;
-    'help')
-        handle_help
-        ;;
-    ?*)
-        handle_unknown $@
-        ;;
-esac
-
+set -e
+run_search $@
