@@ -65,6 +65,7 @@ export WINEPREFIX="$XDG_DATA_HOME/wine/pfx/default"
 
 export LESSHISTFILE="$XDG_DATA_HOME/lesshist"
 export LESSHISTSIZE=100
+export LESSKEYIN_SYSTEM="$XDG_CONFIG_HOME/lesskey"
 
 # Pager for man with some color changes
 export MANPAGER='less -R --use-color -Dur$Dd+c$Dsy$DPw'

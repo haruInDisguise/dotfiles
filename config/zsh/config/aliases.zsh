@@ -12,7 +12,7 @@ alias grep='command grep --color=auto'
 alias bc='command bc --mathlib --quiet'
 alias pn='command ping "cloudflare.com" -c3'
 
-alias pgrep='command pgrep --list-names --ignore-case'
+alias pgrep='command pgrep --list-name --ignore-case'
 alias pkill='command pkill --echo --ignore-case'
 
 alias objdump='command objdump --disassembler-options=intel'
@@ -47,7 +47,7 @@ esac
 ## Some useful and commonly used stuff
 
 # Enable asan support by default?
-alias gdb='ASAN_OPTIONS=abort_on_error=1:detect_leaks=0 command gdb --quiet'
+alias gdb='UBSAN_OPTIONS=abort_on_error=1:halt_on_error=1 ASAN_OPTIONS=abort_on_error=1:detect_leaks=0 command gdb --quiet'
 alias gdb-mute='gdb --eval-command "start &>/dev/null"'
 
 alias e='command eza -la --git --group-directories-first'

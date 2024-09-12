@@ -1,0 +1,4 @@
+#command
+
+# toggle search highlighting
+^h undo-hilite

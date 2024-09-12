@@ -24,8 +24,7 @@ zle-register-and-bind vicmd 'L' pipe-command-results-to-pager
 
 zle-bind vicmd 'R' push-line-or-edit
 
-zle-bind viins '^k' up-line-or-history
-zle-bind viins '^j' down-line-or-history
+zle-bind viins '^k' vi-cmd-mode
 
 unfunction zle-register-and-bind zle-bind
 
