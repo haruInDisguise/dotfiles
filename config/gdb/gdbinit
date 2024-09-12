@@ -5,13 +5,21 @@ set debuginfod enabled off
 
 set confirm off
 set verbose off
+set pagination off
 
 set tui border-kind acs
 set tui compact-source on
 
+# Debugging linux
+add-auto-load-safe-path /home/haru/projects/coding/linux/linux-6.10.6/scripts/gdb
+
+# Aliases
+alias pp = p -pretty --
+
 define gef_init
     source ~/.local/share/gef.py
 end
+
 document gef_init
 Load the gef python api for comfortable reverse engineering.
 Usage: load_gef
