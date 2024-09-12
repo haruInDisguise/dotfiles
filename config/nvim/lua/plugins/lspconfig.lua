@@ -12,8 +12,8 @@ vim.api.nvim_create_autocmd("LspAttach", {
 
         vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts)
 
-        vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, opts)
-        vim.keymap.set('n', ']d', vim.diagnostic.goto_next, opts)
+        vim.keymap.set('n', ']d', vim.diagnostic.goto_prev, opts)
+        vim.keymap.set('n', '[d', vim.diagnostic.goto_next, opts)
 
         vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts)
         vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts)
@@ -54,7 +54,7 @@ return {
         require('mason').setup()
 
         -- FIXME: clangd is included in Archs 'clang' package. Decide which version to use
-        local servers = {'pyright', 'texlab', 'tsserver', 'clangd', 'zls'}
+        local servers = {'pylsp', 'texlab', 'tsserver', 'clangd', 'zls'}
         local mason_lspconfig = require("mason-lspconfig")
 
         -- NOTE: rust-analyzer is configured by 'rustaceanvim'. See ':h rustaceanvim.mason'

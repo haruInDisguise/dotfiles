@@ -3,7 +3,6 @@ return {
     'stevearc/oil.nvim',
     dependencies = { 'nvim-tree/nvim-web-devicons' },
     -- 'VeryLazy' prevents oil from replacing netrw
-    event = 'VimEnter',
     config = function(_, opt)
         local oil = require('oil')
         oil.setup({
