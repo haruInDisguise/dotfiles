@@ -3,68 +3,6 @@
 -- https://github.com/williamboman/mason-lspconfig.nvim
 -- https://github.com/neovim/nvim-lspconfig
 local leader = [[,]]
-local M = {}
-
--- big thanks to: https://neovim.discourse.group/t/show-signature-help-on-insert-mode/2007/5
--- Auotomatically display function signature when inside a parameterlist
--- NOTES:
---  - config takes in a close event
---  - windows is created by vim.lsp.open_floating_preview() in 'runtime/lua/lsp/util.lua:1569'
---  - fix flicker:
---      - send a 'signature_help' request and store the result
---      - update the window if any change occured
---      - close the window if the request id changed or is no longer valid
-M.signature_help_win_active = false
-M.signature_help_win_force = false
-_G.signature_help_disable = false
-local function signature_help_handler(handler)
-    ---@param _ lsp.ResponseError?
-    ---@param result lsp.SignatureHelp  Response from the language server
-    ---@param ctx lsp.HandlerContext Client context
-    ---@param config table Configuration table.
-    return function(_, result, ctx, config)
-        -- debugging
-        _G.sig = {}
-        sig.result = result
-        sig.ctx = result
-        sig.config = result
-
-        config = default_config.window_style;
-        config.zindex = 150
-        config.focusable = false
-
-        if M.signature_help_win_active and not M.signature_help_win_force then
-            return
-        end
-
-        if _G.signature_help_disable and not M.signature_help_win_force then
-            return
-        end
-
-        local fbuf, fwin = handler(_, result, ctx, config)
-        if not fbuf or not fwin then
-            return
-        end
-
-        M.signature_help_win_active = true
-        vim.api.nvim_create_autocmd('WinClosed', {
-            pattern = tostring(fwin),
-            desc = 'Temporary autocmd for properly displaying signature help',
-            callback = function()
-                M.signature_help_win_active = false
-                M.signature_help_win_force = false
-                return true
-            end
-        })
-
-        return fbuf, fwin
-    end
-end
---
--- local function signature_help_force()
---     M.signature_help_win_force = true
---     vim.lsp.buf.signature_help()
--- end
 
 local lsp_augroup = vim.api.nvim_create_augroup('CustomLspAutocmds', { clear = true })
 
@@ -103,15 +41,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
         vim.keymap.set('n', leader .. 'f', function()
             vim.lsp.buf.format { async = false };
         end, opts)
-
-        -- signature_help: display upon cursor hold
-        -- vim.api.nvim_create_autocmd({ 'CursorMovedI', 'CursorHoldI' }, {
-        --     desc = 'Display signature help upon cursor movement (if available)',
-        --     group = lsp_augroup,
-        --     callback = function()
-        --         vim.lsp.buf.signature_help()
-        --     end,
-        -- })
     end,
 })
 
@@ -150,9 +79,6 @@ return {
             flags = {
                 debounce_text_changes = 150,
             },
-            -- handlers = {
-            --     ['textDocument/signatureHelp'] = vim.lsp.with(signature_help_handler(vim.lsp.handlers.signature_help), {})
-            -- }
         }
 
         -- see: https://github.com/hrsh7th/nvim-cmp/issues/1129#issuecomment-1837594834
