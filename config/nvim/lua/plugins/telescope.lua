@@ -11,31 +11,68 @@ return {
         { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
     },
     config = function()
-        local load_extension = require('telescope').load_extension
-        local builtin = require('telescope.builtin')
-        local extensions = require('telescope').extensions
+        local tscope = require('telescope')
+        tscope.setup({
+            defaults = {
+                theme = 'ivy',
+                preview = {
+                    treesitter = 'true',
+                },
+                mappings = {
+                    i = {
+                        ['<C-j>'] = function()
+                            -- FIXME: Find a pure lua solution...
+                            vim.cmd [[stopinsert]]
+                        end,
+                    },
+                    n = {
+                        ['<C-j>'] = 'close'
+                    },
+                },
+            },
+            extensions = {
+                fzf = {
+                    fuzzy = true,
+                    overwrite_generic_sorter = true,
+                    overwrite_file_sorter = true,
+                    case_mode = 'smart_case',
+                    theme = 'ivy',
+                },
+            },
+            picker = {
+                find_files = {
+                    theme = 'ivy',
+                },
+            },
+        })
 
-        load_extension('fzf')
-        load_extension('ui-select')
+        tscope.load_extension('fzf')
+        tscope.load_extension('ui-select')
 
-        local keymap_set = vim.keymap.set
         local keymap_options = {
             silent = true,
             noremap = true,
         }
 
-        keymap_set('n', '<leader>ff', builtin.find_files, keymap_options)
-        keymap_set('n', '<leader>fb', builtin.buffers, keymap_options)
-        keymap_set('n', '<leader>fg', builtin.live_grep, keymap_options)
-        keymap_set('n', '<leader>fr', builtin.registers, keymap_options)
+        local builtin = require('telescope.builtin')
+        local themes = require('telescope.themes')
+
+        vim.keymap.set('n', '<leader>f', function()
+            builtin.find_files(themes.get_ivy({
+                previewer = false,
+            }))
+        end, keymap_options)
+        vim.keymap.set('n', '<leader>/', function()
+            builtin.live_grep(themes.get_ivy({
+                previewer = true,
+            }))
+        end, keymap_options)
+        vim.keymap.set('n', '<leader>g', function()
+            builtin.live_grep(themes.get_ivy({}))
+        end, keymap_options)
+        vim.keymap.set('n', '<leader>r', builtin.registers, keymap_options)
     end,
 
     opts = {
-        picker = {
-            find_files = {
-                theme = 'dropdown'
-            }
-        },
-        extensions = {},
     }
 }
