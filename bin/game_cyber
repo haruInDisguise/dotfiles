@@ -12,8 +12,8 @@ GAME_ARGS="-skipStartScreen"
 export VKD3D_CONFIG=dxr
 export RADV_PERFTEST='rt,rtwave64'
 
-PROTON_DIR="$HOME/.local/share/Steam/compatibilitytools.d/proton-localbuild/"
-#PROTON_DIR="$HOME/.local/share/Steam/steamapps/common/Proton 8.0/"
+# PROTON_DIR="$HOME/.local/share/Steam/compatibilitytools.d/proton-localbuild/"
+PROTON_DIR="$HOME/.local/share/Steam/steamapps/common/Proton - Experimental/"
 PROTON_EXEC="$PROTON_DIR/proton"
 PROTON_ARGS=""
 
@@ -87,7 +87,7 @@ case "$_cmd" in
     launch_in_prefix $@
     ;;
 'proton')
-    test "$1" = proton && shift
+    shift
     launch_proton $@
     ;;
 'debug-server')

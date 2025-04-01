@@ -6,9 +6,9 @@ WINE_TOOLCHAIN_ROOT="/mnt/data_0/opt/dev"
 
 GAME_DIR="/mnt/data_0/games/guild_wars_2"
 GAME_EXEC="$GAME_DIR/Gw2-64.exe"
-GAME_ARGS="-autologin"
+GAME_ARGS="-autologin -log"
 
-PROTON_DIR="$HOME/.local/share/Steam/compatibilitytools.d/proton-localbuild/"
+PROTON_DIR="/mnt/data_0/games/steam/steamapps/common/Proton 9.0 (Beta)/"
 #PROTON_DIR="$HOME/.local/share/Steam/steamapps/common/Proton 8.0/"
 PROTON_EXEC="$PROTON_DIR/proton"
 PROTON_ARGS=""
@@ -47,8 +47,8 @@ export WINEPATH="/usr/lib/wine/x86_64-windows:$WINEPATH"
 launch_in_prefix() {
     local cmd="$1"
     [ $# -gt 0 ] && shift
-    log_info "Executing command: '$PROTON_EXEC' $PROTON_ARGS run 'Z:$cmd' $@"
-    eval "'$PROTON_EXEC' $PROTON_ARGS run 'Z:$cmd' $@"
+    log_info "Executing command: '$PROTON_EXEC' $PROTON_ARGS run 'z:$cmd' $@"
+    eval "'$PROTON_EXEC' $PROTON_ARGS run '$cmd' $@"
 }
 
 launch_debug() {
@@ -68,7 +68,7 @@ launch_debug_server() {
 
     GDBSERVER_PATH="$WINE_TOOLCHAIN_ROOT/w64devkit/bin/gdbserver.exe"
     GDBSERVER_ARGS="--multi localhost:4242 '$prog'"
-    eval "'$PROTON_EXEC' $PROTON_ARGS run 'Z:$GDBSERVER_PATH' $GDBSERVER_ARGS"
+    eval "'$PROTON_EXEC' $PROTON_ARGS run 'z:$GDBSERVER_PATH' $GDBSERVER_ARGS"
 }
 
 launch_winetricks() {

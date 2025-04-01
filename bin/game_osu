@@ -1,50 +1,69 @@
 #!/usr/bin/sh
 . "$DOTFILES_ROOT/lib/log.sh"
 
-GAME_DIR="$HOME/.local/share/osu/"
-GAME_EXEC="/mnt/data_0/games/osu.AppImage"
-
-UPDATE_PATH="$HOME/downloads/osu.AppImage"
-UPDATE_PART_PATTERN="$HOME/downloads/osu*.AppImage.part"
-
-restart_pipewire() {
-    notify-send 'AHHHHHH' 'Restarting pipewire as a temorary workaround to get audio working...'
-    util_pipewire restart
-}
+GAME_DIR="/mnt/data_0/games/osu/"
+GAME_EXEC="$GAME_DIR/osu.AppImage"
+PID_PATH="$XDG_RUNTIME_DIR/osu.pid"
 
 run() {
     local cmd="$1"
 
-    restart_pipewire
-    _run_tablet_area='.40'
+    notify-send 'AHHHHHH' 'Restarting pipewire as a temorary workaround to get audio working...'
+    util_pipewire restart
 
+    # _run_tablet_area='.40'
     # log_debug "Setting tablet area to $_run_tablet_area"
     # xorg_input_configure_tablet "$_run_tablet_area"
 
-    log_debug "Launching game"
-    eval "exec '$GAME_EXEC'"
+    "$GAME_EXEC"
+    util_pipewire restart
 }
 
-update() {
-    eval test -f "$UPDATE_PART_PATTERN" && \
-        log_info "Found partial download. Waiting for it to finish... ["$(eval echo "$UPDATE_PART_PATTERN")"]"
-    while eval test -f "$UPDATE_PART_PATTERN"; do sleep 1; done
+terminate() {
+    notify-send "Trying to termiante running osu process"
+    kill "$(cat "$PID_PATH")"
+}
 
-    if [ -e "$UPDATE_PATH" ]; then
-        install -DT "$UPDATE_PATH" "$GAME_EXEC"
-        rm -f "$UPDATE_PATH"
-        log_info "Game updated"
-        run
+update_bin() {
+    notify-send 'Updating game...'
+    if curl -L 'https://github.com/ppy/osu/releases/latest/download/osu.AppImage' -o "$GAME_EXEC.bck"; then
+        mv "$GAME_EXEC.bck" "$GAME_EXEC"
+        chmod +x "$GAME_EXEC"
+        notify-send 'Game Updated!'
+        return 0
     else
-        log_error "File not found: $UPDATE_PATH"
-        exit 1
+        notif-syend 'Update failed'
+        return 1
+    fi
+}
+
+update_zsync() {
+    cd "$(dirname "$GAME_EXEC")"
+    if "$HOME/.local/src/zsync2/build/src/zsync2" 'https://github.com/ppy/osu/releases/latest/download/osu.AppImage.zsync' \
+        --copy-zsync-file-to="$HOME/.cache/osu.AppImage.zsync" \
+        --seed-file "$GAME_EXEC" --check-for-changes; then
+        notify-send "Game is already up to date"
+        return 0
+    fi
+
+    notify-send "Updating game..."
+
+    if "$HOME/.local/src/zsync2/build/src/zsync2" 'https://github.com/ppy/osu/releases/latest/download/osu.AppImage.zsync' \
+        --copy-zsync-file-to="$HOME/.cache/osu.AppImage.zsync" \
+        --seed-file "$GAME_EXEC"; then
+        chmod 744 "$GAME_EXEC"
+        notify-send "Game has been upated"
+        return 0
+    else
+        notify-send "Failed to update"
+        return 1
     fi
 }
 
 _cmd="${1:-run}"
 
 case $_cmd in
-    'run') run $@;;
-    'update') update $@;;
+    'run') run;;
+    'update') terminate; update_bin && run;;
     *) log_error 'Invalid command'; exit 2;;
 esac
