@@ -4,7 +4,7 @@
 # For now, all this script implements is a "quick search and play"
 # feature
 # TODO: Error handeling for curl requests and json parsing
-# TODO: Rewrite this script in nushell
+# TODO: Rewrite this script in nushell?
 
 LOG_NAME="spotfiy"
 . "$DOTFILES_ROOT/lib/log.sh"
@@ -28,21 +28,24 @@ auth_token_is_valid() {
     local time_expire="$(jq --raw-output '.expires_in' "$CREDENTIALS_PATH")"
     # NOTE: Considering request times, it might be reasonable to assume
     # that the token is no longer valid, even though the expiration
-    # preiod did not run out yet.
+    # period did not run out yet.
     # I just reduce the expire time by a few seconds (abitrary) to make
     # sure that requests always contain a valid token.
     local diff="$(( time_now - time_file ))"
-    log_debug "Remaining auth time: $diff sec"
+    log_debug "Auth time remaining: $(( time_expire - diff )) sec"
     return $(( diff > ( time_expire - 2 ) ))
 }
 
 auth_token_update() {
-    local client_id="$(pass web/spotify/hook_client_id)"
-    local client_secret="$(pass web/spotify/hook_client_secret)"
+    pass web/spotify/client_id &>/dev/null || return 1
+
+    local client_id="$(pass web/spotify/client_id)"
+    local client_secret="$(pass web/spotify/client_secret)"
     local token=$(echo -n "$client_id:$client_secret" | openssl base64 -A)
 
     log_debug "Quering 'api/token' endpoint"
-    "$HOME/.local/src/curl/build/src/curl" \
+    mkdir -p "$(dirname $CREDENTIALS_PATH)"
+    curl \
         --silent \
         --request POST \
         --data 'grant_type=client_credentials' \
@@ -58,10 +61,10 @@ spotify_search() {
 
     log_debug "Quering 'api/search' endpoint"
     RESULT_BUFFER=$( \
-        "$HOME/.local/src/curl/build/src/curl" \
+        curl \
             --silent \
             --get \
-            --data 'limit=4' \
+            --data 'limit=1' \
             --data 'type=track' \
             --data 'offset=0' \
             --data-urlencode "q=$query" \
@@ -78,20 +81,23 @@ print_track_info() {
 }
 
 run_search() {
-    if [ ! -S "$XDG_RUNTIME_DIR/ncspot/ncspot.sock" ]; then
-        log_error "Is ncspot running?"
-        exit 1
-    fi
+    # if [ ! -S "$XDG_RUNTIME_DIR/ncspot/ncspot.sock" ]; then
+    #     log_error "Is ncspot running?"
+    #     exit 1
+    # fi
 
     if (( $# == 0 )); then
         log_error "Missing argument: <search terms>"
         exit 1
     fi
 
-    log_warn 'Using local curl build (8.9.0-DEV) to avoid a bug in version 8.8.0'
     if ! auth_token_is_valid; then
         log_info "Updating auth token"
-        auth_token_update
+
+        if ! auth_token_update; then
+            log_error "Failed to update token"
+            return 1
+        fi
     fi
 
     log_info "Search term: $@"
@@ -100,7 +106,8 @@ run_search() {
     local track_json="$(echo $RESULT_BUFFER | jq --raw-output '.tracks.items[0]')"
     print_track_info "$track_json"
     local uri="$(echo "$RESULT_BUFFER" | jq --raw-output '.tracks.items[0].uri')"
-    playerctl --player=ncspot open "$uri"
+    log_info "URI: $uri"
+    playerctl --player=ncspot,spotifyd,firefox open "$uri"
 }
 
 set -e

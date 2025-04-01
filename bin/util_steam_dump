@@ -16,7 +16,7 @@ dump_cmd() {
     local i=0
     for arg in $@; do
         [ $i -gt 0 ] && echo -n $'\t'
-        echo -n "$arg"
+        echo -n "'$arg'"
         if [ $i -lt $(( $# - 1 )) ]; then
             echo ' \'
         else
@@ -39,6 +39,5 @@ fi
 mkdir -p "$DUMP_PATH"
 
 dump_env > "$DUMP_PATH/env.sh"
-dump_cmd $@ > "$DUMP_PATH/cmd.sh"
+echo $@ > "$DUMP_PATH/cmd.sh"
 dump_run > "$DUMP_PATH/run.sh"
-
