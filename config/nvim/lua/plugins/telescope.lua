@@ -67,10 +67,8 @@ return {
                 previewer = true,
             }))
         end, keymap_options)
-        vim.keymap.set('n', '<leader>g', function()
-            builtin.live_grep(themes.get_ivy({}))
-        end, keymap_options)
         vim.keymap.set('n', '<leader>r', builtin.registers, keymap_options)
+        vim.keymap.set('n', '<leader>b', builtin.buffers, keymap_options)
     end,
 
     opts = {

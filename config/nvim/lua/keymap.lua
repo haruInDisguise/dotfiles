@@ -26,7 +26,7 @@ set_keymap('n', '<c-h>', '<cmd>nohlsearch<cr>', map_options)
 -- Remap escape
 set_keymap({'n', 'v', 's', 'i'}, '<C-k>', '<nop>')
 set_keymap({'n', 'v', 's', 'i'}, '<C-j>', '<esc>')
-set_keymap({'n', 'v', 's', 'i'}, '<C-[>', '<nop>')
+-- set_keymap({'n', 'v', 's', 'i'}, '<C-[>', '<nop>')
 
 -- Save file
 set_keymap('n', '<leader>w', '<cmd>w<CR>', map_options)

@@ -55,8 +55,8 @@ return {
         -- NOTE: "mason.nvim is optimized to load as little as possible during setup. Lazy-loading the plugin, or somehow deferring the setup, is not recommended."
         require('mason').setup()
 
-        local mason_server_list = { 'lua_ls', 'pylsp', 'texlab', 'ts_ls', 'clangd'}
-        local lsp_server_list = { 'lua_ls', 'texlab', 'ts_ls', 'clangd'}
+        local mason_server_list = { 'denols', 'lua_ls', 'pylsp', 'texlab', 'ts_ls', 'clangd' }
+        local lsp_server_list = { 'lua_ls', 'texlab', 'denols', 'clangd', 'csharp_ls'}
         local mason_lspconfig = require("mason-lspconfig")
 
         vim.lsp.set_log_level(vim.lsp.log_levels.WARN)
@@ -84,19 +84,19 @@ return {
         -- see: https://github.com/hrsh7th/nvim-cmp/issues/1129#issuecomment-1837594834
         capabilities.textDocument.completion.completionItem.snippetSupport = false
 
-        lsp['rust_analyzer'] = function() return true end
+        lsp.rust_analyzer = function() return true end
 
         -- The "format on autosave" feature of Vim's Zig plugin has a bug in it:
         --      Error detected while processing BufWritePre Autocommands for "<buffer=1>"..function zig#fmt#Format:
         --      line   58:
         --      E939: Positive count required: silent! lwindow 0
         vim.g.zig_fmt_autosave = 0
-        lsp['zls'].setup(vim.tbl_extend('keep', {
-            cmd = {"/home/haru/.local/opt/src_active/zls/zig-out/bin/zls"},
-            filetype = {"zig"},
+        lsp.zls.setup(vim.tbl_extend('keep', {
+            cmd = { "/home/haru/.local/opt/src_active/zls/zig-out/bin/zls" },
+            filetype = { "zig" },
         }, default_config))
 
-        lsp['pylsp'].setup(vim.tbl_extend('keep', {
+        lsp.pylsp.setup(vim.tbl_extend('keep', {
             settings = {
                 pylsp = {
                     plugins = {
@@ -104,6 +104,15 @@ return {
                     }
                 }
             }
+        }, default_config))
+
+        lsp.denols.setup(vim.tbl_extend('keep', {
+            root_dir = lsp.util.root_pattern("deno.json", "deno.jsonc"),
+        }, default_config))
+
+        lsp.ts_ls.setup(vim.tbl_extend('keep', {
+            root_dir = lsp.util.root_pattern("package.json"),
+            single_file_support = false
         }, default_config))
 
         for _, name in ipairs(lsp_server_list) do
