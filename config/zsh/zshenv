@@ -22,8 +22,8 @@ export XDG_DESKTOP_DIR="/dev/null"
 # Login shell
 export ZDOTDIR="$XDG_CONFIG_HOME/zsh"
 export HISTFILE="$XDG_DATA_HOME/.zhistory"
-export HISTSIZE=10000
-export SAVEHIST=10000
+export HISTSIZE=100000
+export SAVEHIST=100000
 
 # Interactive shell
 # Using fish as a login shell can cause issues on some linux
@@ -68,7 +68,7 @@ export LESSHISTSIZE=100
 export LESSKEYIN_SYSTEM="$XDG_CONFIG_HOME/lesskey"
 
 # Pager for man with some color changes
-export MANPAGER='less -R --use-color -Dur$Dd+c$Dsy$DPw'
+export MANPAGER='less -R --use-color --color=ur$Dd+c$Dsy$DPw$DSkwEr-'
 export MANROFFOPT='-c'
 
 # GNU GPG
@@ -84,6 +84,10 @@ export PERL5LIB="$XDG_DATA_HOME/perl5/lib/perl5${PERL5LIB:+:${PERL5LIB}}"
 export PERL_LOCAL_LIB_ROOT="$XDG_DATA_HOME/perl5${PERL_LOCAL_LIB_ROOT:+:${PERL_LOCAL_LIB_ROOT}}"
 export PERL_MB_OPT="--install_base \"$XDG_DATA_HOME/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=$XDG_DATA_HOME/perl5"
+
+# Ruby
+export GEM_HOME="$XDG_DATA_HOME/ruby_gem"
+export PATH="$PATH:$GEM_HOME/ruby/2.0.2/bin"
 
 # Fixing "bugs" in dwm... see dwm(1)
 export _JAVA_AWT_WM_NONREPARENTING=1
