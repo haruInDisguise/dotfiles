@@ -18,7 +18,7 @@ drop_cache() {
 # ZLE "widgets" for custom mappings
 
 pipe-command-results-to-pager() {
-    local pager='less'
+    local pager='bat'
     eval "r | $pager"
 }
 

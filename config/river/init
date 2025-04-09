@@ -15,8 +15,8 @@ get_tag() {
 
 # Programs
 riverctl map normal Super Return spawn "alacritty -e sh '$DOTFILES_ROOT/config/tmux/default_session.sh'"
-# rofi sometimes fails to properly process input
-riverctl map normal Super P spawn 'kill $(cat "$XDG_RUNTIME_DIR/rofi.pid"); rofi -show run'
+# rofi sometimes fails to focus again, when switching windows while it is opened
+riverctl map normal Super Semicolon spawn 'fuzzel'
 
 # WM management mappings
 riverctl map normal Super C close
@@ -77,9 +77,9 @@ done
 
 # Super+0 to focus all tags
 # Super+Shift+0 to tag focused view with all tags
-all_tags=$(((1 << 32) - 1))
-riverctl map normal Super 0 set-focused-tags $all_tags
-riverctl map normal Super+Shift 0 set-view-tags $all_tags
+# all_tags=$(((1 << 32) - 1))
+# riverctl map normal Super 0 set-focused-tags $all_tags
+# riverctl map normal Super+Shift 0 set-view-tags $all_tags
 
 # Super+Space to toggle float
 riverctl map normal Super Space toggle-float
@@ -101,14 +101,14 @@ do
     riverctl map $mode None XF86AudioPrev  spawn "$DOTFILES_ROOT/scripts/wm_manage_media previous"
     riverctl map $mode None XF86AudioNext  spawn "$DOTFILES_ROOT/scripts/wm_manage_media next"
 
-    # Control screen backlight brightness with brightnessctl (https://github.com/Hummer12007/brightnessctl)
-    riverctl map $mode None XF86MonBrightnessUp   spawn 'brightnessctl set +5%'
-    riverctl map $mode None XF86MonBrightnessDown spawn 'brightnessctl set 5%-'
+    riverctl map $mode Super+Shift Space spawn "$DOTFILES_ROOT/scripts/wm_manage_media play-pause"
+    riverctl map $mode Super+Shift P spawn "$DOTFILES_ROOT/scripts/wm_manage_media next"
+    riverctl map $mode Super+Shift N spawn "$DOTFILES_ROOT/scripts/wm_manage_media previous"
 done
 
 # WM setup
 riverctl hide-cursor when-typing enabled
-riverctl keyboard-layout "us,de"
+riverctl keyboard-layout -options grp:alt_space_toggle us,de
 
 # Set background and border color
 riverctl background-color 0x333333
@@ -118,14 +118,15 @@ riverctl border-color-unfocused 0x93a1a1
 riverctl set-repeat 35 500
 
 riverctl rule-add -app-id 'float*' float
-riverctl rule-add -app-id "firefox*" ssd
-riverctl rule-add -app-id "firefox*" tags $(get_tag 2)
-riverctl rule-add -app-id "steam*" ssd
-riverctl rule-add -app-id "steam*" tags $(get_tag 3)
+riverctl rule-add -app-id 'firefox*' ssd
+riverctl rule-add -app-id 'firefox*' tags $(get_tag 2)
+riverctl rule-add -app-id 'steam*' ssd
+riverctl rule-add -app-id 'steam*' tags $(get_tag 3)
 
 riverctl default-layout rivercarro
 rivercarro -per-tag &
 disown
+
 
 # Run startup scripts
 sh "$DOTFILES_ROOT/scripts/wm_startup" &

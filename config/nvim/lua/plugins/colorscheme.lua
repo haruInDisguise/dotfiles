@@ -1,11 +1,16 @@
 -- config for: https://github.com/sainnhe/gruvbox-material
+
+---@module 'lazy'
+---@type LazySpec
 return {
     {
-    'ellisonleao/gruvbox.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-        require("gruvbox").setup({
+        'ellisonleao/gruvbox.nvim',
+        lazy = false,
+        priority = 1000,
+
+        ---@module 'gruvbox'
+        ---@type GruvboxConfig
+        opts = {
             terminal_colors = true,
             undercurl = true,
             underline = true,
@@ -22,7 +27,7 @@ return {
             invert_signs = false,
             invert_tabline = false,
             invert_intend_guides = false,
-            inverse = true, -- invert background for search, diffs, statuslines and errors
+            inverse = true,    -- invert background for search, diffs, statuslines and errors
             contrast = "hard", -- can be "hard", "soft" or empty string
             palette_overrides = {},
             overrides =
@@ -31,15 +36,17 @@ return {
             },
             dim_inactive = false,
             transparent_mode = false,
-        })
-        vim.cmd([[ colorscheme gruvbox ]])
-    end,
-    },
+        },
+
+        init = function()
+            vim.cmd([[ colorscheme gruvbox ]])
+        end,
+    }
     -- {
     --     "wincent/base16-nvim",
     --     lazy = false, -- load at start
     --     priority = 1000, -- load first
-    --     config = function()
+    --     init = function()
     --         vim.o.background = 'dark'
     --         -- Make comments more prominent -- they are important.
     --         local bools = vim.api.nvim_get_hl(0, { name = 'Boolean' })
@@ -52,4 +59,3 @@ return {
     --     end
     -- },
 }
-

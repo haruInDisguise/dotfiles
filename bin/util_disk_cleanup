@@ -1,0 +1,24 @@
+#!/usr/bin/sh
+
+. "$DOTFILES_ROOT/lib/log.sh"
+
+log_info "Cleaning up pacman cache"
+sudo pacman -Scc
+
+log_info "Cleaning up systemd logs older than 1 day"
+sudo journalctl --vacuum-time=1d
+
+log_info "Cleaning systemd tmpfiles"
+sudo systemd-tmpfiles --clean --remove
+
+log_info "Cleaning docker (CAUTION!)"
+_dockerd=0
+if ! pidof dockerd &>/dev/null; then
+    sudo dockerd &>/dev/null &
+fi
+
+docker system prune
+
+if test $_dockerd -gt 0; then
+    sudo kill %1
+fi

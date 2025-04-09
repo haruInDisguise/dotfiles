@@ -1,7 +1,7 @@
+-- config for: https://github.com/folke/lazydev.nvim
+
 return {
     'folke/lazydev.nvim',
     ft = 'lua',
-    config = function()
-        require('lazydev').setup({})
-    end
+    opts = {},
 }

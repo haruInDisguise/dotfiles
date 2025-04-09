@@ -1,0 +1,24 @@
+[main]
+output = DP-1
+font = "ComicCode Nerd Font:style=regular:size=15"
+
+terminal = alacritty -e
+
+[key-bindings]
+cancel = Control+j
+
+[colors]
+background
+text
+prompt
+placeholder
+input
+selection
+selection-text
+selection-match
+counter
+broder
+
+[border]
+width
+

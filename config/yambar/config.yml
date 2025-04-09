@@ -8,7 +8,7 @@ color_highlight: &color_highlight 789984ff
 bar:
   height: 20
   location: bottom
-  spacing: 5
+  spacing: 3
   font: *default_font
   background: *color_background
 
@@ -42,33 +42,96 @@ bar:
               activated:
                 - string: {text: "{app-id}", max: 30, foreground: *color_highlight }
                 - string: {text: " {title}", max: 30}
+  center:
+    - mpris:
+        identities:
+          - "ncspot"
+          - "spotify"
+          - "firefox"
+        content:
+          - map:
+              conditions:
+                state != offline && title != "":
+                  - list:
+                      spacing: 5
+                      items:
+                        - string: {text: "{artist}", max: 30 }
+                        - string: {text: "-" }
+                        - string: {text: "{title}", max: 30 }
+                  # - map:
+                  #     conditions:
+                  #       pos != "":
+                  #         - string: {text: " " }
+                  #         - string: {text: "{pos} / {end}", max: 30 }
+                  #         - list:
+                  #             items:
+                  #               - progress-bar:
+                  #                   tag: "elapsed"
+                  #                   length: 10
+                  #                   start: { string: { text: "[" } }
+                  #                   end: { string: { text: "]" } }
+                  #                   fill: { string: { text: "=" } }
+                  #                   empty: { string: { text: " " } }
+                  #                   indicator: { string: { text: ">" } }
+                  - map:
+                      conditions:
+                        shuffle: { string: { text: "" } }
+                  - map:
+                      conditions:
+                        loop == Playlist: { string: { text: "" } }
+
   right:
     - network:
-        poll-interval: 1000
-        spacing: 5
-        anchors:
-          color_upload: &color_upload ea6962ff
-          color_download: &color_download a9b665ff
-          color_up: &color_up a9b665ff
-          color_down: &color_down ea6962ff
+        poll-interval: 2500
+        content:
+          map:
+            margin: 8
+            deco: { background: { color: *color_background_highlight}}
+            conditions:
+              type == ether || type == wlan:
+                map:
+                  conditions:
+                    state == up:
+                      list:
+                        items:
+                          - string: {max: 6, text: "{name}"}
+                          - string: {text: ": {state} [{ipv4}]"}
+                          - string: {text: "{ul-speed:mib}"}
+                          - string: {text: "{dl-speed:mib}"}
+
+    - cpu:
+        poll-interval: 2500
         content:
           map:
             conditions:
-              name == eno2:
-                  map:
-                    conditions:
-                      state == up:
-                        - string: { text: "{name} " }
-                        - string: { text: "{ipv4} ", foreground: *color_up }
-                        - string: { text: "{dl-speed:mib}\uea9a/{ul-speed:mib}\ueaa1Mb/s"}
-                      state != up && ipv4 == "":
-                        - string: { text: "{name}: {state}" }
+              id < 0:
+                list:
+                  margin: 8
+                  deco: { background: { color: *color_background_highlight}}
+                  items:
+                    - string: {text: "CPU:"}
+                    - string: {text: "{cpu:02:}%"}
+
+    - mem:
+        poll-interval: 2500
+        content:
+          list:
+            deco: { background: { color: *color_background_highlight}}
+            margin: 8
+            items:
+              - string: {text: "MEM:"}
+              - string: {text: "{used::mib}"}
+              - string: {text: "/"}
+              - string: {text: "{total:mib}"}
+              - string: {text: "[{percent_used:%}%]"}
     - clock:
         time-format: "%R"
         date-format: "%a %d %b %Y"
         content:
           list:
+            margin: 8
+            deco: { background: { color: *color_background_highlight}}
             items:
               - string: {text: "{date}", right-margin: 5}
-              - string: {text: ""}
+              - string: {text: "┃"}
               - string: {text: "{time}", right-margin: 10}

@@ -1,0 +1,13 @@
+#!/usr/bin/sh
+
+OUT="$(mktemp /tmp/snip_XXXX.png)"
+DIMENSIONS="$(slurp)"
+
+WH="$(echo $DIMENSIONS | cut -d ' ' -f1)"
+XY="$(echo $DIMENSIONS | cut -d ' ' -f2)"
+
+grim -g "$WH $XY" "$OUT"
+
+feh --borderless --geometry "$WH" --title 'float_snip_img' "$OUT"
+rm "$OUT"
+

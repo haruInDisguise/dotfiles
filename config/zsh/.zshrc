@@ -118,11 +118,26 @@ command -v 'ast-grep' &>/dev/null && eval "$(ast-grep completions zsh)"
 
 # desc:     Neat auto completions!
 # source:   https://github.com/zsh-users/zsh-autosuggestions
-source "$ZDOTDIR/extern/zsh-autosuggestions/zsh-autosuggestions.plugin.zsh"
 
 # desc:     Very pretty syntax highlighting.
 # source:   https://github.com/zsh-users/zsh-syntax-highlighting
 # note:     To be sourced at the end of the config or after every call to zle that
 #           binds/invokes a (default) widget.
 source "$ZDOTDIR/extern/zsh-syntax-highlighting/zsh-syntax-highlighting.plugin.zsh"
+
+
+# Added by `rbenv init` on Thu Jan  2 12:01:54 PM CET 2025
+export PATH="/home/haru/.rbenv/shims:${PATH}"
+export RBENV_SHELL=zsh
+rbenv() {
+    local command
+    command="${1:-}"
+    if [ "$#" -gt 0 ]; then
+        shift
+        fi
+    case "$command" in rehash|shell)
+        eval "$(rbenv "sh-$command" "$@")";; *)
+            command rbenv "$command" "$@";;
+    esac
+}
 
