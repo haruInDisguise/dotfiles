@@ -15,7 +15,7 @@ TabWidth: 4
 
 IndentPPDirectives: BeforeHash
 IncludeBlocks: Preserve
-InsertBraces: true
+InsertBraces: false
 
 # FIXME: This option does not respect typedefs :^(
 QualifierAlignment: Custom

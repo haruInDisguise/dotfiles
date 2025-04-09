@@ -1,17 +1,31 @@
+# Taken from the default vi binding of 'escape'
+function _key_handle_escape
+    if commandline -P
+        commandline -f cancel
+    else
+        set fish_bind_mode default
+        if test (count (commandline --cut-at-cursor | tail -c2)) != 2
+            commandline -f backward-char
+        end
+        commandline -f repaint-mode
+    end
+end
+
 if status is-login
     source "$__fish_config_home/env.fish"
     exec bash -c '. /etc/profile; exec fish'
 end
 
 if status is-interactive
-    # No greeting :(
     set -g fish_greeting ''
 
-    # Vi Mode
     fish_vi_key_bindings
 
-    bind ctrl-j -M insert -m default cancel
-    bind ctrl-j -m default cancel
+    bind ctrl-j -M replace _key_handle_escape
+    bind ctrl-j -M insert -m default _key_handle_escape
+    bind ctrl-j -m default _key_handle_escape
+
+    bind -M replace_one -m default '' begin-selection kill-selection end-selection self-insert backward-char repaint-mode
 
     bind ctrl-e -M insert edit_command_buffer
     bind ctrl-e edit_command_buffer

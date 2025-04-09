@@ -49,20 +49,12 @@ function _prompt_event_prompt --on-event fish_prompt
     echo
 end
 
-function fish_command_not_found
-    printf (_ "fish: Unknown command: %s\n") (string escape -- $argv[1]) >&2
-end
-
-# Do not render vi mode indicator
-function fish_mode_prompt
-end
-
-function prompt_status
+function _prompt_status
     echo -n (__fish_print_pipestatus "" " " "|" (set_color $fish_color_status) \
                                       (set_color --bold $fish_color_status) $argv[1])
 end
 
-function prompt_jobs
+function _prompt_jobs
     set -f job_count (count (jobs))
 
     if test $job_count -gt 0
@@ -81,8 +73,8 @@ function fish_prompt
 
     #echo -n (prompt_pwd)' '
     echo -n (pwd | string replace "$HOME" '~')' '
-    echo -n (prompt_jobs)' '
-    echo -n (prompt_status $last_pipestatus)
+    echo -n (_prompt_jobs)' '
+    echo -n (_prompt_status $last_pipestatus)
 
     echo -n "$(set_color $indicator_color)>$(set_color normal)"
     echo ' '
@@ -96,3 +88,11 @@ function fish_right_prompt
 
     printf '%s' (fish_git_prompt)
 end
+
+function fish_command_not_found
+    printf (_ "fish: Unknown command: %s\n") (string escape -- $argv[1]) >&2
+end
+
+# Do not print a mode prompt
+function fish_mode_prompt; end
+

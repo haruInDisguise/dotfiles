@@ -1,0 +1,22 @@
+theme = GruvboxDark
+font-family = "ComicCode"
+
+window-decoration = client
+window-save-state = never
+window-padding-balance = true
+window-padding-y = 8
+window-padding-x = 8
+
+resize-overlay = never
+
+clipboard-read = allow
+clipboard-write = allow
+clipboard-paste-protection = false
+
+confirm-close-surface = false
+quit-after-last-window-closed = true
+
+gtk-single-instance = true
+gtk-titlebar = false
+
+bold-is-bright = true

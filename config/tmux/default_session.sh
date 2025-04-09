@@ -2,8 +2,7 @@
 
 SESSION_NAME="dev-pad"
 
-if ! tmux server-info 1>/dev/null 2>&1 || \
-    [ "$(tmux list-sessions -F "#{==:#{session_name},${SESSION_NAME}}")" = 1 ]; then
+if ! tmux has-session -t "$SESSION_NAME" > /dev/null 2>&1; then
     tmux new-session -s "$SESSION_NAME" -d
     tmux new-window -t "$SESSION_NAME"
     tmux new-window -t "$SESSION_NAME"
