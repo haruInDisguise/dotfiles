@@ -9,14 +9,14 @@ launch_scripts() {
         timeout 600 'waylock -ignore-empty-password -fork-on-lock -init-color 0x2e3b3b -input-color 0x0d3138 -fail-color 0x3c1f1e' \
         timeout 610 'wlopm --off DP-1; wlopm --off DP-2' \
         resume 'wlopm --on DP-1; wlopm --on DP-2' &
-    riverctl spawn yambar
+    yambar -d debug &> "$XDG_CACHE_HOME/yambar_debug.log"
 }
 
 launch_host_specific() {
-    # Some mobile/desktop specific stuff
     case "$(uname -n)" in
     'main-pad' )
-        wlr-randr --output DP-1 --mode 2560x1440@119.998001Hz --output DP-2 --transform 90
+        # wlr-randr --output DP-1 --mode 2560x1440@119.998001Hz --output DP-2 --transform 90
+        wlr-randr --output DP-1 --preferred --output DP-2 --off # --transform 90
         riverctl input 'tablet-1386-828-Wacom_Intuos_PT_S_2_Pen' map-to-output DP-1
         ;;
     'boxpad' )

@@ -1,8 +1,7 @@
 #!/usr/bin/sh
 
 PLAYERCTL="playerctl"
-PLAYER="ncspot,spotifyd,firefox"
-IGNORE=""
+PLAYER="ncspot,spotifyd,spotify,firefox"
 
 run() {
     playerctl \
