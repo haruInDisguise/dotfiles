@@ -1,15 +1,11 @@
 -- config for: https://github.com/Saghen/blink.cmp
+
+---@module 'lazy'
+---@type LazySpec
 return {
     'saghen/blink.cmp',
-    -- optional: provides snippets for the snippet source
-    -- dependencies = 'rafamadriz/friendly-snippets',
-
-    -- use a release tag to download pre-built binaries
     version = 'v0.*',
-    -- AND/OR build from source, requires nightly: https://rust-lang.github.io/rustup/concepts/channels.html#working-with-nightly-rust
-    -- build = 'cargo build --release',
-    -- If you use nix, you can build from source using latest nightly rust with:
-    -- build = 'nix run .#build-plugin',
+    lazy = true,
 
     ---@module 'blink.cmp'
     ---@type blink.cmp.Config
@@ -46,7 +42,10 @@ return {
         },
 
         -- experimental signature help support
-        signature = { enabled = true }
+        signature = {
+            enabled = true,
+            window = _G.default_config.window_style,
+        }
     },
     -- allows extending the providers array elsewhere in your config
     -- without having to redefine it

@@ -1,7 +1,13 @@
 -- config for: https://github.com/hoob3rt/lualine.nvim
+
+---@module 'lazy'
+---@type LazySpec
 return {
     'hoob3rt/lualine.nvim',
-    event = 'BufEnter',
+    event = 'UIEnter',
+
+    ---@module 'lualine'
+    ---@type table
     opts = {
         options = {
             theme = 'gruvbox',

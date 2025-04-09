@@ -1,12 +1,14 @@
 -- My Neovim config! Yay!
 
+vim.loader.enable(true)
+
 require('utils')
 require('keymap')
 require('autocmds')
 
+-- Plugin setup
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
-
-if not vim.loop.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
     vim.fn.system({
         "git",
         "clone",
@@ -18,15 +20,30 @@ if not vim.loop.fs_stat(lazypath) then
 end
 
 vim.opt.rtp:prepend(lazypath)
-require('lazy').setup({
+require('lazy').setup {
     spec = {
         { import = 'plugins' }
     },
     change_detection = {
         notify = false,
-    }
-})
+    },
+    performance = {
+        rtp = {
+            disabled_plugins = {
+                "matchit",
+                "netrwPlugin",
+                "zipPlugin",
 
+                "gzip",
+                "tarPlugin",
+                "tutor",
+                "tohtml",
+            }
+        }
+    }
+}
+
+-- LSP Debugging
 vim.lsp.handlers['window/showMessage'] = function(_, result, ctx)
   local client = vim.lsp.get_client_by_id(ctx.client_id)
   local lvl = ({ 'ERROR', 'WARN', 'INFO', 'DEBUG' })[result.type]
@@ -39,21 +56,8 @@ vim.lsp.handlers['window/showMessage'] = function(_, result, ctx)
   })
 end
 
--- OPTIONS
-local opt = vim.opt
-
--- vim.g.clipboard = {
---   name = 'OSC 52',
---   copy = {
---     ['+'] = require('vim.ui.clipboard.osc52').copy('+'),
---     ['*'] = require('vim.ui.clipboard.osc52').copy('*'),
---   },
---   paste = {
---     ['+'] = require('vim.ui.clipboard.osc52').paste('+'),
---     ['*'] = require('vim.ui.clipboard.osc52').paste('*'),
---   },
--- }
-
+-- Options
+vim.g.clipboard = 'osc52'
 
 -- Disable providers I don't need (see ':h provider')
 vim.g.loaded_python3_provider = 0
@@ -62,49 +66,49 @@ vim.g.loaded_ruby_provider = 0
 vim.g.loaded_perl_provider = 0
 
 -- I don't like folds..
-opt.foldtext = ''
-opt.foldmethod = 'manual'
-opt.foldlevelstart = 99
+vim.opt.foldtext = ''
+vim.opt.foldmethod = 'manual'
+vim.opt.foldlevelstart = 99
 
-opt.mouse = ''
-opt.updatetime = 400
-opt.shortmess = opt.shortmess + 'c'
-opt.relativenumber = true
-opt.number = true
-opt.hidden = true
-opt.history = 500
+vim.opt.mouse = ''
+vim.opt.updatetime = 400
+vim.opt.shortmess = vim.opt.shortmess + 'c'
+vim.opt.relativenumber = true
+vim.opt.number = true
+vim.opt.hidden = true
+vim.opt.history = 500
 
-opt.wildmenu = true
-opt.wildignore = '*/.git'
+vim.opt.wildmenu = true
+vim.opt.wildignore = '*/.git'
 
-opt.laststatus = 3
+vim.opt.laststatus = 3
 
 -- Disable swapfiles and automatic backups
-opt.swapfile = false
-opt.backup = false
-opt.writebackup = false
+vim.opt.swapfile = false
+vim.opt.backup = false
+vim.opt.writebackup = false
 
 -- Indentation, wrapping and scrolloff
-opt.smarttab = true
-opt.tabstop = 4
-opt.shiftwidth = 0
-opt.expandtab = true
-opt.autoindent = true
-opt.scrolloff = 3
+vim.opt.smarttab = true
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 0
+vim.opt.expandtab = true
+vim.opt.autoindent = true
+vim.opt.scrolloff = 3
 
-opt.backspace = 'indent,start,eol'
+vim.opt.backspace = 'indent,start,eol'
 
-opt.wrap = false
-opt.sidescroll = 5
+vim.opt.wrap = false
+vim.opt.sidescroll = 5
 -- opt.listchars = 'extends:>,precedes:<'
 
-opt.inccommand = 'split'
+vim.opt.inccommand = 'split'
 
 -- Search related
-opt.incsearch = true
-opt.smartcase = true
-opt.hlsearch = true
-opt.magic = true
-opt.ignorecase = true
-opt.showmatch = true
-opt.list = true
+vim.opt.incsearch = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
+vim.opt.magic = true
+vim.opt.ignorecase = true
+vim.opt.showmatch = true
+vim.opt.list = true
