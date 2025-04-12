@@ -1,6 +1,0 @@
-#!/usr/bin/sh
-
-GAME_DIR="/mnt/data_0/games/minecraft"
-GAME_EXEC="$GAME_DIR/MultiMC/MultiMC"
-
-eval "$GAME_EXEC"
