@@ -2,9 +2,9 @@ local M = {}
 
 local default_hi = function(name, style)
     opts = {
-        name = '',
+        name = "",
     }
-    local ok, hl = pcall(vim.api.nvim_get_hl(name, style, opts)
+    local ok, hl = pcall(vim.api.nvim_get_hl(name, style, opts))
 end
 
 M.setup = function()

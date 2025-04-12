@@ -1,7 +1,5 @@
-local opts = {
-    buffer = vim.api.nvim_get_current_buf(),
-    noremap = true,
-    silent = true,
+require('mason-lspconfig').setup_handlers {
+    ['rust_analyzer'] = function() end,
 }
 
 local capabilities = require('blink.cmp').get_lsp_capabilities()
@@ -17,6 +15,13 @@ vim.g.rustaceanvim = {
         semanticTokensProvider = true,
     },
 }
+
+local opts = {
+    buffer = vim.api.nvim_get_current_buf(),
+    noremap = true,
+    silent = true,
+}
+
 
 -- vim.keymap.del('n', 'J', { buffer = vim.api.nvim_get_current_buf() })
 vim.keymap.set('n', 'J', function()
