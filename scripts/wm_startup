@@ -7,7 +7,7 @@ launch_scripts() {
     mako --default-timeout 2000 &
     swayidle -w \
         timeout 600 'waylock -ignore-empty-password -fork-on-lock -init-color 0x2e3b3b -input-color 0x0d3138 -fail-color 0x3c1f1e' \
-        timeout 610 'wlopm --off DP-1; wlopm --off DP-2' \
+        timeout 605 'wlopm --off DP-1; wlopm --off DP-2' \
         resume 'wlopm --on DP-1; wlopm --on DP-2' &
     yambar -d debug &> "$XDG_CACHE_HOME/yambar_debug.log"
 }

@@ -5,4 +5,5 @@
 # Launch wayland/the river wm
 CACHE_PATH="$XDG_CACHE_HOME/river"
 mkdir -p "$CACHE_PATH"
-river -log-level info >"$CACHE_PATH/all.log" 2>&1
+alias river='ssh-agent river -log-level info >"$CACHE_PATH/all.log" 2>&1'
+river
