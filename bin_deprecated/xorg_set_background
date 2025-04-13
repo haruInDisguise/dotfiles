@@ -1,5 +1,0 @@
-IMG_PATH="${1:-$HOME/.local/share/bg}"
-CMD="feh --bg-fill --no-fehbg"
-
-eval "$CMD" "$IMG_PATH"
-
