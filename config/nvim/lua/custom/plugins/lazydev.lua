@@ -15,7 +15,6 @@ return {
     },
     {
         "saghen/blink.cmp",
-        ft = "lua",
 
         ---@module "blink-cmp"
         ---@type blink.cmp.Config

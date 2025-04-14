@@ -4,7 +4,6 @@
 ---@type LazySpec
 return {
     "saghen/blink.cmp",
-    event = "InsertEnter",
     build = "cargo build --release",
 
     ---@module "blink.cmp"
@@ -61,5 +60,16 @@ return {
     opts_extend = {
         "sources.default",
         "sources.providers",
-    }
+    },
+
+    config = function(_, opts)
+        -- On startup, we only need to modify blink-cmp's opts
+        -- and use its capabilities in "plugin/lsp.lua".
+        vim.api.nvim_create_autocmd("InsertEnter", {
+            once = true,
+            callback = function(_)
+                require('blink-cmp').setup(opts)
+            end
+        })
+    end,
 }
