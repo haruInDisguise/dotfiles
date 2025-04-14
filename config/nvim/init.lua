@@ -1,5 +1,29 @@
 -- My Neovim config! Yay!
 
+-- TODO:
+-- 1. Configurations can be specified in "lsp/<name>.lua"
+--      - Use this feature. I've been wanting to split my lsp configs anyway,
+--        and now this task became trivial... nice
+--      - COMPLETELY REMOVE lspconfig. It is now a data-only repository that provides sane default
+--        configurations. Its programatic api (ie. LspRestart etc.) is deprecatef
+-- 2. 'commentstring' now supports TS queries
+--      - I could potentially override the default keybind to add support
+--        for multi line comments + ignore empty lines
+-- 3. Figure out how 'vim.ui.open()' parses paths/URIs
+-- 4. Make use of 'vim.diagnostic.setqflist()'
+-- 5. Look into how ':h: is actually implemented
+--      - Can I open multiple help buffers in the same tab?
+--          -> No(?). ":tab help" can be used to create a seperate tab
+--      - How do doc-links work (ie. 'K' binding)?
+--      - Find a way to move back the the previous doc-link
+-- 6. Implement my own 'statusline' and remove dependece on 'lualine.nvim'
+--      - Look into 'titlestring', 'statuscolumn', 'rulerformat'
+-- 7. Pass the (highlighted) word under the cursor (use 'semantic token'?) as
+--    an argument to Treesitters livegrep picker
+--      - '"/' register holds the last search pattern
+-- 8. Don't close a split window when deleting its buffer
+--      - '#' is the alternate filename (filename of the previous active buffer)
+
 vim.loader.enable(true)
 vim.g.mapleader = [[ ]]
 require("custom.utils")

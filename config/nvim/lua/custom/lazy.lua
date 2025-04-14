@@ -21,6 +21,7 @@ M.setup = function()
     ---@module "lazy"
     ---@type LazyConfig
     require("lazy").setup {
+        defaults = { },
         spec = {
             { import = "custom.plugins" }
         },

@@ -1,10 +1,7 @@
-vim.api.nvim_create_augroup("custom", {})
-
-vim.api.nvim_create_autocmd("TextYankPost", {
-  group = "custom",
+vim.api.nvim_create_autocmd("TextYankPost",
+{
   desc = "Hightlight yanked text",
-  pattern = "*",
   callback = function()
-    vim.highlight.on_yank { timeout = 400, on_visual = true }
+    vim.hl.on_yank { timeout = 400, on_visual = true, higroup = "Substitute" }
   end,
 })

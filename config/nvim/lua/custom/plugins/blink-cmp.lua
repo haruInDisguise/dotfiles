@@ -4,8 +4,8 @@
 ---@type LazySpec
 return {
     "saghen/blink.cmp",
-    version = "v0.*",
     event = "InsertEnter",
+    build = "cargo build --release",
 
     ---@module "blink.cmp"
     ---@type blink.cmp.Config

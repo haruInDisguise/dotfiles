@@ -3,17 +3,12 @@
 -- https://github.com/williamboman/mason-lspconfig.nvim
 -- https://github.com/neovim/nvim-lspconfig
 
--- TODO: Useful new features:
---  - Configurations can be specified in "lsp/<name>.lua".
---  - "vim.lsp.config()" defines a default configuration for a specific client
---  - Split server config into seperate files
---  - clangd: Modify 'root_dir'
-
 ---@module "lazy"
 ---@type LazySpec
 return {
     "neovim/nvim-lspconfig",
     event = "BufRead",
+    enabled = false,
 
     dependencies = {
         "williamboman/mason.nvim",
@@ -73,7 +68,16 @@ return {
                 ["clangd"] = {
                     auto_install = false,
                     config = {
-                        root_dir = lsp.util.root_pattern("compile_commands.json", "build/compile_commands.json")
+                        cmd = {
+                            "clangd",
+                            "--background-index",
+                            "--background-index-priority=normal",
+                            "--clang-tidy",
+                            "--completion-style=detailed",
+                            "--function-arg-placeholders",
+                            "--header-insertion=never",
+                        },
+                        root_markers = { 'compile_commands.json', 'build/compile_commands.json' }
                     },
                 },
                 ["denols"] = {
@@ -91,7 +95,9 @@ return {
 
         ---@module "mason"
         ---@type MasonSettings
-        require("mason").setup {}
+        require("mason").setup {
+            PATH = "prepend",
+        }
 
         local mason_server_list = vim.tbl_filter(function(item)
             return server_list[item].auto_install
@@ -102,22 +108,23 @@ return {
         require("mason-lspconfig").setup {
             ensure_installed = mason_server_list,
             automatic_installation = false,
+            handlers = nil
         }
 
-        local lsp = require("lspconfig")
         -- Disable snippet support by default
         -- see: https://github.com/hrsh7th/nvim-cmp/issues/1129#issuecomment-1837594834
-        default_config.capabilities = require("blink.cmp").get_lsp_capabilities({}, true)
-        default_config.capabilities.textDocument.completion.completionItem.snippetSupport = false
+        -- default_config.capabilities = require("blink.cmp.sources.lib").get_lsp_capabilities()
+        -- default_config.capabilities.textDocument.completion.completionItem.snippetSupport = false
 
-        for item, config in pairs(server_list) do
-            local c = vim.tbl_deep_extend("force", default_config, config)
-            lsp[item].setup(c)
+        for item, k in pairs(server_list) do
+            local c = vim.tbl_extend("force", default_config, k.config)
+            vim.lsp.config(item, c)
+            vim.lsp.enable(item)
         end
 
         -- Setup config
         vim.api.nvim_create_autocmd("LspAttach", {
-            desc = "Buffer local settings for our lsp session",
+            desc = "'on_attach' hook for LSP clients",
             callback = function(args)
                 local leader = [[,]]
                 local map_config = { noremap = true, buffer = args.buf }
@@ -126,10 +133,9 @@ return {
                 if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint) then
                     vim.keymap.set("n", "<leader>uh", function()
                         vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = args.buf }))
-                    end, { desc = "Toggle inlay hints", buffer = args.buf })
+                    end, { desc = "Toggle inlay hints" })
                 end
 
-                ---@type 
                 local set_key = function(mode, lhs, rhs, config)
                     vim.keymap.set(mode, lhs, rhs, vim.tbl_deep_extend('keep', config, map_config))
                 end
@@ -145,7 +151,7 @@ return {
                         virtual_text = not old_opts.virtual_text or false,
                         virtual_lines = not old_opts.virtual_lines or false,
                     })
-                end, {  })
+                end, {})
 
                 vim.keymap.set("n", "<leader>h", vim.lsp.buf.type_definition, map_config)
 

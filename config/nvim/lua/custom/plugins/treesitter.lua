@@ -4,7 +4,6 @@
 ---@type LazySpec
 return {
     "nvim-treesitter/nvim-treesitter",
-    version = false,
     build = ":TSUpdate",
     event = "VeryLazy",
 
@@ -13,7 +12,7 @@ return {
     },
 
     ---@type TSConfig
-    mpts = {
+    opts = {
         ensure_installed = {
             "bash",
             "bibtex",
@@ -47,7 +46,7 @@ return {
         incremental_selection = {
             enable = true,
             keymaps = {
-                init_selection = "<C-space>",
+                init_selection = "gnn",
                 node_incremental = "<C-space>",
                 scope_incremental = "grc",
                 node_decremental = "grm",
@@ -55,11 +54,8 @@ return {
         },
         ident = { enable = true },
         textobjects = {
-            select = {
-                enable = true,
-                lookahead = true,
-            },
-        },
+            
+        }
     },
     config = function(_, opts)
         require("nvim-treesitter.configs").setup(opts)
