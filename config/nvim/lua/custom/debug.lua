@@ -1,25 +1,19 @@
-local M = {
-    debug = {},
-    keymap = {},
-    buffer = {},
-}
-
-M.buffer.close = function()
-    local current_buffer = nil
-end
-
 -- Define some global debugging primitives
-function M.debug.show_help_for_tag(tag)
+
+local M = {}
+
+function M.show_help_for_tag(tag)
     local success = pcall(vim.cmd.help, { args = { tag } })
     if not success then
         print("No help for tag: " .. tag)
     end
 end
 
-function M.debug.get_named_item_at_pos()
+function M.get_named_item_at_pos()
     local node = vim.treesitter.get_node({})
-    assert(node, "Failed to query treesitter node")
-    -- vim.api.nvim_echo({{"Hello there!", "@keyword.repeat.lua"}})
+    vim.log()
+
+    vim.api.nvim_echo({{"Hello there!", "@keyword.repeat.lua"}})
 
     local target_nodes = node:field("name")
     while #target_nodes == 0 do
@@ -35,7 +29,7 @@ function M.debug.get_named_item_at_pos()
     return vim.treesitter.get_node_text(target_nodes[1], 0)
 end
 
-function M.debug.dump_ts()
+function M.dump_ts()
     local parser = vim.treesitter.get_parser()
     if not parser then
         return
@@ -65,7 +59,7 @@ function M.debug.dump_ts()
     vim.notify(table.concat(match_list, '\n'))
 end
 
-function M.debug.dump(obj)
+function M.dump(obj)
     local raw_dump = vim.inspect(obj)
 
     local text = vim.split(raw_dump, '\n')
@@ -85,18 +79,6 @@ function M.debug.dump(obj)
         end,
     })
     vim.api.nvim_win_set_buf(vim.api.nvim_get_current_win(), buffer)
-end
-
----@param default_config vim.keymap.set.Opts
-M.keymap.get_func_with_config = function(default_config)
-    ---@param mode string|string[]
-    ---@param lhs string
-    ---@param rhs string|function
-    ---@param opts? vim.keymap.set.Opts
-    return function(mode, lhs, rhs, opts)
-        local config = vim.tbl_extend("force", default_config, opts)
-        vim.keymap.set(mode, lhs, rhs, config)
-    end
 end
 
 return M

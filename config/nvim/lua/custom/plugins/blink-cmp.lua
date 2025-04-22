@@ -22,17 +22,26 @@ return {
             },
         },
 
-        -- Based on "enter" keymap
+        cmdline = {
+            keymap = {
+                preset = "default",
+                   ['<C-space>'] = { 'show_and_insert', 'show_documentation', 'hide_documentation' },
+                --    ['<C-e>'] = { 'cancel', 'fallback' },
+                --    ['<C-y>'] = { 'select_and_accept' },
+                --    ['<Up>'] = { 'select_prev', 'fallback' },
+                --    ['<Down>'] = { 'select_next', 'fallback' },
+                --    ['<C-p>'] = { 'select_prev', 'fallback_to_mappings' },
+                --    ['<C-n>'] = { 'select_next', 'fallback_to_mappings' },
+                --    ['<C-b>'] = { 'scroll_documentation_up', 'fallback' },
+                --    ['<C-f>'] = { 'scroll_documentation_down', 'fallback' },
+                --    ['<Tab>'] = { 'snippet_forward', 'fallback' },
+
+            }
+        },
+
         keymap = {
-            ["<C-space>"] = { "show_and_insert", "show_documentation", "hide_documentation" },
-            ["<C-e>"] = { "hide", "fallback" },
-            ["<C-y>"] = { "select_and_accept", "fallback" },
-
-            ["<C-p>"] = { "select_prev", "fallback" },
-            ["<C-n>"] = { "select_next", "fallback" },
-
-            ["<C-b>"] = { "scroll_documentation_up", "fallback" },
-            ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+            preset = "default",
+            ['<C-space>'] = { 'show_and_insert', 'show_documentation', 'hide_documentation' },
         },
 
         appearance = {
@@ -54,22 +63,24 @@ return {
         -- experimental signature help support
         signature = {
             enabled = true,
-            window = _G.default_config.window_style,
+            window = {
+                winhighlight = "NormalFloat:Normal",
+            },
         }
     },
+
+    config = function(_, opts)
+        vim.api.nvim_create_autocmd("InsertEnter", {
+            callback = function(_)
+                require('blink-cmp').setup(opts)
+            end,
+            once = true,
+            desc = "Register blink-cmp upon entering insert mode",
+        })
+    end,
+
     opts_extend = {
         "sources.default",
         "sources.providers",
     },
-
-    config = function(_, opts)
-        -- On startup, we only need to modify blink-cmp's opts
-        -- and use its capabilities in "plugin/lsp.lua".
-        vim.api.nvim_create_autocmd("InsertEnter", {
-            once = true,
-            callback = function(_)
-                require('blink-cmp').setup(opts)
-            end
-        })
-    end,
 }

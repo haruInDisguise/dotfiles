@@ -30,16 +30,27 @@ return {
             inverse = true,
             contrast = "hard",
             palette_overrides = {},
-            overrides =
-            {
-                -- LspReferenceTarget = { standout = true },
-            },
             dim_inactive = false,
             transparent_mode = false,
         },
 
         init = function()
             vim.cmd([[ colorscheme gruvbox ]])
-        end,
+
+            -- local buf = vim.api.nvim_get_current_buf()
+            -- local ft = vim.filetype.match({ buf = buf })
+            --
+            -- if ft then
+            --     -- Add treesitter highlights and fallback to syntax
+            --     local lang = vim.treesitter.language.get_lang(ft)
+            --
+            --     if not (lang and pcall(vim.treesitter.start, buf, lang)) then
+            --         vim.bo[buf].syntax = ft
+            --     end
+            --
+            --     -- Trigger early redraw
+            --     vim.cmd([[redraw]])
+            -- end
+        end
     }
 }

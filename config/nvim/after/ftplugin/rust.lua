@@ -5,6 +5,7 @@ require('mason-lspconfig').setup_handlers {
 local capabilities = require('blink.cmp').get_lsp_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = false
 
+---@diagnostic disable-next-line: undefined-doc-name
 ---@type RustaceanOpts
 vim.g.rustaceanvim = {
     dap = {

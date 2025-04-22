@@ -7,16 +7,16 @@
 ---@type LazySpec
 return {
     {
-        -- Let lazy manage lspconfigs presets
+        -- Disabled. Only used to source lsp presets
         "neovim/nvim-lspconfig",
     },
     {
         "williamboman/mason-lspconfig.nvim",
+        cmd = "Mason",
         dependencies = {
             { "williamboman/mason.nvim", config = true },
         },
 
-        cmd = "Mason",
         opts = {
             ensure_installed = {
                 "ts_ls",

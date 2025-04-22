@@ -2,7 +2,6 @@
 
 return {
     "nvim-telescope/telescope.nvim",
-    -- event = { "BufReadPre", "BufNewFile" },
     event = "VeryLazy",
 
     dependencies = {
@@ -17,7 +16,6 @@ return {
             mappings = {
                 i = {
                     ["<C-j>"] = function()
-                        -- FIXME: Find a pure lua solution...
                         vim.cmd [[stopinsert]]
                     end,
                 },
@@ -36,31 +34,32 @@ return {
         },
     },
     config = function(_, opts)
+        local utils = require("custom.utils")
         local builtin = require("telescope.builtin")
         local tscope = require("telescope")
         local themes = require("telescope.themes")
-
         opts.defaults = themes.get_ivy(opts.defaults)
+
         tscope.setup(opts)
         tscope.load_extension("fzf")
         tscope.load_extension("ui-select")
 
-        local keymap_options = {
+        local set_keymap = utils.keymap.get_func_with_config({
             silent = true,
             noremap = true,
-        }
+        })
 
-        vim.keymap.set("n", "<leader>f", function()
+        set_keymap("n", "<leader>f", function()
             builtin.find_files({
                 previewer = false,
             })
-        end, keymap_options)
-        vim.keymap.set("n", "<leader>/", function()
+        end, {desc = "Open telescope find_files"})
+        set_keymap("n", "<leader>/", function()
             builtin.live_grep({
                 previewer = true,
             })
-        end, keymap_options)
-        vim.keymap.set("n", "<leader>r", builtin.registers, keymap_options)
-        vim.keymap.set("n", "<leader>b", builtin.buffers, keymap_options)
+        end, {desc = "Open telescope live_grep"})
+        set_keymap("n", "<leader>r", builtin.registers, {desc = "Open telescope registers"})
+        set_keymap("n", "<leader>b", builtin.buffers, {desc = "Open telescope buffers"})
     end,
 }

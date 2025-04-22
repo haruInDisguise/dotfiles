@@ -1,11 +1,6 @@
 -- My Neovim config! Yay!
 
 -- TODO:
--- 1. Configurations can be specified in "lsp/<name>.lua"
---      - Use this feature. I've been wanting to split my lsp configs anyway,
---        and now this task became trivial... nice
---      - COMPLETELY REMOVE lspconfig. It is now a data-only repository that provides sane default
---        configurations. Its programatic api (ie. LspRestart etc.) is deprecatef
 -- 2. 'commentstring' now supports TS queries
 --      - I could potentially override the default keybind to add support
 --        for multi line comments + ignore empty lines
@@ -15,7 +10,9 @@
 --      - Can I open multiple help buffers in the same tab?
 --          -> No(?). ":tab help" can be used to create a seperate tab
 --      - How do doc-links work (ie. 'K' binding)?
+--          -> Tags
 --      - Find a way to move back the the previous doc-link
+--          -> Return to previous tag (Ctrl-T)
 -- 6. Implement my own 'statusline' and remove dependece on 'lualine.nvim'
 --      - Look into 'titlestring', 'statuscolumn', 'rulerformat'
 -- 7. Pass the (highlighted) word under the cursor (use 'semantic token'?) as
@@ -26,9 +23,11 @@
 
 vim.loader.enable(true)
 vim.g.mapleader = [[ ]]
-require("custom.utils")
 
-require("custom.lazy").setup()
+require("custom.lazy")
+
+require("custom.lsp")
+require("custom.colors")
 require("custom.autocmds")
 require("custom.keymap")
 
